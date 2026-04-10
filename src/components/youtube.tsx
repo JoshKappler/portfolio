@@ -86,14 +86,15 @@ export function YouTube() {
               >
                 Boffy
               </a>
-              . I grew the channel from zero to 2.1 million subscribers through
-              audience research, data-driven strategy, and consistent output.
+              . I grew the channel from zero to 2.1 million subscribers. No
+              team at first — just figuring out what gets clicks and doing more
+              of it.
             </p>
             <p className="text-text-muted leading-relaxed">
-              I hired and managed a team of editors and designers, negotiated
-              sponsorship contracts with brands like RedMagic, Wargaming,
-              GeoGuessr, YouTooz, GamerSupps, and Ellify, and used analytics to figure out what was
-              working and what was not.
+              Eventually I hired editors and designers, negotiated
+              sponsorships with RedMagic, Wargaming, GeoGuessr, and others, and
+              spent a lot of time in analytics trying to figure out what was
+              actually working.
             </p>
             <p className="text-text-muted leading-relaxed">
               Running a YouTube channel at this scale is a lot like running a

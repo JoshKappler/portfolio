@@ -10,11 +10,12 @@ const items = [
   "Tool Use",
   "Streaming",
   "State Machines",
-  "Adversarial Review",
+  "Self-Validation",
   "Knowledge Graphs",
-  "Cognitive Pipelines",
+  "Voice + TTS",
   "Learning Loops",
   "Structured Output",
+  "Video Generation",
 ];
 
 function MarqueeRow({ reverse = false }: { reverse?: boolean }) {

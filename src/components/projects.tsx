@@ -9,7 +9,7 @@ const projects = [
     title: "autohack",
     subtitle: "Autonomous Security Agent",
     description:
-      "I built an agent that finds bug bounty programs, hunts for security vulnerabilities using Claude, reviews its own findings, and submits reports on its own. It runs hour-long sessions with 200-turn conversations and gets better over time by learning from past outcomes.",
+      "I built an agent that finds bug bounty programs, hunts for security vulnerabilities using Claude, reviews its own findings, and submits reports on its own. It runs hour-long sessions with 200-turn conversations and gets better over time because it records what worked and what didn't.",
     techStack: [
       "TypeScript",
       "Anthropic SDK",
@@ -21,7 +21,7 @@ const projects = [
     highlights: [
       "12-state pipeline from discovery through submission across HackerOne, Immunefi, and Huntr",
       "A separate Claude instance validates findings on a 0-15 rubric before anything gets submitted",
-      "Learning system that records outcomes, near-misses, and triager feedback to improve future hunts",
+      "Records outcomes, near-misses, and triager feedback so future hunts are better",
       "Two Claude backends: CLI mode (Max subscription) or API mode with prompt caching for 90% input token savings",
       "Watchdog process that detects stalled solves and resets state automatically",
       "Real-time dashboard with xterm.js terminal showing live Claude output",
@@ -32,7 +32,7 @@ const projects = [
     title: "AgentArena",
     subtitle: "Multi-Agent Simulation Platform",
     description:
-      "A sandbox where multiple LLM-powered agents interact in scenarios designed to produce emergent behavior. Includes a genetic algorithm that evolves prompt configurations and a village simulation where agents have memory, emotions, and relationships.",
+      "A sandbox where multiple LLM agents interact in open-ended scenarios to see what happens. Has a genetic algorithm that evolves prompt configs over hundreds of runs, and a village sim where agents remember things, form opinions, and build relationships.",
     techStack: [
       "TypeScript",
       "Next.js 15",
@@ -44,7 +44,7 @@ const projects = [
       "Village mode: 4-8 agents each run a 5-step cognitive pipeline (perception, action selection, reflection, planning, state resolution)",
       "3-tier memory system: episodic with embeddings, semantic from reflection, and a knowledge graph tracking who knows what",
       "Genetic optimizer that evolves prompt configs across hundreds of scenarios, scored by an LLM judge on 5 dimensions",
-      "Emotional state (grief, fear, anger, hope, loneliness) that influences how agents make decisions",
+      "Agents have emotional state (grief, fear, anger, hope, loneliness) that changes how they act",
       "A DM orchestrator that watches tension metrics and creates dramatic events when things get too calm",
       "Multi-provider LLM client routing to Claude, Groq, or OpenRouter through a single interface",
     ],
@@ -85,7 +85,7 @@ const projects = [
       "Sends specific lint/test errors back to Claude for targeted fixes, up to 3 retry attempts",
       "Monitors PRs for review comments, generates responses, and pushes code fixes based on feedback",
       "Classifies errors as transient, permanent, validation, or timeout to decide whether to retry",
-      "Tracks success rates by language, repo, and failure pattern to improve over time",
+      "Tracks success rates by language, repo, and failure pattern so it picks better bounties over time",
     ],
     accentColor: "#3498db",
   },
@@ -112,10 +112,32 @@ const projects = [
     accentColor: "#f39c12",
   },
   {
+    title: "chadGPT",
+    subtitle: "Local AI Chat with Voice",
+    description:
+      "A chat app that runs entirely on local models through Ollama. It has voice input via Whisper, multiple TTS backends (Gemini, Edge, ElevenLabs), and configurable AI personalities. The Node launcher handles spinning up Ollama and the Python venv automatically.",
+    techStack: [
+      "Python",
+      "FastAPI",
+      "Ollama",
+      "Whisper",
+      "ElevenLabs",
+      "JavaScript",
+    ],
+    highlights: [
+      "Runs local LLMs through Ollama with automatic process management and port detection",
+      "3 swappable TTS backends: Gemini, Edge TTS, and ElevenLabs",
+      "Whisper-based voice input with word-level timestamps",
+      "Node.js launcher that creates the Python venv, installs deps, and starts the FastAPI server in one command",
+      "Configurable AI personalities with persistent conversation history",
+    ],
+    accentColor: "#e67e22",
+  },
+  {
     title: "sniply.biz",
     subtitle: "Full-Stack SaaS Marketplace",
     description:
-      "A live marketplace connecting customers with hair care professionals. I built and deployed this end-to-end, from the matching algorithm to the booking system to the messaging feature.",
+      "A live marketplace where people find and book barbers and stylists. I built and deployed the whole thing — matching algorithm, booking system, messaging, auth, all of it.",
     techStack: [
       "Next.js 16",
       "TypeScript",
@@ -171,9 +193,9 @@ export function Projects() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-text-muted text-lg max-w-2xl"
         >
-          Every project here was built from scratch using direct SDK calls. No
-          LangChain, no CrewAI, no agent frameworks. All repos are private, but
-          I am happy to walk through any of them.
+          Everything here was built from scratch — direct SDK calls, no
+          LangChain, no CrewAI, no agent frameworks. Repos are private but I
+          can walk through any of them.
         </motion.p>
       </div>
 

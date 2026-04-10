@@ -43,9 +43,9 @@ export function Contact() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-text-muted text-lg leading-relaxed mb-10 max-w-xl"
           >
-            I am looking for founding engineer and AI agent engineering roles at
-            early-stage startups in the San Francisco Bay Area. If you are
-            building something interesting, I would love to hear about it.
+            I am looking for founding engineer and AI agent roles at
+            early-stage startups in the Bay Area. If you are building something
+            interesting, I want to hear about it.
           </motion.p>
 
           <motion.div

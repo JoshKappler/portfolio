@@ -24,7 +24,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Josh Kappler",
   description:
-    "Building autonomous AI agents from scratch. 2.1M YouTube subscribers. Six production AI systems.",
+    "I build AI agents from scratch. 2.1M YouTube subscribers. No frameworks.",
   openGraph: {
     title: "Josh Kappler",
     description:

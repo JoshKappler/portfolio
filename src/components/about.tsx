@@ -16,9 +16,14 @@ const tools = [
   { name: "Zod", category: "framework" },
   { name: "Pydantic", category: "framework" },
   { name: "Anthropic SDK", category: "ai" },
+  { name: "Claude Agent SDK", category: "ai" },
   { name: "Claude Code", category: "ai" },
+  { name: "Groq", category: "ai" },
+  { name: "OpenRouter", category: "ai" },
   { name: "Ollama", category: "ai" },
+  { name: "Whisper", category: "ai" },
   { name: "FastAPI", category: "framework" },
+  { name: "Playwright", category: "tool" },
   { name: "ffmpeg", category: "tool" },
 ];
 
@@ -62,8 +67,8 @@ export function About() {
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
                 I grew a YouTube channel to 2.1 million subscribers over seven
-                years. No team at the start, no playbook. Just figuring out what
-                works, iterating fast, and staying consistent.
+                years. No team at the start, no playbook. I just figured out
+                what worked and did more of it.
               </motion.p>
 
               <motion.p
@@ -71,10 +76,10 @@ export function About() {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
-                Now I build AI agents. Same approach: pick a hard problem, build
-                the whole thing from scratch, make it work. I have built six
-                production AI systems in the past several months, all solo, all
-                using direct SDK calls with no frameworks.
+                Now I build AI agents. Same approach — pick a hard problem,
+                build the whole thing from scratch, make it work. Seven AI
+                systems in the past several months, all solo, all direct SDK
+                calls, no frameworks.
               </motion.p>
 
               <motion.p
@@ -133,12 +138,12 @@ export function About() {
               </h4>
               <ul className="space-y-4 text-sm text-text-muted">
                 {[
-                  "Direct SDK calls, no framework abstractions",
-                  "Claude Code as primary development tool",
-                  "Multi-provider LLM support with graceful fallbacks",
-                  "Full-stack delivery with monitoring dashboards",
-                  "State machines for complex agent lifecycles",
-                  "Learning loops that feed outcomes back into future runs",
+                  "Direct SDK calls — no LangChain, no CrewAI",
+                  "Claude Code as primary dev tool",
+                  "Multi-provider LLM routing (Claude, Groq, OpenRouter, Ollama)",
+                  "Full-stack: backend, frontend, dashboards, deployment",
+                  "State machines for agent lifecycle management",
+                  "Recording outcomes and feeding them back into future runs",
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent/50 shrink-0" />

@@ -40,23 +40,28 @@ function AnimatedText({
 }
 
 export function Hero({ index }: { index: number }) {
-  const { visibleIndex } = useSnapContext();
+  const { visibleIndex, phase } = useSnapContext();
   const isVisible = index === visibleIndex;
+  const shouldRenderBg = Math.abs(index - visibleIndex) <= 1;
+
+  let opacity = 0;
+  if (isVisible) {
+    opacity = phase === "out" ? 0 : 1;
+  }
 
   return (
     <section
-      className="absolute inset-0 h-screen w-full flex flex-col justify-center px-6 md:px-16 lg:px-24 overflow-hidden transition-opacity duration-500 ease-in-out"
-      style={{ opacity: isVisible ? 1 : 0, pointerEvents: isVisible ? "auto" : "none" }}
+      className="absolute inset-0 h-screen w-full flex flex-col justify-center px-6 md:px-16 lg:px-24 overflow-hidden transition-opacity duration-400 ease-in-out"
+      style={{
+        opacity,
+        pointerEvents: isVisible && phase === "idle" ? "auto" : "none",
+      }}
     >
-      {/* Shader background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <ShaderAnimation />
+        {shouldRenderBg && <ShaderAnimation />}
       </div>
-
-      {/* Overlay to darken shader */}
       <div className="absolute inset-0 z-[1] bg-black/50 pointer-events-none" />
 
-      {/* Decorative line */}
       <motion.div
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
@@ -87,8 +92,9 @@ export function Hero({ index }: { index: number }) {
           className="max-w-xl"
         >
           <p className="text-text-muted text-lg md:text-xl leading-relaxed mb-12">
-            2.1M YouTube subscribers. Six production AI agent systems built from
-            scratch. Looking to bring that energy to an early-stage startup.
+            2.1M YouTube subscribers. I build AI agents from scratch — no
+            frameworks, no shortcuts. Looking for an early-stage startup where I
+            can do more of it.
           </p>
         </motion.div>
 
@@ -126,7 +132,6 @@ export function Hero({ index }: { index: number }) {
         </motion.div>
       </div>
 
-      {/* Marquee at bottom */}
       <div className="absolute bottom-0 left-0 right-0 z-[2]">
         <Marquee />
       </div>

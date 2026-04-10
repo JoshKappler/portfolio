@@ -10,24 +10,28 @@ import {
   ReactNode,
 } from "react";
 
+type Phase = "idle" | "out" | "in";
+
 interface SnapContextValue {
   visibleIndex: number;
+  phase: Phase;
   totalSections: number;
+  registerScroller: (index: number, el: HTMLElement | null) => void;
 }
 
 const SnapContext = createContext<SnapContextValue>({
   visibleIndex: 0,
+  phase: "idle",
   totalSections: 0,
+  registerScroller: () => {},
 });
 
 export function useSnapContext() {
   return useContext(SnapContext);
 }
 
-// Timing (ms)
-const FADE_OUT = 500;
-const PAUSE = 200;
-const FADE_IN = 500;
+const OUT_MS = 350;
+const IN_MS = 400;
 
 export function SnapContainer({
   children,
@@ -36,139 +40,166 @@ export function SnapContainer({
   children: ReactNode;
   sectionCount: number;
 }) {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [visibleIndex, setVisibleIndex] = useState(0);
+  const [phase, setPhase] = useState<Phase>("idle");
   const transitioningRef = useRef(false);
   const pendingRef = useRef<number | null>(null);
-  const cooldownRef = useRef(false);
+  const visibleIndexRef = useRef(0);
+  const scrollersRef = useRef<Map<number, HTMLElement>>(new Map());
+  // Track scroll direction for "entering from below" behavior
+  const lastDirectionRef = useRef<1 | -1>(1);
 
-  const goTo = useCallback(
-    (target: number) => {
-      if (target < 0 || target >= sectionCount) return;
-      if (target === activeIndex) return;
-      setActiveIndex(target);
+  visibleIndexRef.current = visibleIndex;
+
+  const registerScroller = useCallback(
+    (index: number, el: HTMLElement | null) => {
+      if (el) scrollersRef.current.set(index, el);
+      else scrollersRef.current.delete(index);
     },
-    [activeIndex, sectionCount]
+    []
   );
 
-  // Listen for wheel and keyboard events to navigate
+  const runTransition = useCallback((target: number, direction: 1 | -1) => {
+    transitioningRef.current = true;
+    lastDirectionRef.current = direction;
+
+    setPhase("out");
+
+    setTimeout(() => {
+      setVisibleIndex(target);
+      setPhase("in");
+
+      // If navigating backward into a section, scroll it to the bottom
+      // so the user continues scrolling upward naturally
+      if (direction === -1) {
+        setTimeout(() => {
+          const scroller = scrollersRef.current.get(target);
+          if (scroller && scroller.scrollHeight > scroller.clientHeight) {
+            scroller.scrollTop = scroller.scrollHeight - scroller.clientHeight;
+          }
+        }, 0);
+      }
+
+      setTimeout(() => {
+        setPhase("idle");
+        transitioningRef.current = false;
+
+        if (pendingRef.current !== null && pendingRef.current !== target) {
+          const next = pendingRef.current;
+          const dir = next > target ? 1 : -1;
+          pendingRef.current = null;
+          runTransition(next, dir);
+        }
+      }, IN_MS);
+    }, OUT_MS);
+  }, []);
+
+  const navigate = useCallback(
+    (direction: 1 | -1) => {
+      const current = visibleIndexRef.current;
+      const target = Math.max(0, Math.min(current + direction, sectionCount - 1));
+      if (target === current) return;
+
+      if (transitioningRef.current) {
+        pendingRef.current = target;
+        return;
+      }
+
+      runTransition(target, direction);
+    },
+    [sectionCount, runTransition]
+  );
+
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      if (cooldownRef.current) return;
-
-      // Require a meaningful scroll delta to avoid trackpad micro-scrolls
+      if (transitioningRef.current) {
+        e.preventDefault();
+        return;
+      }
       if (Math.abs(e.deltaY) < 30) return;
 
-      cooldownRef.current = true;
-      setTimeout(() => {
-        cooldownRef.current = false;
-      }, FADE_OUT + PAUSE + FADE_IN + 100);
+      const current = visibleIndexRef.current;
+      const scroller = scrollersRef.current.get(current);
 
-      if (e.deltaY > 0) {
-        setActiveIndex((prev) => Math.min(prev + 1, sectionCount - 1));
-      } else {
-        setActiveIndex((prev) => Math.max(prev - 1, 0));
+      // Check if the current section has scrollable content
+      if (scroller && scroller.scrollHeight > scroller.clientHeight) {
+        const atTop = scroller.scrollTop <= 1;
+        const atBottom =
+          scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 1;
+
+        // Scrolling down and not at bottom — let it scroll naturally
+        if (e.deltaY > 0 && !atBottom) return;
+        // Scrolling up and not at top — let it scroll naturally
+        if (e.deltaY < 0 && !atTop) return;
       }
+
+      // At boundary or non-scrollable — navigate sections
+      e.preventDefault();
+      navigate(e.deltaY > 0 ? 1 : -1);
     };
 
     const onKeyDown = (e: KeyboardEvent) => {
-      if (cooldownRef.current) return;
+      if (transitioningRef.current) return;
 
-      if (
-        e.key === "ArrowDown" ||
-        e.key === "PageDown" ||
-        e.key === " "
-      ) {
+      const current = visibleIndexRef.current;
+      const scroller = scrollersRef.current.get(current);
+      const hasScroll = scroller && scroller.scrollHeight > scroller.clientHeight;
+
+      if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
+        if (hasScroll) {
+          const atBottom =
+            scroller!.scrollTop + scroller!.clientHeight >= scroller!.scrollHeight - 1;
+          if (!atBottom) return; // let native scroll handle it
+        }
         e.preventDefault();
-        cooldownRef.current = true;
-        setTimeout(() => {
-          cooldownRef.current = false;
-        }, FADE_OUT + PAUSE + FADE_IN + 100);
-        setActiveIndex((prev) => Math.min(prev + 1, sectionCount - 1));
+        navigate(1);
       } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+        if (hasScroll) {
+          const atTop = scroller!.scrollTop <= 1;
+          if (!atTop) return;
+        }
         e.preventDefault();
-        cooldownRef.current = true;
-        setTimeout(() => {
-          cooldownRef.current = false;
-        }, FADE_OUT + PAUSE + FADE_IN + 100);
-        setActiveIndex((prev) => Math.max(prev - 1, 0));
+        navigate(-1);
       }
     };
 
-    // Touch handling
     let touchStartY = 0;
     const onTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
     };
     const onTouchEnd = (e: TouchEvent) => {
-      if (cooldownRef.current) return;
+      if (transitioningRef.current) return;
       const deltaY = touchStartY - e.changedTouches[0].clientY;
       if (Math.abs(deltaY) < 50) return;
 
-      cooldownRef.current = true;
-      setTimeout(() => {
-        cooldownRef.current = false;
-      }, FADE_OUT + PAUSE + FADE_IN + 100);
+      const current = visibleIndexRef.current;
+      const scroller = scrollersRef.current.get(current);
 
-      if (deltaY > 0) {
-        setActiveIndex((prev) => Math.min(prev + 1, sectionCount - 1));
-      } else {
-        setActiveIndex((prev) => Math.max(prev - 1, 0));
+      if (scroller && scroller.scrollHeight > scroller.clientHeight) {
+        const atTop = scroller.scrollTop <= 1;
+        const atBottom =
+          scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 1;
+        if (deltaY > 0 && !atBottom) return;
+        if (deltaY < 0 && !atTop) return;
       }
+
+      navigate(deltaY > 0 ? 1 : -1);
     };
 
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchend", onTouchEnd, { passive: true });
-
     return () => {
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
     };
-  }, [sectionCount]);
-
-  // Orchestrate fade-out → black → fade-in
-  useEffect(() => {
-    if (activeIndex === visibleIndex) return;
-
-    if (transitioningRef.current) {
-      pendingRef.current = activeIndex;
-      return;
-    }
-
-    const runTransition = (target: number) => {
-      transitioningRef.current = true;
-
-      // Step 1: fade out everything
-      setVisibleIndex(-1);
-
-      // Step 2: after fade-out + pause, fade in the new section
-      setTimeout(() => {
-        setVisibleIndex(target);
-
-        // Step 3: after fade-in, check for queued transitions
-        setTimeout(() => {
-          transitioningRef.current = false;
-          if (pendingRef.current !== null && pendingRef.current !== target) {
-            const next = pendingRef.current;
-            pendingRef.current = null;
-            runTransition(next);
-          }
-        }, FADE_IN);
-      }, FADE_OUT + PAUSE);
-    };
-
-    runTransition(activeIndex);
-  }, [activeIndex, visibleIndex]);
+  }, [navigate]);
 
   return (
-    <SnapContext.Provider
-      value={{ visibleIndex, totalSections: sectionCount }}
-    >
+    <SnapContext.Provider value={{ visibleIndex, phase, totalSections: sectionCount, registerScroller }}>
       <main className="relative h-screen w-screen overflow-hidden">
         {children}
       </main>

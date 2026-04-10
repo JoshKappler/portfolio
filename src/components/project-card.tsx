@@ -43,7 +43,7 @@ export function ProjectCard({
       transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
       className="group relative"
     >
-      <div className="relative border border-border/60 rounded-3xl overflow-hidden bg-bg-card/40 backdrop-blur-sm hover:border-border-hover transition-all duration-700">
+      <div className="relative border border-white/[0.08] rounded-3xl overflow-hidden bg-bg/60 backdrop-blur-xl hover:border-white/[0.14] transition-all duration-700">
         {/* Top accent line */}
         <div
           className="h-px w-full"
