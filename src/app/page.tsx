@@ -6,7 +6,7 @@ import { YouTube } from "@/components/youtube";
 import { Projects } from "@/components/projects";
 import { About } from "@/components/about";
 import { Contact } from "@/components/contact";
-import { ThemedNeuralVortex, ThemedSmoke, ThemedDottedSurface } from "@/components/themed-backgrounds";
+import { ThemedEtheralShadow, ThemedNeuralVortex, ThemedSmoke, ThemedDottedSurface } from "@/components/themed-backgrounds";
 
 export default function Home() {
   return (
@@ -14,7 +14,7 @@ export default function Home() {
       <CursorGlow />
       <SnapContainer sectionCount={5}>
         <Hero index={0} />
-        <ContentSection index={1}>
+        <ContentSection index={1} background={<ThemedEtheralShadow />}>
           <YouTube />
         </ContentSection>
         <ContentSection
