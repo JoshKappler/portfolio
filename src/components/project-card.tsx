@@ -3,6 +3,7 @@
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 import Image from "next/image";
+import { useTheme } from "./theme-provider";
 
 interface ProjectProps {
   index: number;
@@ -33,6 +34,8 @@ export function ProjectCard({
 }: ProjectProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const { theme } = useTheme();
+  const isLight = theme === "light";
   return (
     <motion.article
       ref={ref}
@@ -41,7 +44,11 @@ export function ProjectCard({
       transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
       className="group relative"
     >
-      <div className="relative border border-white/[0.08] rounded-3xl overflow-hidden bg-bg/60 backdrop-blur-xl hover:border-white/[0.14] transition-all duration-700">
+      <div className={`relative border rounded-3xl overflow-hidden transition-all duration-700 ${
+        isLight
+          ? "border-border bg-bg-card/95 hover:border-border-hover"
+          : "border-border/60 bg-bg-card/50 backdrop-blur-xl hover:border-border-hover"
+      }`}>
         {/* Top accent line */}
         <div
           className="h-px w-full"

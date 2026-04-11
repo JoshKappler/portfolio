@@ -1,9 +1,13 @@
 "use client";
 
-import { ReactNode, useRef, useEffect } from "react";
+import { ReactNode, useRef, useEffect, useMemo } from "react";
 import { EtheralShadow } from "@/components/ui/etheral-shadow";
 import { useSnapContext } from "./snap-container";
 import { useTheme } from "./theme-provider";
+
+const ANIMATION_CONFIG = { scale: 100, speed: 90 };
+const NOISE_DARK = { opacity: 0.8, scale: 1.2 };
+const NOISE_LIGHT = { opacity: 0.4, scale: 1.2 };
 
 export function ContentSection({
   children,
@@ -46,11 +50,11 @@ export function ContentSection({
             <>
               <EtheralShadow
                 color={isLight ? "rgba(100, 130, 200, 1)" : "rgba(40, 80, 180, 1)"}
-                animation={{ scale: 100, speed: 90 }}
-                noise={{ opacity: isLight ? 0.4 : 0.8, scale: 1.2 }}
+                animation={ANIMATION_CONFIG}
+                noise={isLight ? NOISE_LIGHT : NOISE_DARK}
                 sizing="fill"
               />
-              <div className="absolute inset-0 bg-bg/55" />
+              <div className={`absolute inset-0 z-[1] ${isLight ? "bg-bg/[0.93]" : "bg-bg/55"}`} />
             </>
           ))}
       </div>

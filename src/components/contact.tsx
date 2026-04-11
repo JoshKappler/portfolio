@@ -2,10 +2,13 @@
 
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
+import { useTheme } from "./theme-provider";
 
 export function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const { theme } = useTheme();
+  const isLight = theme === "light";
 
   return (
     <section
@@ -15,7 +18,7 @@ export function Contact() {
     >
       <div className="max-w-6xl mx-auto">
         {/* CTA area */}
-        <div className="relative border border-border/40 rounded-3xl p-12 md:p-16 lg:p-20 overflow-hidden bg-bg-card/20">
+        <div className={`relative border border-border/40 rounded-3xl p-12 md:p-16 lg:p-20 overflow-hidden ${isLight ? "bg-bg-card/90" : "bg-bg-card/20"}`}>
           {/* Ambient glow */}
           <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
 

@@ -3,10 +3,13 @@
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 import { AnimatedCounter } from "./animated-counter";
+import { useTheme } from "./theme-provider";
 
 export function YouTube() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const { theme } = useTheme();
+  const isLight = theme === "light";
 
   return (
     <section
@@ -109,9 +112,9 @@ export function YouTube() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="flex flex-col justify-center"
           >
-            <div className="relative border border-border rounded-2xl p-8 bg-bg-card/30 backdrop-blur-sm">
+            <div className={`relative border border-border rounded-2xl p-8 ${isLight ? "bg-bg-card/90" : "bg-bg-card/30 backdrop-blur-sm"}`}>
               <div className="absolute -top-3 left-6">
-                <span className="px-3 py-1 text-[10px] font-mono text-accent tracking-widest uppercase bg-bg-card border border-border rounded-full">
+                <span className={`px-3 py-1 text-[10px] font-mono text-accent tracking-widest uppercase border border-border rounded-full ${isLight ? "bg-bg-card" : "bg-bg-card"}`}>
                   Brand Partnerships
                 </span>
               </div>

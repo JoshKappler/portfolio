@@ -55,10 +55,12 @@ export function ShaderAnimation({ isLight = false }: { isLight?: boolean }) {
           }
         }
 
-        vec3 bg = mix(vec3(0.0), vec3(0.94, 0.93, 0.91), u_light);
-        color = mix(color, bg + color * 0.4, u_light);
+        vec3 lightBg = vec3(0.94, 0.93, 0.91);
+        float ringIntensity = clamp(length(color) * 0.12, 0.0, 0.15);
+        vec3 lightResult = lightBg - vec3(ringIntensity);
+        color = mix(color, lightResult, u_light);
 
-        gl_FragColor = vec4(color[0],color[1],color[2],1.0);
+        gl_FragColor = vec4(color, 1.0);
       }
     `
 
@@ -146,11 +148,7 @@ export function ShaderAnimation({ isLight = false }: { isLight?: boolean }) {
   return (
     <div
       ref={containerRef}
-      className="w-full h-screen"
-      style={{
-        background: "#000",
-        overflow: "hidden",
-      }}
+      className="w-full h-screen overflow-hidden"
     />
   )
 }

@@ -15,9 +15,7 @@ export function DottedSurface({ isLight = false }: { isLight?: boolean }) {
       const fogColor = isLight ? 0xf0efe8 : 0x06060a;
       fog.color.setHex(fogColor);
       renderer.setClearColor(fogColor, 0);
-      material.color.setRGB(
-        ...(isLight ? [0.3, 0.3, 0.35] as [number, number, number] : [0.78, 0.78, 0.78] as [number, number, number])
-      );
+      material.color.set(isLight ? 0x555560 : 0xc8c8c8);
     }
   }, [isLight]);
 
@@ -52,7 +50,6 @@ export function DottedSurface({ isLight = false }: { isLight?: boolean }) {
     container.appendChild(renderer.domElement);
 
     const positions: number[] = [];
-    const colors: number[] = [];
     const geometry = new THREE.BufferGeometry();
 
     for (let ix = 0; ix < AMOUNTX; ix++) {
@@ -60,11 +57,6 @@ export function DottedSurface({ isLight = false }: { isLight?: boolean }) {
         const x = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2;
         const z = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2;
         positions.push(x, 0, z);
-        if (lightRef.current) {
-          colors.push(80, 80, 90);
-        } else {
-          colors.push(200, 200, 200);
-        }
       }
     }
 
@@ -72,14 +64,10 @@ export function DottedSurface({ isLight = false }: { isLight?: boolean }) {
       "position",
       new THREE.Float32BufferAttribute(positions, 3)
     );
-    geometry.setAttribute(
-      "color",
-      new THREE.Float32BufferAttribute(colors, 3)
-    );
 
     const material = new THREE.PointsMaterial({
       size: 8,
-      vertexColors: true,
+      color: lightRef.current ? 0x555560 : 0xc8c8c8,
       transparent: true,
       opacity: 0.8,
       sizeAttenuation: true,

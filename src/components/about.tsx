@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
+import { useTheme } from "./theme-provider";
 
 const tools = [
   { name: "TypeScript", category: "language" },
@@ -30,6 +31,8 @@ const tools = [
 export function About() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const { theme } = useTheme();
+  const isLight = theme === "light";
 
   return (
     <section
@@ -131,7 +134,7 @@ export function About() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="border border-border/40 rounded-2xl p-6 bg-bg-card/20"
+              className={`border border-border/40 rounded-2xl p-6 ${isLight ? "bg-bg-card/90" : "bg-bg-card/20"}`}
             >
               <h4 className="font-mono text-[10px] text-accent tracking-[0.3em] uppercase mb-5">
                 How I build

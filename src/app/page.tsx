@@ -19,34 +19,19 @@ export default function Home() {
         </ContentSection>
         <ContentSection
           index={2}
-          background={
-            <>
-              <ThemedNeuralVortex />
-              <div className="absolute inset-0 bg-bg/40" />
-            </>
-          }
+          background={<ThemedNeuralVortex />}
         >
           <Projects />
         </ContentSection>
         <ContentSection
           index={3}
-          background={
-            <>
-              <ThemedSmoke smokeColor="#c9a96e" />
-              <div className="absolute inset-0 bg-bg/50" />
-            </>
-          }
+          background={<ThemedSmoke smokeColor="#c9a96e" />}
         >
           <About />
         </ContentSection>
         <ContentSection
           index={4}
-          background={
-            <>
-              <ThemedDottedSurface />
-              <div className="absolute inset-0 bg-bg/40" />
-            </>
-          }
+          background={<ThemedDottedSurface />}
         >
           <Contact />
         </ContentSection>

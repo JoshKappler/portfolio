@@ -126,7 +126,8 @@ export function SmokeBackground({ smokeColor = "#c9a96e", isLight = false }: Smo
 
     let raf: number;
     const loop = (now: number) => {
-      gl.clearColor(0, 0, 0, 1);
+      const bg = lightRef.current ? 0.94 : 0.0;
+      gl.clearColor(bg, bg, bg, 1);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(program);
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer);

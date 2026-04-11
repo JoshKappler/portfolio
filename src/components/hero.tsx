@@ -63,7 +63,7 @@ export function Hero({ index }: { index: number }) {
       <div className="absolute inset-0 z-0 pointer-events-none">
         {shouldRenderBg && <ShaderAnimation isLight={isLight} />}
       </div>
-      <div className={`absolute inset-0 z-[1] pointer-events-none ${isLight ? "bg-white/40" : "bg-black/50"}`} />
+      <div className={`absolute inset-0 z-[1] pointer-events-none ${isLight ? "bg-bg/60" : "bg-black/50"}`} />
 
       <motion.div
         initial={{ scaleY: 0 }}
