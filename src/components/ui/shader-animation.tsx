@@ -55,9 +55,7 @@ export function ShaderAnimation({ isLight = false }: { isLight?: boolean }) {
           }
         }
 
-        vec3 lightBg = vec3(0.94, 0.93, 0.91);
-        float ringIntensity = clamp(length(color) * 0.12, 0.0, 0.15);
-        vec3 lightResult = lightBg - vec3(ringIntensity);
+        vec3 lightResult = vec3(1.0) - color * 0.4;
         color = mix(color, lightResult, u_light);
 
         gl_FragColor = vec4(color, 1.0);

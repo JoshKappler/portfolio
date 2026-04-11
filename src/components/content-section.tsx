@@ -49,12 +49,12 @@ export function ContentSection({
           (background ?? (
             <>
               <EtheralShadow
-                color={isLight ? "rgba(100, 130, 200, 1)" : "rgba(40, 80, 180, 1)"}
+                color={isLight ? "rgba(180, 200, 235, 1)" : "rgba(40, 80, 180, 1)"}
                 animation={ANIMATION_CONFIG}
                 noise={isLight ? NOISE_LIGHT : NOISE_DARK}
                 sizing="fill"
               />
-              <div className={`absolute inset-0 z-[1] ${isLight ? "bg-bg/[0.93]" : "bg-bg/55"}`} />
+              <div className={`absolute inset-0 z-[1] ${isLight ? "bg-white/80" : "bg-bg/55"}`} />
             </>
           ))}
       </div>

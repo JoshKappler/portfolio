@@ -74,16 +74,16 @@ export function NeuralVortexBackground({ isLight = false }: { isLight?: boolean 
         noise += pow(noise, 10.);
         noise = max(.0, noise - .5);
         noise *= (1. - length(vUv - .5));
-        vec3 darkColor = vec3(0.5, 0.15, 0.65);
-        darkColor = mix(darkColor, vec3(0.02, 0.7, 0.9), 0.32 + 0.16 * sin(2.0 * u_scroll_progress + 1.2));
-        darkColor += vec3(0.15, 0.0, 0.6) * sin(2.0 * u_scroll_progress + 1.5);
+        vec3 color = vec3(0.5, 0.15, 0.65);
+        color = mix(color, vec3(0.02, 0.7, 0.9), 0.32 + 0.16 * sin(2.0 * u_scroll_progress + 1.2));
+        color += vec3(0.15, 0.0, 0.6) * sin(2.0 * u_scroll_progress + 1.5);
+        color = color * noise;
 
-        vec3 lightColor = vec3(0.35, 0.15, 0.55);
-        lightColor = mix(lightColor, vec3(0.1, 0.45, 0.65), 0.32 + 0.16 * sin(2.0 * u_scroll_progress + 1.2));
-        lightColor += vec3(0.1, 0.0, 0.4) * sin(2.0 * u_scroll_progress + 1.5);
-
-        vec3 color = mix(darkColor, lightColor, u_light) * noise;
-        gl_FragColor = vec4(color, noise);
+        // Dark mode: colored pattern, transparent where no pattern
+        // Light mode: white bg with colored pattern where noise is high
+        vec3 lightResult = mix(vec3(1.0), color * 2.0, clamp(noise * 1.5, 0.0, 1.0));
+        float alpha = mix(noise, 1.0, u_light);
+        gl_FragColor = vec4(mix(color, lightResult, u_light), alpha);
       }
     `;
 

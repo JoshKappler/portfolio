@@ -12,7 +12,7 @@ export function DottedSurface({ isLight = false }: { isLight?: boolean }) {
     lightRef.current = isLight;
     if (sceneObjRef.current) {
       const { fog, renderer, material } = sceneObjRef.current;
-      const fogColor = isLight ? 0xf0efe8 : 0x06060a;
+      const fogColor = isLight ? 0xffffff : 0x06060a;
       fog.color.setHex(fogColor);
       renderer.setClearColor(fogColor, 0);
       material.color.set(isLight ? 0x555560 : 0xc8c8c8);
@@ -27,7 +27,7 @@ export function DottedSurface({ isLight = false }: { isLight?: boolean }) {
     const AMOUNTX = 30;
     const AMOUNTY = 40;
 
-    const fogColor = lightRef.current ? 0xf0efe8 : 0x06060a;
+    const fogColor = lightRef.current ? 0xffffff : 0x06060a;
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog(fogColor, 2000, 10000);
 
