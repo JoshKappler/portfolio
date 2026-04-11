@@ -46,7 +46,7 @@ export function ProjectCard({
     >
       <div className={`relative border rounded-3xl overflow-hidden transition-all duration-700 ${
         isLight
-          ? "border-border bg-white shadow-sm hover:border-border-hover"
+          ? "border-border bg-bg-card hover:border-border-hover"
           : "border-border/60 bg-bg-card/50 backdrop-blur-xl hover:border-border-hover"
       }`}>
         {/* Top accent line */}

@@ -112,7 +112,7 @@ export function YouTube() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="flex flex-col justify-center"
           >
-            <div className={`relative border border-border rounded-2xl p-8 ${isLight ? "bg-white shadow-sm" : "bg-bg-card/30 backdrop-blur-sm"}`}>
+            <div className={`relative border border-border rounded-2xl p-8 ${isLight ? "bg-bg-card" : "bg-bg-card/30 backdrop-blur-sm"}`}>
               <div className="absolute -top-3 left-6">
                 <span className={`px-3 py-1 text-[10px] font-mono tracking-widest uppercase border rounded-full ${isLight ? "text-text-dim bg-white border-border" : "text-accent bg-bg-card border-border"}`}>
                   Brand Partnerships
@@ -130,7 +130,7 @@ export function YouTube() {
                 ].map((brand) => (
                   <span
                     key={brand}
-                    className={`px-4 py-2 text-sm rounded-lg border ${isLight ? "text-text border-border bg-bg-elevated" : "text-text-muted border-border/60 bg-bg/50"}`}
+                    className={`px-4 py-2 text-sm rounded-lg border ${isLight ? "text-text border-border bg-bg-card" : "text-text-muted border-border/60 bg-bg/50"}`}
                   >
                     {brand}
                   </span>
