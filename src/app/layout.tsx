@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
+import { ThemeProvider, ThemeToggle } from "@/components/theme-provider";
 import "./globals.css";
 
 
@@ -50,7 +51,10 @@ export default function RootLayout({
       className={`${syne.variable} ${dmSans.variable} ${jetbrains.variable}`}
     >
       <body>
-        {children}
+        <ThemeProvider>
+          <ThemeToggle />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

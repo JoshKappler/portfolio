@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "motion/react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 
 interface ProjectProps {
@@ -33,8 +33,6 @@ export function ProjectCard({
 }: ProjectProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
-  const [isExpanded, setIsExpanded] = useState(false);
-
   return (
     <motion.article
       ref={ref}
@@ -156,55 +154,28 @@ export function ProjectCard({
             ))}
           </div>
 
-          {/* Expandable details */}
-          <motion.div
-            initial={false}
-            animate={{
-              height: isExpanded ? "auto" : 0,
-              opacity: isExpanded ? 1 : 0,
-            }}
-            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="pt-6 border-t border-border/40">
-              <p className="font-mono text-[10px] text-text-dim tracking-[0.3em] uppercase mb-5">
-                Technical Details
-              </p>
-              <div className="grid md:grid-cols-2 gap-3">
-                {highlights.map((h, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={isExpanded ? { opacity: 1, x: 0 } : {}}
-                    transition={{ delay: i * 0.04, duration: 0.3 }}
-                    className="flex items-start gap-3 text-sm text-text-muted"
-                  >
-                    <span
-                      className="mt-2 w-1 h-1 rounded-full shrink-0"
-                      style={{ backgroundColor: accentColor }}
-                    />
-                    {h}
-                  </motion.div>
-                ))}
-              </div>
+          {/* Technical details */}
+          <div className="pt-6 border-t border-border/40">
+            <p className="font-mono text-[10px] text-text-dim tracking-[0.3em] uppercase mb-5">
+              Technical Details
+            </p>
+            <div className="grid md:grid-cols-2 gap-3">
+              {highlights.map((h, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.3 + i * 0.04, duration: 0.3 }}
+                  className="flex items-start gap-3 text-sm text-text-muted"
+                >
+                  <span
+                    className="mt-2 w-1 h-1 rounded-full shrink-0"
+                    style={{ backgroundColor: accentColor }}
+                  />
+                  {h}
+                </motion.div>
+              ))}
             </div>
-          </motion.div>
-
-          {/* Toggle */}
-          <div className="mt-6 pt-4 border-t border-border/30">
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="group/btn flex items-center gap-2 font-mono text-xs text-text-dim hover:text-accent transition-colors cursor-pointer"
-            >
-              <motion.span
-                animate={{ rotate: isExpanded ? 45 : 0 }}
-                transition={{ duration: 0.2 }}
-                className="inline-block text-accent"
-              >
-                +
-              </motion.span>
-              {isExpanded ? "Less detail" : "Technical details"}
-            </button>
           </div>
         </div>
       </div>

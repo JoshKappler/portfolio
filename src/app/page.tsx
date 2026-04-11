@@ -6,9 +6,7 @@ import { YouTube } from "@/components/youtube";
 import { Projects } from "@/components/projects";
 import { About } from "@/components/about";
 import { Contact } from "@/components/contact";
-import { NeuralVortexBackground } from "@/components/ui/neural-vortex-background";
-import { SmokeBackground } from "@/components/ui/smoke-background";
-import { DottedSurface } from "@/components/ui/dotted-surface";
+import { ThemedNeuralVortex, ThemedSmoke, ThemedDottedSurface } from "@/components/themed-backgrounds";
 
 export default function Home() {
   return (
@@ -23,7 +21,7 @@ export default function Home() {
           index={2}
           background={
             <>
-              <NeuralVortexBackground />
+              <ThemedNeuralVortex />
               <div className="absolute inset-0 bg-bg/40" />
             </>
           }
@@ -34,7 +32,7 @@ export default function Home() {
           index={3}
           background={
             <>
-              <SmokeBackground smokeColor="#c9a96e" />
+              <ThemedSmoke smokeColor="#c9a96e" />
               <div className="absolute inset-0 bg-bg/50" />
             </>
           }
@@ -45,7 +43,7 @@ export default function Home() {
           index={4}
           background={
             <>
-              <DottedSurface />
+              <ThemedDottedSurface />
               <div className="absolute inset-0 bg-bg/40" />
             </>
           }

@@ -3,6 +3,7 @@
 import { ReactNode, useRef, useEffect } from "react";
 import { EtheralShadow } from "@/components/ui/etheral-shadow";
 import { useSnapContext } from "./snap-container";
+import { useTheme } from "./theme-provider";
 
 export function ContentSection({
   children,
@@ -15,6 +16,8 @@ export function ContentSection({
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { visibleIndex, phase, registerScroller } = useSnapContext();
+  const { theme } = useTheme();
+  const isLight = theme === "light";
   const isVisible = index === visibleIndex;
   // Only mount the background for current section and immediate neighbors
   const shouldRenderBg = Math.abs(index - visibleIndex) <= 1;
@@ -42,9 +45,9 @@ export function ContentSection({
           (background ?? (
             <>
               <EtheralShadow
-                color="rgba(40, 80, 180, 1)"
+                color={isLight ? "rgba(100, 130, 200, 1)" : "rgba(40, 80, 180, 1)"}
                 animation={{ scale: 100, speed: 90 }}
-                noise={{ opacity: 0.8, scale: 1.2 }}
+                noise={{ opacity: isLight ? 0.4 : 0.8, scale: 1.2 }}
                 sizing="fill"
               />
               <div className="absolute inset-0 bg-bg/55" />

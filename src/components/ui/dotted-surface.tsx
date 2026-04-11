@@ -3,8 +3,23 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-export function DottedSurface() {
+export function DottedSurface({ isLight = false }: { isLight?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const lightRef = useRef(isLight);
+  const sceneObjRef = useRef<{ fog: THREE.Fog; renderer: THREE.WebGLRenderer; material: THREE.PointsMaterial } | null>(null);
+
+  useEffect(() => {
+    lightRef.current = isLight;
+    if (sceneObjRef.current) {
+      const { fog, renderer, material } = sceneObjRef.current;
+      const fogColor = isLight ? 0xf0efe8 : 0x06060a;
+      fog.color.setHex(fogColor);
+      renderer.setClearColor(fogColor, 0);
+      material.color.setRGB(
+        ...(isLight ? [0.3, 0.3, 0.35] as [number, number, number] : [0.78, 0.78, 0.78] as [number, number, number])
+      );
+    }
+  }, [isLight]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -14,8 +29,9 @@ export function DottedSurface() {
     const AMOUNTX = 30;
     const AMOUNTY = 40;
 
+    const fogColor = lightRef.current ? 0xf0efe8 : 0x06060a;
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x06060a, 2000, 10000);
+    scene.fog = new THREE.Fog(fogColor, 2000, 10000);
 
     const camera = new THREE.PerspectiveCamera(
       60,
@@ -31,7 +47,7 @@ export function DottedSurface() {
     });
     renderer.setPixelRatio(1);
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setClearColor(0x06060a, 0);
+    renderer.setClearColor(fogColor, 0);
 
     container.appendChild(renderer.domElement);
 
@@ -44,7 +60,11 @@ export function DottedSurface() {
         const x = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2;
         const z = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2;
         positions.push(x, 0, z);
-        colors.push(200, 200, 200);
+        if (lightRef.current) {
+          colors.push(80, 80, 90);
+        } else {
+          colors.push(200, 200, 200);
+        }
       }
     }
 
@@ -67,6 +87,8 @@ export function DottedSurface() {
 
     const points = new THREE.Points(geometry, material);
     scene.add(points);
+
+    sceneObjRef.current = { fog: scene.fog as THREE.Fog, renderer, material };
 
     let count = 0;
     let animationId: number;

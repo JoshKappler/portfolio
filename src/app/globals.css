@@ -4,7 +4,7 @@
   --color-bg: #06060a;
   --color-bg-elevated: #0e0e14;
   --color-bg-card: #12121a;
-  --color-text: #e8e6e3;
+  --color-text: #f5f5f5;
   --color-text-muted: #8a8a8f;
   --color-text-dim: #4a4a50;
   --color-accent: #c9a96e;
@@ -14,6 +14,19 @@
   --font-display: var(--font-syne);
   --font-body: var(--font-dm-sans);
   --font-mono: var(--font-jetbrains);
+}
+
+html[data-theme="light"] {
+  --color-bg: #f0efe8;
+  --color-bg-elevated: #e6e5de;
+  --color-bg-card: #dddcd5;
+  --color-text: #1a1a2e;
+  --color-text-muted: #4a4a5a;
+  --color-text-dim: #8a8a95;
+  --color-accent: #a07830;
+  --color-accent-dim: #7a6235;
+  --color-border: #c8c7c0;
+  --color-border-hover: #a8a7a0;
 }
 
 html {
@@ -50,7 +63,7 @@ body::before {
   background: radial-gradient(
     ellipse at center,
     transparent 50%,
-    rgba(6, 6, 10, 0.4) 100%
+    color-mix(in srgb, var(--color-bg) 40%, transparent) 100%
   );
 }
 

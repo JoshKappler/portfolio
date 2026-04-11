@@ -8,6 +8,7 @@ out vec4 O;
 uniform float time;
 uniform vec2 resolution;
 uniform vec3 u_color;
+uniform float u_light;
 
 #define FC gl_FragCoord.xy
 #define R resolution
@@ -31,8 +32,10 @@ void main(){
   col.b-=fbm(uv*1.006+vec2(0,T*.015)+n+.006);
 
   col=mix(col, u_color, dot(col,vec3(.21,.71,.07)));
-  col=mix(vec3(.08),col,min(time*.1,1.));
-  col=clamp(col,.08,1.);
+  vec3 base = mix(vec3(.08), vec3(.92), u_light);
+  float clampLo = mix(.08, .75, u_light);
+  col=mix(base,col,min(time*.1,1.));
+  col=clamp(col,clampLo,1.);
   O=vec4(col,1);
 }`;
 
@@ -54,15 +57,21 @@ const hexToRgb = (hex: string): [number, number, number] => {
 
 interface SmokeBackgroundProps {
   smokeColor?: string;
+  isLight?: boolean;
 }
 
-export function SmokeBackground({ smokeColor = "#c9a96e" }: SmokeBackgroundProps) {
+export function SmokeBackground({ smokeColor = "#c9a96e", isLight = false }: SmokeBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const colorRef = useRef(hexToRgb(smokeColor));
+  const lightRef = useRef(isLight);
 
   useEffect(() => {
     colorRef.current = hexToRgb(smokeColor);
   }, [smokeColor]);
+
+  useEffect(() => {
+    lightRef.current = isLight;
+  }, [isLight]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -104,6 +113,7 @@ export function SmokeBackground({ smokeColor = "#c9a96e" }: SmokeBackgroundProps
     const uResolution = gl.getUniformLocation(program, "resolution");
     const uTime = gl.getUniformLocation(program, "time");
     const uColor = gl.getUniformLocation(program, "u_color");
+    const uLight = gl.getUniformLocation(program, "u_light");
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -123,6 +133,7 @@ export function SmokeBackground({ smokeColor = "#c9a96e" }: SmokeBackgroundProps
       gl.uniform2f(uResolution, canvas.width, canvas.height);
       gl.uniform1f(uTime, now * 1e-3);
       gl.uniform3fv(uColor, colorRef.current);
+      gl.uniform1f(uLight, lightRef.current ? 1.0 : 0.0);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       raf = requestAnimationFrame(loop);
     };

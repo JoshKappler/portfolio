@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { ShaderAnimation } from "@/components/ui/shader-animation";
 import { Marquee } from "./marquee";
 import { useSnapContext } from "./snap-container";
+import { useTheme } from "./theme-provider";
 
 const headline1 = "I build autonomous";
 const headline2 = "AI agents.";
@@ -41,6 +42,8 @@ function AnimatedText({
 
 export function Hero({ index }: { index: number }) {
   const { visibleIndex, phase } = useSnapContext();
+  const { theme } = useTheme();
+  const isLight = theme === "light";
   const isVisible = index === visibleIndex;
   const shouldRenderBg = Math.abs(index - visibleIndex) <= 1;
 
@@ -58,9 +61,9 @@ export function Hero({ index }: { index: number }) {
       }}
     >
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {shouldRenderBg && <ShaderAnimation />}
+        {shouldRenderBg && <ShaderAnimation isLight={isLight} />}
       </div>
-      <div className="absolute inset-0 z-[1] bg-black/50 pointer-events-none" />
+      <div className={`absolute inset-0 z-[1] pointer-events-none ${isLight ? "bg-white/40" : "bg-black/50"}`} />
 
       <motion.div
         initial={{ scaleY: 0 }}

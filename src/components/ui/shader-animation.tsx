@@ -3,8 +3,9 @@
 import { useEffect, useRef } from "react"
 import * as THREE from "three"
 
-export function ShaderAnimation() {
+export function ShaderAnimation({ isLight = false }: { isLight?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const lightRef = useRef(isLight)
   const sceneRef = useRef<{
     camera: THREE.Camera
     scene: THREE.Scene
@@ -12,6 +13,13 @@ export function ShaderAnimation() {
     uniforms: any
     animationId: number
   } | null>(null)
+
+  useEffect(() => {
+    lightRef.current = isLight
+    if (sceneRef.current) {
+      sceneRef.current.uniforms.u_light.value = isLight ? 1.0 : 0.0
+    }
+  }, [isLight])
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -33,6 +41,7 @@ export function ShaderAnimation() {
       precision highp float;
       uniform vec2 resolution;
       uniform float time;
+      uniform float u_light;
 
       void main(void) {
         vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
@@ -45,6 +54,9 @@ export function ShaderAnimation() {
             color[j] += lineWidth*float(i*i) / abs(fract(t - 0.01*float(j)+float(i)*0.01)*5.0 - length(uv) + mod(uv.x+uv.y, 0.2));
           }
         }
+
+        vec3 bg = mix(vec3(0.0), vec3(0.94, 0.93, 0.91), u_light);
+        color = mix(color, bg + color * 0.4, u_light);
 
         gl_FragColor = vec4(color[0],color[1],color[2],1.0);
       }
@@ -60,6 +72,7 @@ export function ShaderAnimation() {
     const uniforms = {
       time: { type: "f", value: 1.0 },
       resolution: { type: "v2", value: new THREE.Vector2() },
+      u_light: { type: "f", value: lightRef.current ? 1.0 : 0.0 },
     }
 
     const material = new THREE.ShaderMaterial({

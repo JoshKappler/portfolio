@@ -9,6 +9,7 @@ import {
   useCallback,
   ReactNode,
 } from "react";
+import { motion, AnimatePresence } from "motion/react";
 
 type Phase = "idle" | "out" | "in";
 
@@ -202,7 +203,65 @@ export function SnapContainer({
     <SnapContext.Provider value={{ visibleIndex, phase, totalSections: sectionCount, registerScroller }}>
       <main className="relative h-screen w-screen overflow-hidden">
         {children}
+        <ScrollIndicator
+          visibleIndex={visibleIndex}
+          sectionCount={sectionCount}
+          phase={phase}
+          navigate={navigate}
+        />
       </main>
     </SnapContext.Provider>
+  );
+}
+
+function ScrollIndicator({
+  visibleIndex,
+  sectionCount,
+  phase,
+  navigate,
+}: {
+  visibleIndex: number;
+  sectionCount: number;
+  phase: Phase;
+  navigate: (direction: 1 | -1) => void;
+}) {
+  const isFirst = visibleIndex === 0;
+  const isLast = visibleIndex === sectionCount - 1;
+  const direction = isFirst ? "down" : "up";
+
+  if (isLast) return null;
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.button
+        key={direction}
+        onClick={() => navigate(isFirst ? 1 : -1)}
+        initial={{ opacity: 0, y: direction === "down" ? -4 : 4 }}
+        animate={{ opacity: phase === "idle" ? 1 : 0, y: 0 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.4 }}
+        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-1 cursor-pointer group"
+        aria-label={`Scroll ${direction}`}
+      >
+        <motion.svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          className="text-text/40 group-hover:text-accent transition-colors duration-300"
+          animate={{ y: [0, 3, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          style={{ rotate: direction === "up" ? "180deg" : "0deg" }}
+        >
+          <path
+            d="M4 7l6 6 6-6"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </motion.svg>
+      </motion.button>
+    </AnimatePresence>
   );
 }

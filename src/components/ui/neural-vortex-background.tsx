@@ -2,11 +2,17 @@
 
 import { useEffect, useRef } from "react";
 
-export function NeuralVortexBackground() {
+export function NeuralVortexBackground({ isLight = false }: { isLight?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pointer = useRef({ x: 0, y: 0, tX: 0, tY: 0 });
   const animationRef = useRef<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const lightRef = useRef(isLight);
+  const uLightRef = useRef<WebGLUniformLocation | null>(null);
+
+  useEffect(() => {
+    lightRef.current = isLight;
+  }, [isLight]);
 
   useEffect(() => {
     const canvasEl = canvasRef.current;
@@ -34,6 +40,7 @@ export function NeuralVortexBackground() {
       uniform float u_ratio;
       uniform vec2 u_pointer_position;
       uniform float u_scroll_progress;
+      uniform float u_light;
 
       vec2 rotate(vec2 uv, float th) {
         return mat2(cos(th), sin(th), -sin(th), cos(th)) * uv;
@@ -67,10 +74,15 @@ export function NeuralVortexBackground() {
         noise += pow(noise, 10.);
         noise = max(.0, noise - .5);
         noise *= (1. - length(vUv - .5));
-        vec3 color = vec3(0.5, 0.15, 0.65);
-        color = mix(color, vec3(0.02, 0.7, 0.9), 0.32 + 0.16 * sin(2.0 * u_scroll_progress + 1.2));
-        color += vec3(0.15, 0.0, 0.6) * sin(2.0 * u_scroll_progress + 1.5);
-        color = color * noise;
+        vec3 darkColor = vec3(0.5, 0.15, 0.65);
+        darkColor = mix(darkColor, vec3(0.02, 0.7, 0.9), 0.32 + 0.16 * sin(2.0 * u_scroll_progress + 1.2));
+        darkColor += vec3(0.15, 0.0, 0.6) * sin(2.0 * u_scroll_progress + 1.5);
+
+        vec3 lightColor = vec3(0.35, 0.15, 0.55);
+        lightColor = mix(lightColor, vec3(0.1, 0.45, 0.65), 0.32 + 0.16 * sin(2.0 * u_scroll_progress + 1.2));
+        lightColor += vec3(0.1, 0.0, 0.4) * sin(2.0 * u_scroll_progress + 1.5);
+
+        vec3 color = mix(darkColor, lightColor, u_light) * noise;
         gl_FragColor = vec4(color, noise);
       }
     `;
@@ -114,6 +126,8 @@ export function NeuralVortexBackground() {
     const uRatio = gl.getUniformLocation(program, "u_ratio");
     const uPointerPosition = gl.getUniformLocation(program, "u_pointer_position");
     const uScrollProgress = gl.getUniformLocation(program, "u_scroll_progress");
+    const uLight = gl.getUniformLocation(program, "u_light");
+    uLightRef.current = uLight;
 
     const resize = () => {
       const dpr = 1;
@@ -145,6 +159,7 @@ export function NeuralVortexBackground() {
         ? scroller.scrollTop / Math.max(scroller.scrollHeight - scroller.clientHeight, 1)
         : 0;
       gl.uniform1f(uScrollProgress, scrollProgress);
+      gl.uniform1f(uLight, lightRef.current ? 1.0 : 0.0);
 
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       animationRef.current = requestAnimationFrame(render);
