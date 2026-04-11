@@ -11,7 +11,7 @@ export function ThemedNeuralVortex() {
   return (
     <>
       <NeuralVortexBackground isLight={isLight} />
-      <div className={`absolute inset-0 z-[1] ${isLight ? "bg-white/40" : "bg-bg/40"}`} />
+      <div className={`absolute inset-0 ${isLight ? "z-[1] bg-white/40" : "bg-bg/40"}`} />
     </>
   );
 }
@@ -22,7 +22,7 @@ export function ThemedSmoke({ smokeColor }: { smokeColor?: string }) {
   return (
     <>
       <SmokeBackground smokeColor={smokeColor} isLight={isLight} />
-      <div className={`absolute inset-0 z-[1] ${isLight ? "bg-white/30" : "bg-bg/50"}`} />
+      <div className={`absolute inset-0 ${isLight ? "z-[1] bg-white/30" : "bg-bg/50"}`} />
     </>
   );
 }
@@ -33,7 +33,7 @@ export function ThemedDottedSurface() {
   return (
     <>
       <DottedSurface isLight={isLight} />
-      <div className={`absolute inset-0 z-[1] ${isLight ? "bg-white/30" : "bg-bg/40"}`} />
+      <div className={`absolute inset-0 ${isLight ? "z-[1] bg-white/30" : "bg-bg/40"}`} />
     </>
   );
 }
