@@ -22,11 +22,11 @@ html[data-theme="light"] {
   --color-bg-card: #ffffff;
   --color-text: #111111;
   --color-text-muted: #222222;
-  --color-text-dim: #555555;
-  --color-accent: #8a6420;
-  --color-accent-dim: #6a5020;
-  --color-border: #e0e0e0;
-  --color-border-hover: #c0c0c0;
+  --color-text-dim: #333333;
+  --color-accent: #7a5510;
+  --color-accent-dim: #5a4010;
+  --color-border: #cccccc;
+  --color-border-hover: #aaaaaa;
 }
 
 html {
