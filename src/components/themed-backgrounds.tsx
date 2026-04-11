@@ -12,12 +12,12 @@ export function ThemedEtheralShadow() {
   return (
     <>
       <EtheralShadow
-        color={isLight ? "rgba(120, 160, 220, 1)" : "rgba(40, 80, 180, 1)"}
+        color={isLight ? "rgba(70, 120, 200, 1)" : "rgba(40, 80, 180, 1)"}
         animation={{ scale: 100, speed: 90 }}
-        noise={{ opacity: isLight ? 0.4 : 0.8, scale: 1.2 }}
+        noise={{ opacity: isLight ? 0.6 : 0.8, scale: 1.2 }}
         sizing="fill"
       />
-      <div className={`absolute inset-0 ${isLight ? "z-[1] bg-white/55" : "bg-bg/55"}`} />
+      <div className={`absolute inset-0 ${isLight ? "z-[1] bg-white/40" : "bg-bg/55"}`} />
     </>
   );
 }

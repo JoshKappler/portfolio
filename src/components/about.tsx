@@ -134,7 +134,7 @@ export function About() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className={`border rounded-2xl p-6 ${isLight ? "bg-white border-border shadow-sm" : "border-border/40 bg-bg-card/20"}`}
+              className={`border rounded-2xl p-6 ${isLight ? "bg-bg border-border" : "border-border/40 bg-bg-card/20"}`}
             >
               <h4 className="font-mono text-[10px] text-accent tracking-[0.3em] uppercase mb-5">
                 How I build
