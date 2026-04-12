@@ -123,28 +123,6 @@ const projects = [
     accentColor: "#3498db",
   },
   {
-    title: "leadfinder",
-    subtitle: "5-Stage Agent Pipeline",
-    description:
-      "Built for a bank consulting firm. Five independent agents run in sequence — bank analysis, contact discovery, behavioral profiling, connection mapping, and content generation — with a human checkpoint between each stage. Each agent starts with a clean context window and receives only the structured JSON output of the previous stage. Analysts can re-run any single stage without re-running the rest.",
-    techStack: [
-      "TypeScript",
-      "Anthropic SDK",
-      "Zod",
-      "PDF parsing",
-    ],
-    highlights: [
-      "Stage 1 ingests 20-100 page call reports, 10-K filings, and FDIC data, then extracts NIM, efficiency ratio, NPA ratio, CET1, and peer benchmarks",
-      "Stage 2 discovers contacts via website scraping, SMTP verification without sending, and pattern matching — each email gets a confidence score",
-      "Stage 3 profiles prospects from LinkedIn, press, earnings calls, and podcasts — findings get confidence calibration (single mention = low, multiple sources = high)",
-      "Stage 4 cross-references the prospect's public network against internal contacts and scores relationship strength (former colleague > LinkedIn connection)",
-      "Stage 5 drafts outreach and runs a self-review pass against a banned-words list to strip AI-detectable writing patterns",
-      "Calibrated against 2GB of real deal documents (8 completed deals with inputs, working documents, and final deliverables)",
-    ],
-    linkLabel: "Private",
-    accentColor: "#8e44ad",
-  },
-  {
     title: "Mafia",
     subtitle: "AI Social Deduction Game",
     description:
