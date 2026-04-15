@@ -80,7 +80,6 @@ Shader-specific optimizations:
 - `project-card.tsx` — Individual project card (glass style: `bg-bg/60 backdrop-blur-xl`)
 - `about.tsx` — Bio + tools + approach
 - `contact.tsx` — CTA + footer links
-- `marquee.tsx` — Horizontal scrolling skill tags (rendered inside Hero)
 
 ### Utilities
 - `cursor-glow.tsx` — Custom cursor glow effect

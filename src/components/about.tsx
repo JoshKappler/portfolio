@@ -90,13 +90,12 @@ export function About() {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.4 }}
               >
-                I studied CS at the University of Oregon with a specialization
-                in AI and machine learning. I was a top student, but the
-                curriculum was mostly theoretical, focused on weights, layers,
-                and statistics without much applied usage. The things I work with
-                now, agent orchestration, tool use, prompt engineering,
-                multi-model pipelines, did not exist in any syllabus. So I left
-                and learned by building.
+                I studied CS at the University of Oregon, focused on AI and
+                machine learning. The curriculum covered the theory — weights,
+                layers, statistics — but the things I actually work with now
+                (agent orchestration, tool use, prompt engineering,
+                multi-model pipelines) didn't exist in any syllabus. I dropped
+                out and learned by building.
               </motion.p>
             </div>
           </div>

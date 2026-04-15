@@ -240,27 +240,24 @@ function ScrollIndicator({
         animate={{ opacity: phase === "idle" ? 1 : 0, y: 0 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4 }}
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-1 cursor-pointer group"
+        className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-3 cursor-pointer group"
         aria-label={`Scroll ${direction}`}
       >
-        <motion.svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          className="text-text/40 group-hover:text-accent transition-colors duration-300"
-          animate={{ y: [0, 3, 0] }}
+        <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-text group-hover:text-accent transition-colors duration-300">
+          {direction === "down" ? "Scroll" : "Back"}
+        </span>
+        <motion.div
+          className="relative w-6 h-10 rounded-full border-2 border-text/80 group-hover:border-accent transition-colors duration-300 flex justify-center"
+          animate={{ y: [0, 2, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           style={{ rotate: direction === "up" ? "180deg" : "0deg" }}
         >
-          <path
-            d="M4 7l6 6 6-6"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <motion.span
+            className="absolute top-1.5 w-1 h-2 rounded-full bg-text group-hover:bg-accent transition-colors duration-300"
+            animate={{ y: [0, 10, 0], opacity: [1, 0.2, 1] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
           />
-        </motion.svg>
+        </motion.div>
       </motion.button>
     </AnimatePresence>
   );

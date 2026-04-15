@@ -2,7 +2,6 @@
 
 import { motion } from "motion/react";
 import { ShaderAnimation } from "@/components/ui/shader-animation";
-import { Marquee } from "./marquee";
 import { useSnapContext } from "./snap-container";
 import { useTheme } from "./theme-provider";
 
@@ -133,10 +132,6 @@ export function Hero({ index }: { index: number }) {
             </motion.a>
           ))}
         </motion.div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 z-[2]">
-        <Marquee />
       </div>
     </section>
   );
