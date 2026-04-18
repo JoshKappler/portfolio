@@ -105,7 +105,7 @@ export function ShaderAnimation({ isLight = false }: { isLight?: boolean }) {
     // Animation loop
     const animate = () => {
       const animationId = requestAnimationFrame(animate)
-      uniforms.time.value += 0.05
+      uniforms.time.value += 0.0125
       renderer.render(scene, camera)
 
       if (sceneRef.current) {
