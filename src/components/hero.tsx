@@ -94,9 +94,11 @@ export function Hero({ index }: { index: number }) {
           className="max-w-xl"
         >
           <p className="text-text-muted text-lg md:text-xl leading-relaxed mb-12">
-            2.1M YouTube subscribers. I build AI agents from scratch — no
-            frameworks, no shortcuts. Looking for an early-stage startup where I
-            can do more of it.
+            Nine shipped AI agent systems, all solo. I write the orchestration
+            layer myself — tool loops, state machines, memory, multi-provider
+            routing. No LangChain, no CrewAI. Also grew a YouTube channel to
+            2.1M subscribers, which is where I learned to stick with long,
+            messy projects until they work.
           </p>
         </motion.div>
 
@@ -104,8 +106,36 @@ export function Hero({ index }: { index: number }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1.6 }}
-          className="flex flex-wrap gap-8 text-sm"
+          className="flex flex-wrap items-center gap-6 md:gap-8 text-sm"
         >
+          <motion.a
+            href="/resume.pdf"
+            download="Joshua_Kappler_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.8 }}
+            className="group relative inline-flex items-center gap-2 px-5 py-2.5 border border-accent/60 bg-accent/10 hover:bg-accent hover:text-bg text-accent transition-all duration-300 font-mono text-xs tracking-[0.2em] uppercase"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span>Download Résumé</span>
+          </motion.a>
+
           {[
             { label: "YouTube", href: "https://youtube.com/boffy" },
             { label: "GitHub", href: "https://github.com/JoshKappler" },
@@ -122,7 +152,7 @@ export function Hero({ index }: { index: number }) {
               rel="noopener noreferrer"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.8 + i * 0.1 }}
+              transition={{ delay: 1.9 + i * 0.1 }}
               className="group relative text-text-muted hover:text-accent transition-colors duration-300"
             >
               <span className="font-mono text-xs tracking-wider">
