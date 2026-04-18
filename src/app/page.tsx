@@ -14,14 +14,14 @@ export default function Home() {
       <CursorGlow />
       <SnapContainer sectionCount={5}>
         <Hero index={0} />
-        <ContentSection index={1} background={<ThemedEtheralShadow />}>
-          <YouTube />
-        </ContentSection>
         <ContentSection
-          index={2}
+          index={1}
           background={<ThemedNeuralVortex />}
         >
           <Projects />
+        </ContentSection>
+        <ContentSection index={2} background={<ThemedEtheralShadow />}>
+          <YouTube />
         </ContentSection>
         <ContentSection
           index={3}

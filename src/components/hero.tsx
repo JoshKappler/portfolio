@@ -25,8 +25,8 @@ function AnimatedText({
           initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{
-            duration: 0.4,
-            delay: delay + i * 0.025,
+            duration: 0.7,
+            delay: delay + i * 0.05,
             ease: [0.25, 0.1, 0.25, 1],
           }}
           className="inline-block"
@@ -67,7 +67,7 @@ export function Hero({ index }: { index: number }) {
       <motion.div
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
-        transition={{ duration: 1.2, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+        transition={{ duration: 2.0, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
         className="absolute top-0 left-[10%] md:left-[8%] w-px h-[40vh] bg-gradient-to-b from-transparent via-accent/20 to-transparent origin-top z-[2]"
       />
 
@@ -75,27 +75,27 @@ export function Hero({ index }: { index: number }) {
         <motion.p
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.9, delay: 0.4 }}
           className="font-mono text-sm text-accent tracking-[0.3em] uppercase mb-8"
         >
           Josh Kappler
         </motion.p>
 
         <h1 className="font-display text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[0.92] tracking-tight mb-10">
-          <AnimatedText text={headline1} delay={0.4} />
+          <AnimatedText text={headline1} delay={0.7} />
           <br />
-          <AnimatedText text={headline2} delay={0.9} className="text-accent" />
+          <AnimatedText text={headline2} delay={1.7} className="text-accent" />
         </h1>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.4 }}
+          transition={{ duration: 1.1, delay: 2.8 }}
           className="max-w-xl"
         >
           <p className="text-text-muted text-lg md:text-xl leading-relaxed mb-12">
             Nine shipped AI agent systems, all solo. I write the orchestration
-            layer myself — tool loops, state machines, memory, multi-provider
+            layer myself. Tool loops, state machines, memory, multi-provider
             routing. No LangChain, no CrewAI. Also grew a YouTube channel to
             2.1M subscribers, which is where I learned to stick with long,
             messy projects until they work.
@@ -105,18 +105,44 @@ export function Hero({ index }: { index: number }) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.6 }}
-          className="flex flex-wrap items-center gap-6 md:gap-8 text-sm"
+          transition={{ duration: 1.1, delay: 3.4 }}
+          className="flex flex-wrap items-center gap-4 md:gap-6 text-sm"
         >
           <motion.a
             href="/resume.pdf"
-            download="Joshua_Kappler_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.8 }}
-            className="group relative inline-flex items-center gap-2 px-5 py-2.5 border border-accent/60 bg-accent/10 hover:bg-accent hover:text-bg text-accent transition-all duration-300 font-mono text-xs tracking-[0.2em] uppercase"
+            transition={{ delay: 3.7, duration: 0.8 }}
+            className="group relative inline-flex items-center gap-2 px-5 py-2.5 border border-accent bg-accent/15 hover:bg-accent hover:text-bg text-accent transition-all duration-300 font-mono text-xs tracking-[0.2em] uppercase"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            <span>View Résumé</span>
+          </motion.a>
+
+          <motion.a
+            href="/resume.pdf"
+            download="Joshua_Kappler_Resume.pdf"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 3.85, duration: 0.8 }}
+            className="group relative inline-flex items-center gap-2 px-4 py-2.5 border border-accent/40 hover:border-accent text-text-muted hover:text-accent transition-all duration-300 font-mono text-xs tracking-[0.2em] uppercase"
+            aria-label="Download résumé"
+            title="Download résumé"
           >
             <svg
               width="14"
@@ -133,7 +159,7 @@ export function Hero({ index }: { index: number }) {
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" y1="15" x2="12" y2="3" />
             </svg>
-            <span>Download Résumé</span>
+            <span>Download</span>
           </motion.a>
 
           {[
@@ -152,8 +178,8 @@ export function Hero({ index }: { index: number }) {
               rel="noopener noreferrer"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.9 + i * 0.1 }}
-              className="group relative text-text-muted hover:text-accent transition-colors duration-300"
+              transition={{ delay: 4.0 + i * 0.15, duration: 0.8 }}
+              className="group relative text-text-muted hover:text-accent transition-colors duration-300 ml-2"
             >
               <span className="font-mono text-xs tracking-wider">
                 {link.label}

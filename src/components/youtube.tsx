@@ -25,7 +25,7 @@ export function YouTube() {
           transition={{ duration: 0.5 }}
           className="font-mono text-xs text-accent tracking-[0.3em] uppercase mb-4"
         >
-          01 / YouTube
+          02 / YouTube
         </motion.p>
 
         {/* Big stat hero */}
@@ -90,7 +90,7 @@ export function YouTube() {
                 Boffy
               </a>
               . I grew the channel from zero to 2.1 million subscribers. No
-              team at first — just figuring out what gets clicks and doing more
+              team at first. I just figured out what gets clicks and did more
               of it.
             </p>
             <p className="text-text-muted leading-relaxed">

@@ -8,24 +8,13 @@ const tools = [
   { name: "TypeScript", category: "language" },
   { name: "Python", category: "language" },
   { name: "Next.js", category: "framework" },
-  { name: "React", category: "framework" },
-  { name: "Node.js", category: "runtime" },
-  { name: "SQLite", category: "data" },
   { name: "PostgreSQL", category: "data" },
-  { name: "Drizzle ORM", category: "data" },
-  { name: "tRPC", category: "framework" },
+  { name: "SQLite", category: "data" },
   { name: "Zod", category: "framework" },
   { name: "Pydantic", category: "framework" },
   { name: "Anthropic SDK", category: "ai" },
-  { name: "Claude Agent SDK", category: "ai" },
-  { name: "Claude Code", category: "ai" },
   { name: "Groq", category: "ai" },
   { name: "OpenRouter", category: "ai" },
-  { name: "Ollama", category: "ai" },
-  { name: "Whisper", category: "ai" },
-  { name: "FastAPI", category: "framework" },
-  { name: "Playwright", category: "tool" },
-  { name: "ffmpeg", category: "tool" },
 ];
 
 export function About() {
@@ -69,9 +58,11 @@ export function About() {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                I grew a YouTube channel to 2.1 million subscribers over seven
-                years. No team at the start, no playbook. I just figured out
-                what worked and did more of it.
+                I build AI agents from scratch. I write the orchestration
+                layer myself. Tool-use loops, state machines, memory
+                management, multi-provider routing. Every system in the
+                project list was built solo, no LangChain, no CrewAI, no agent
+                frameworks.
               </motion.p>
 
               <motion.p
@@ -79,23 +70,11 @@ export function About() {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
-                Now I build AI agents. Same approach — pick a hard problem,
-                build the whole thing from scratch, make it work. Seven AI
-                systems in the past several months, all solo, all direct SDK
-                calls, no frameworks.
-              </motion.p>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                I studied CS at the University of Oregon, focused on AI and
-                machine learning. The curriculum covered the theory — weights,
-                layers, statistics — but the things I actually work with now
-                (agent orchestration, tool use, prompt engineering,
-                multi-model pipelines) didn't exist in any syllabus. I dropped
-                out and learned by building.
+                Before this I spent seven years growing a YouTube channel from
+                zero to 2.1 million subscribers. That is where I learned to
+                follow through on long, unglamorous projects and manage
+                something that kept getting bigger and more complex. Same
+                instinct, different medium.
               </motion.p>
             </div>
           </div>
@@ -140,7 +119,7 @@ export function About() {
               </h4>
               <ul className="space-y-4 text-sm text-text-muted">
                 {[
-                  "Direct SDK calls — no LangChain, no CrewAI",
+                  "Hand-rolled orchestration, no LangChain, no CrewAI",
                   "Claude Code as primary dev tool",
                   "Multi-provider LLM routing (Claude, Groq, OpenRouter, Ollama)",
                   "Full-stack: backend, frontend, dashboards, deployment",
