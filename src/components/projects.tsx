@@ -6,6 +6,31 @@ import { ProjectCard } from "./project-card";
 
 const projects = [
   {
+    title: "memo-engine",
+    subtitle: "Deal Analysis + Investment Memo Platform",
+    description:
+      "Built for a private credit investment firm under NDA. Ingests messy deal documents (PDFs, Excel models, Word drafts, .msg emails) and produces institutional-grade investment memos through a six-step human-in-the-loop pipeline. Every claim in the output is cited back to the source file and location. Analysts iterate with the AI through a chat review gate, with voice input via Whisper, before advancing to the next stage.",
+    techStack: [
+      "Next.js 16",
+      "TypeScript",
+      "Anthropic SDK",
+      "Postgres",
+      "pgvector",
+      "Voyage AI",
+      "Vercel Workflow DevKit",
+    ],
+    highlights: [
+      "Contextual retrieval: per-chunk Sonnet 4.6 prefixes run over the full document, with the first 400K chars cached via ephemeral prompt caching so every call reads at the $0.30/M cached rate",
+      "Voyage AI voyage-3 embeddings (1024-dim) batched by byte budget (≤400KB, ≤96 items) to respect the 320K-token-per-batch cap on dense financial text",
+      "Forced tool_use with Zod-to-JSON-schema for ~40-field structured extraction: credit snapshot, capital structure, financials, covenants, management, comps, scenarios",
+      "Durable pipeline orchestration via Vercel Workflow DevKit — parse, analysis, research, internal memo, and external memo each run as a step with its own 800s budget",
+      "Multi-format export: PDF via @sparticuz/chromium + puppeteer-core (Vercel-compatible headless Chromium), Excel with ExcelJS formulas and sensitivity tables, DOCX, ZIP bundle",
+      "Multi-user auth with bcrypt cost 12 and JWT sessions via jose, admin approval gate, with a legacy shared-password fallback for continuity",
+    ],
+    linkLabel: "Private",
+    accentColor: "#2c3e50",
+  },
+  {
     title: "autohack",
     subtitle: "Autonomous Security Agent",
     description:
@@ -196,29 +221,6 @@ const projects = [
     link: "https://github.com/JoshKappler/chadGPT",
     linkLabel: "GitHub",
     accentColor: "#e67e22",
-  },
-  {
-    title: "Arena",
-    subtitle: "Moral-Dilemma Agent Scenarios",
-    description:
-      "An engine for dropping LLM agents into sealed-room moral dilemmas and watching what they do. Three built-in situations: the Escape Room (only one person leaves alive), the Basement (captor holds a captive), and the Control Room (collective crisis decision). Situations and personalities are hand-authored JSON files, so new scenarios can be added without touching code.",
-    techStack: [
-      "TypeScript",
-      "Next.js 15",
-      "React 19",
-      "Anthropic SDK",
-    ],
-    highlights: [
-      "Scenario-driven: each situation JSON defines the rules and stakes, each personality JSON defines who the agent is. Everything after that emerges from the conversation",
-      "Personality files are character-first, not instruction-first. They describe who the agent IS, not what to say, so behavior is emergent rather than scripted",
-      "Three built-in situations covering distinct pressure types: coercion (escape room), power imbalance (basement), and collective responsibility (control room)",
-      "10+ saved runs per scenario, used to compare how different personality mixes behave under the same constraints",
-      "Full run history persisted to disk so any scenario can be replayed, diffed against past runs, or used as input for new behavioral experiments",
-      "Runs on the same multi-provider LLM layer as my other agent projects: Anthropic API, Groq, or OpenRouter, picked via environment variable",
-    ],
-    link: "https://github.com/JoshKappler/Arena",
-    linkLabel: "GitHub",
-    accentColor: "#34495e",
   },
 ];
 
