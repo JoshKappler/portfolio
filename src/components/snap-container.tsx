@@ -9,7 +9,7 @@ import {
   useCallback,
   ReactNode,
 } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 
 type Phase = "idle" | "out" | "in";
 
@@ -207,7 +207,6 @@ export function SnapContainer({
           visibleIndex={visibleIndex}
           sectionCount={sectionCount}
           phase={phase}
-          navigate={navigate}
         />
       </main>
     </SnapContext.Provider>
@@ -218,47 +217,37 @@ function ScrollIndicator({
   visibleIndex,
   sectionCount,
   phase,
-  navigate,
 }: {
   visibleIndex: number;
   sectionCount: number;
   phase: Phase;
-  navigate: (direction: 1 | -1) => void;
 }) {
-  const isFirst = visibleIndex === 0;
   const isLast = visibleIndex === sectionCount - 1;
-  const direction = isFirst ? "down" : "up";
-
-  if (isLast) return null;
+  const visible = !isLast && phase === "idle";
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.button
-        key={direction}
-        onClick={() => navigate(isFirst ? 1 : -1)}
-        initial={{ opacity: 0, y: direction === "down" ? -4 : 4 }}
-        animate={{ opacity: phase === "idle" ? 1 : 0, y: 0 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.4 }}
-        className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-3 cursor-pointer group"
-        aria-label={`Scroll ${direction}`}
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-x-0 bottom-6 z-40 flex justify-center"
+    >
+      <motion.div
+        animate={{ opacity: visible ? 0.35 : 0, y: [0, 4, 0] }}
+        transition={{
+          opacity: { duration: 0.4 },
+          y: { duration: 2.2, repeat: Infinity, ease: "easeInOut" },
+        }}
+        className="text-text"
       >
-        <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-text group-hover:text-accent transition-colors duration-300">
-          {direction === "down" ? "Scroll" : "Back"}
-        </span>
-        <motion.div
-          className="relative w-6 h-10 rounded-full border-2 border-text/80 group-hover:border-accent transition-colors duration-300 flex justify-center"
-          animate={{ y: [0, 2, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          style={{ rotate: direction === "up" ? "180deg" : "0deg" }}
-        >
-          <motion.span
-            className="absolute top-1.5 w-1 h-2 rounded-full bg-text group-hover:bg-accent transition-colors duration-300"
-            animate={{ y: [0, 10, 0], opacity: [1, 0.2, 1] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
+          <path
+            d="M1 1 L7 7 L13 1"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
-        </motion.div>
-      </motion.button>
-    </AnimatePresence>
+        </svg>
+      </motion.div>
+    </div>
   );
 }
