@@ -17,24 +17,36 @@ function AnimatedText({
   delay: number;
   className?: string;
 }) {
+  const words = text.split(" ");
+  let charIndex = 0;
   return (
     <span className={className}>
-      {text.split("").map((char, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{
-            duration: 0.7,
-            delay: delay + i * 0.05,
-            ease: [0.25, 0.1, 0.25, 1],
-          }}
-          className="inline-block"
-          style={{ whiteSpace: char === " " ? "pre" : undefined }}
-        >
-          {char}
-        </motion.span>
-      ))}
+      {words.map((word, wi) => {
+        const wordChars = word.split("").map((char) => {
+          const i = charIndex++;
+          return (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{
+                duration: 0.3,
+                delay: delay + i * 0.02,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+              className="inline-block"
+            >
+              {char}
+            </motion.span>
+          );
+        });
+        return (
+          <span key={wi}>
+            <span className="inline-block whitespace-nowrap">{wordChars}</span>
+            {wi < words.length - 1 ? " " : null}
+          </span>
+        );
+      })}
     </span>
   );
 }
@@ -75,22 +87,22 @@ export function Hero({ index }: { index: number }) {
         <motion.p
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.9, delay: 0.4 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
           className="font-mono text-sm text-accent tracking-[0.3em] uppercase mb-8"
         >
           Josh Kappler
         </motion.p>
 
         <h1 className="font-display text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[0.92] tracking-tight mb-10">
-          <AnimatedText text={headline1} delay={0.7} />
+          <AnimatedText text={headline1} delay={0.25} />
           <br />
-          <AnimatedText text={headline2} delay={1.7} className="text-accent" />
+          <AnimatedText text={headline2} delay={0.75} className="text-accent" />
         </h1>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 2.8 }}
+          transition={{ duration: 0.5, delay: 1.0 }}
           className="max-w-xl"
         >
           <p className="text-text-muted text-lg md:text-xl leading-relaxed mb-12">
@@ -105,7 +117,7 @@ export function Hero({ index }: { index: number }) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 3.4 }}
+          transition={{ duration: 0.5, delay: 1.2 }}
           className="flex flex-wrap items-center gap-4 md:gap-6 text-sm"
         >
           <motion.a
@@ -114,7 +126,7 @@ export function Hero({ index }: { index: number }) {
             rel="noopener noreferrer"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 3.7, duration: 0.8 }}
+            transition={{ delay: 1.3, duration: 0.4 }}
             className="group relative inline-flex items-center gap-2 px-5 py-2.5 border border-accent bg-accent/15 hover:bg-accent hover:text-bg text-accent transition-all duration-300 font-mono text-xs tracking-[0.2em] uppercase"
           >
             <svg
@@ -150,7 +162,7 @@ export function Hero({ index }: { index: number }) {
               rel="noopener noreferrer"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 4.0 + i * 0.15, duration: 0.8 }}
+              transition={{ delay: 1.4 + i * 0.06, duration: 0.4 }}
               className="group relative text-text-muted hover:text-accent transition-colors duration-300 ml-2"
             >
               <span className="font-mono text-xs tracking-wider">
