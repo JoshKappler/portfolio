@@ -86,7 +86,6 @@ export function Contact() {
                 label: "GitHub",
                 href: "https://github.com/JoshKappler",
               },
-              { label: "sniply.biz", href: "https://sniply.biz" },
             ].map((link) => (
               <a
                 key={link.label}

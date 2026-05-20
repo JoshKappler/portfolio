@@ -56,6 +56,31 @@ const projects = [
     accentColor: "#e74c3c",
   },
   {
+    title: "property-leads",
+    subtitle: "Autonomous Lead-Finding Pipeline",
+    description:
+      "Built for a private real-estate cash buyer flipping foreclosure houses. An hourly Vercel cron triggers an orchestrator agent that plans which scrapers to run, then per-property research and scoring agents produce a maximum-allowable-offer with reasoning, a rehab band, and a 0-100 lead tier. Outreach drafts go through a writer agent and a separate reviewer before Resend dispatch. Runs at $0.22 for a 33-property cycle.",
+    techStack: [
+      "Next.js 16",
+      "Anthropic SDK",
+      "Neon Postgres",
+      "Drizzle",
+      "Apify",
+      "Resend",
+      "Leaflet",
+    ],
+    highlights: [
+      "4-stage agent pipeline with tiered models: Haiku for orchestration and the outreach reviewer, Sonnet for research, scoring, and draft writing",
+      "Research agent folds FEMA flood zones and municipal violation and permit data into a single MAO with cited reasoning per property",
+      "Scoring returns 0-100 with hot/warm/cold tiering and a breakdown so an analyst can disagree with the model in one read",
+      "Outreach has a Sonnet drafter and a separate Haiku reviewer that can block or rewrite a draft before it reaches Resend. emailPolicy defaults to off so test runs never blast",
+      "Scheduling is three knobs on a versioned config row: pause, interval in minutes, and time-of-day with IANA timezone. Vercel cron fires hourly and the route gates itself",
+      "Idempotent ALTER TABLE migration runner, fingerprint-based dedup across runs, Nominatim geocoding queue with a hard 1 req/sec rate limit",
+    ],
+    linkLabel: "Private",
+    accentColor: "#1abc9c",
+  },
+  {
     title: "Socratic",
     subtitle: "Multi-Agent Debate Platform",
     description:
