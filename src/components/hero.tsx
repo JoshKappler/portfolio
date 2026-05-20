@@ -121,9 +121,7 @@ export function Hero({ index }: { index: number }) {
           className="flex flex-wrap items-center gap-4 md:gap-6 text-sm"
         >
           <motion.a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/resume"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.3, duration: 0.4 }}
