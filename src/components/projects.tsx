@@ -107,45 +107,6 @@ const projects = [
     accentColor: "#1abc9c",
   },
   {
-    title: "algora",
-    subtitle: "Autonomous GitHub-Bounty Solver",
-    description:
-      "An autonomous agent that finds open GitHub bounties, clones the target repository, and spawns a Claude Code session to write the fix. It reads the issue, plans the change, runs the project's own tests against its work, and opens a pull request when the work passes. The orchestration layer handles repo setup, the Claude Code subprocess, and result checking on its own.",
-    techStack: [
-      "TypeScript",
-      "Anthropic SDK",
-      "Claude Code",
-      "Node.js",
-      "Git",
-    ],
-    highlights: [
-      "Spawns a Claude Code session per bounty as a managed subprocess, with the issue and repository context fed in as the task brief",
-      "Clones the target repo into an isolated workspace, installs dependencies, and runs the project's existing test suite to gate the agent's work before a PR is opened",
-      "Polls the bounty board for open issues and tracks which ones it has already attempted so it never duplicates work across runs",
-    ],
-    link: "https://github.com/JoshKappler/algora",
-    linkLabel: "GitHub",
-    accentColor: "#8e44ad",
-  },
-  {
-    title: "genesis",
-    subtitle: "Directed Evolution Engine",
-    description:
-      "I wanted to see if I could breed better AI agent prompts instead of writing them by hand. This system represents personality as ~20 modular traits across 5 psychological categories, mutates them, runs agents through behavioral scenarios with a dynamic narrator that adapts to their responses, and selects winners through natural selection. The agents develop behavior they were never explicitly told to have.",
-    techStack: ["Python", "Ollama", "Gemma 4", "Pydantic", "Textual TUI"],
-    highlights: [
-      "Traits describe WHO someone IS, not WHAT TO DO. This avoids instruction pollution so evolution operates on semantic building blocks",
-      "4 mutation operators: tweak (60%), swap from trait pool (20%), delete (10%), duplicate+drift across categories (10%)",
-      "Two-phase evaluation: binary pass/fail gates first, then anonymous head-to-head ranking using letter labels (A/B/C/D/E) so the evaluator can't be biased by champion status",
-      "Champion caching reuses scenario runs until a new champion is crowned, cutting ~20% of LLM calls per generation",
-      "Full generation rollback: revert to any past generation, trim later data, and resume evolution from that point",
-      "Runs entirely local on Ollama. No cloud calls, no API keys, no rate limits",
-    ],
-    link: "https://github.com/JoshKappler/genesis",
-    linkLabel: "GitHub",
-    accentColor: "#2ecc71",
-  },
-  {
     title: "Village",
     subtitle: "Experiment · Emergent Multi-Agent Simulation",
     description:
@@ -168,55 +129,6 @@ const projects = [
     link: "https://github.com/JoshKappler/Village",
     linkLabel: "GitHub",
     accentColor: "#9b59b6",
-  },
-  {
-    title: "Socratic",
-    subtitle: "Experiment · Multi-Agent Debate Platform",
-    description:
-      "A live web app where five AI agents with distinct philosophical perspectives debate any topic in real time. An orchestrator agent controls turn order based on conversation state, creating natural back-and-forths, interjections, and redirects instead of round-robin. Agents track their own positions throughout the debate, conceding points and evolving their arguments as the conversation develops.",
-    techStack: [
-      "TypeScript",
-      "Next.js 16",
-      "Anthropic SDK",
-      "Zod",
-      "SSE Streaming",
-      "Tailwind",
-    ],
-    highlights: [
-      "Orchestrator uses tool_use to return structured decisions (who speaks next, who they address, and convergence status), validated with Zod at the boundary",
-      "Position tracking: each agent maintains a running record of concessions, firm holds, and compelling counterarguments, fed back into their next prompt",
-      "Multi-provider LLM abstraction: Anthropic API, OpenRouter, and Groq, auto-selected based on environment variables",
-      "Server-sent events stream debate events (turn_start, token, turn_end, status_change, debate_end) to a React frontend in real time",
-      "Classical courtroom UI with semicircular avatar layout, color-coded chat feed, and animated speaking/thinking states per agent",
-      "Convergence detection: orchestrator tracks position drift across agents and declares resolution or deadlock with a synthesis of where they agreed and diverged",
-    ],
-    link: "https://github.com/JoshKappler/Socratic",
-    linkLabel: "GitHub",
-    accentColor: "#c9a96e",
-  },
-  {
-    title: "Mafia",
-    subtitle: "Experiment · Multi-Agent Social Deduction Game",
-    description:
-      "A full werewolf/mafia game played entirely by LLM agents. Four roles (wolf, villager, doctor, detective), day and night phases, three rounds of open discussion per day, voting, and a win-condition check after every phase. Each agent generates its own personality from a trait pool at the start of a game and carries that identity across every round.",
-    techStack: [
-      "TypeScript",
-      "Next.js 15",
-      "React 19",
-      "Anthropic SDK",
-      "Groq",
-    ],
-    highlights: [
-      "Four distinct role prompts. Wolves coordinate privately at night, the doctor picks someone to protect, the detective investigates one player per night, villagers vote blind during the day",
-      "Three-round day discussions where each living player speaks in turn, referencing accusations from earlier rounds and adjusting their own story in response",
-      "Deterministic name extraction parses LLM output against the living-player list to resolve votes, instead of trusting the model to return structured output",
-      "Every run is saved to disk as both JSON (machine replayable) and TXT (human readable), so transcripts persist for analysis across dozens of completed games",
-      "Multi-provider LLM abstraction so roles can swap backends mid-game: Anthropic API, Groq, or OpenRouter, picked via environment variable",
-      "Temperature 0.9 and 300-token cap per message keeps agents tight and stops them from monologuing themselves into obvious tells",
-    ],
-    link: "https://github.com/JoshKappler/Mafia",
-    linkLabel: "GitHub",
-    accentColor: "#3498db",
   },
 ];
 

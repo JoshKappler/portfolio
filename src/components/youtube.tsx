@@ -90,9 +90,10 @@ export function YouTube() {
                 Boffy
               </a>
               . I grew the channel from zero to 2.1 million subscribers, mostly
-              gaming and Minecraft. No team at first. I figured out how to
-              explain things in a way people actually want to watch, and did
-              more of what worked.
+              gaming. No team at first. A lot of the videos were technical:
+              game modding, and how PC parts like graphics cards change the way
+              a game runs. I learned how to make that watchable for a huge
+              audience.
             </p>
             <p className="text-text-muted leading-relaxed">
               Eventually I hired editors and designers, negotiated
@@ -101,9 +102,10 @@ export function YouTube() {
               actually working.
             </p>
             <p className="text-text-muted leading-relaxed">
-              Running a YouTube channel at this scale is a lot like developer
-              advocacy. You explain something clearly, look at how people
-              respond, adjust, and do it again.
+              Running a YouTube channel at this scale is mostly a feedback
+              loop. You put something out, look at how people respond, and
+              adjust. Same instinct I bring to shipping and explaining
+              software.
             </p>
           </motion.div>
 

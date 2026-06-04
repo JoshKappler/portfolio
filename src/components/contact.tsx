@@ -48,9 +48,10 @@ export function Contact() {
           >
             I&apos;m looking for AI engineering or developer-advocacy roles at
             early-stage startups in the Bay Area or remote. I spent seven years
-            explaining hard things to a 2.1M-subscriber audience, and now I
-            build AI agents from scratch. If you&apos;re building something
-            interesting, I want to hear about it.
+            making gaming videos for a 2.1M-subscriber audience, a lot of it
+            explaining game modding and PC hardware, and now I build AI agents
+            from scratch. If you&apos;re building something interesting, I want
+            to hear about it.
           </motion.p>
 
           <motion.div

@@ -71,11 +71,12 @@ export function About() {
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
                 Before this I spent seven years growing a YouTube channel from
-                zero to 2.1 million subscribers, mostly gaming and Minecraft.
-                That is where I learned to follow through on long projects and
-                to explain technical things to an audience that clicks away the
-                second it gets bored. That second skill is why developer
-                advocacy interests me as much as engineering does.
+                zero to 2.1 million subscribers, mostly gaming. A lot of it
+                meant taking something complicated, like a modding workflow or
+                why one graphics card beats another, and making a general
+                audience actually want to sit through it. That is the same
+                skill developer advocacy runs on, which is why it interests me
+                as much as engineering does.
               </motion.p>
             </div>
           </div>
