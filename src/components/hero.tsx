@@ -110,7 +110,8 @@ export function Hero({ index }: { index: number }) {
             orchestration layer myself: tool loops, state machines, memory, and
             multi-provider routing. No LangChain, no CrewAI. Before engineering
             I grew a YouTube channel to 2.1M subscribers, so I can ship long
-            projects to the end and explain technical work to a large audience.
+            projects to the end and explain technical things in a way people
+            actually want to watch.
           </p>
         </motion.div>
 

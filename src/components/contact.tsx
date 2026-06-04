@@ -47,10 +47,10 @@ export function Contact() {
             className="text-text-muted text-lg leading-relaxed mb-10 max-w-xl"
           >
             I&apos;m looking for AI engineering or developer-advocacy roles at
-            early-stage Bay Area startups. I spent seven years explaining hard
-            things to a 2.1M-subscriber audience, and now I build AI agents
-            from scratch. If you&apos;re building something interesting, I want
-            to hear about it.
+            early-stage startups in the Bay Area or remote. I spent seven years
+            explaining hard things to a 2.1M-subscriber audience, and now I
+            build AI agents from scratch. If you&apos;re building something
+            interesting, I want to hear about it.
           </motion.p>
 
           <motion.div

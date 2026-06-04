@@ -71,10 +71,11 @@ export function About() {
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
                 Before this I spent seven years growing a YouTube channel from
-                zero to 2.1 million subscribers. That is where I learned to
-                follow through on long, unglamorous projects and manage
-                something that kept getting bigger and more complex. Same
-                instinct, different medium.
+                zero to 2.1 million subscribers, mostly gaming and Minecraft.
+                That is where I learned to follow through on long projects and
+                to explain technical things to an audience that clicks away the
+                second it gets bored. That second skill is why developer
+                advocacy interests me as much as engineering does.
               </motion.p>
             </div>
           </div>
