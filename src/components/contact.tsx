@@ -46,9 +46,11 @@ export function Contact() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-text-muted text-lg leading-relaxed mb-10 max-w-xl"
           >
-            I am looking for AI agent engineering roles, or other AI-adjacent
-            work, at early-stage startups in the Bay Area. If you are building
-            something interesting, I want to hear about it.
+            I&apos;m looking for AI engineering or developer-advocacy roles at
+            early-stage Bay Area startups. I spent seven years explaining hard
+            things to a 2.1M-subscriber audience, and now I build AI agents
+            from scratch. If you&apos;re building something interesting, I want
+            to hear about it.
           </motion.p>
 
           <motion.div
@@ -64,7 +66,7 @@ export function Contact() {
               <span className="relative z-10">Joshua.Kappler@gmail.com</span>
             </a>
             <a
-              href="https://linkedin.com/in/josh-kappler-b2b9b5374"
+              href="https://www.linkedin.com/in/josh-kappler-b2b9b5374/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-border text-text-muted font-display font-semibold text-sm tracking-wide rounded-xl hover:border-accent/40 hover:text-accent transition-all duration-300"

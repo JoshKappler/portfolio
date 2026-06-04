@@ -106,11 +106,11 @@ export function Hero({ index }: { index: number }) {
           className="max-w-xl"
         >
           <p className="text-text-muted text-lg md:text-xl leading-relaxed mb-12">
-            Nine shipped AI agent systems, all solo. I write the orchestration
-            layer myself. Tool loops, state machines, memory, multi-provider
-            routing. No LangChain, no CrewAI. Also grew a YouTube channel to
-            2.1M subscribers, which is where I learned to stick with long,
-            messy projects until they work.
+            I build production AI agents from scratch. I write the
+            orchestration layer myself: tool loops, state machines, memory, and
+            multi-provider routing. No LangChain, no CrewAI. Before engineering
+            I grew a YouTube channel to 2.1M subscribers, so I can ship long
+            projects to the end and explain technical work to a large audience.
           </p>
         </motion.div>
 
@@ -149,7 +149,7 @@ export function Hero({ index }: { index: number }) {
             { label: "GitHub", href: "https://github.com/JoshKappler" },
             {
               label: "LinkedIn",
-              href: "https://linkedin.com/in/josh-kappler-b2b9b5374",
+              href: "https://www.linkedin.com/in/josh-kappler-b2b9b5374/",
             },
             { label: "Email", href: "mailto:Joshua.Kappler@gmail.com" },
           ].map((link, i) => (
