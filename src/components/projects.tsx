@@ -107,6 +107,31 @@ const projects = [
     accentColor: "#1abc9c",
   },
   {
+    title: "survival-station",
+    subtitle: "Offline-First AI Survival Appliance",
+    description:
+      "An air-gapped PC, built for a non-technical user, that runs with no internet on solar power. A stdlib-only Python server (the machine had Windows Smart App Control blocking unsigned binaries, so no numpy, torch, or Open WebUI) proxies a local Ollama for streaming chat and multimodal photo identification. Answers are grounded with retrieval over an offline Kiwix encyclopedia, fetched in parallel with the model and fail-open. Offline maps run on a pure-PowerShell PMTiles server with a MapLibre viewer.",
+    techStack: [
+      "Python (stdlib)",
+      "Ollama",
+      "gemma3 / moondream",
+      "Kiwix",
+      "PowerShell",
+      "MapLibre",
+    ],
+    highlights: [
+      "Stdlib-only Python web server: streaming NDJSON chat, multimodal photo input, and a single-file inline UI, with zero pip packages because Smart App Control blocked unsigned binaries during the build",
+      "Retrieval grounding over an offline Kiwix library: the lookup runs in parallel with the model answer, carries its own short timeout, and fails open so a slow or missing library never blocks the chat",
+      "Hand-rolled HTMLParser scrapes Kiwix search results and maps ZIM slugs to readable source labels (Medical Encyclopedia, iFixit, Prepper Pack, Wikipedia)",
+      "Local multimodal vision via gemma3:4b and moondream for plant and wound identification, behind a hard safety prompt that refuses to ever call a wild plant edible from a photo alone",
+      "Pure-PowerShell PMTiles server resolves map tiles out of a single binary archive over HTTP range requests, paired with a vendored MapLibre viewer for fully offline maps",
+      "Localhost-only with no runtime telemetry; about 87 GB of encyclopedias, tiles, and models stays out of git and rebuilds from a manifest (aria2 download list plus extract scripts)",
+    ],
+    link: "https://github.com/JoshKappler/survival-station",
+    linkLabel: "GitHub",
+    accentColor: "#4a7c59",
+  },
+  {
     title: "Village",
     subtitle: "Experiment · Emergent Multi-Agent Simulation",
     description:
