@@ -16,7 +16,10 @@ export function AnimatedCounter({
 }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const [count, setCount] = useState(0);
+  // Initialize at target so server-rendered HTML (crawlers, link unfurlers,
+  // AI tools reading the site) shows the real number, not 0. The count-up
+  // animation still runs for human visitors once the section is in view.
+  const [count, setCount] = useState(target);
 
   useEffect(() => {
     if (!isInView) return;
