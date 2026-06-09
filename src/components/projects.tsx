@@ -82,31 +82,6 @@ const projects = [
     accentColor: "#1abc9c",
   },
   {
-    title: "algora",
-    subtitle: "Autonomous Coding Agent · GitHub Bounty Solver",
-    description:
-      "algora is an autonomous GitHub bounty solver. It discovers open bounties, scores them for expected ROI, clones the repo, spawns Claude Code for a 100-turn solve session, validates the diff with the repo's own tests and lints, and opens a PR. Then it watches the review and pushes fixes for reviewer feedback on its own. Built from scratch with direct SDK calls, no agent frameworks.",
-    techStack: [
-      "TypeScript",
-      "Claude Code",
-      "Anthropic SDK",
-      "Next.js 15",
-      "SQLite",
-      "Drizzle",
-    ],
-    highlights: [
-      "9-state bounty lifecycle from discovery through merged PR, sourced from the Algora API cross-referenced with GitHub issues",
-      "Priority formula (reward x feasibility) / (1 + competitors) ranks the queue by expected ROI before any compute is spent",
-      "Feasibility analyzer reads the issue and skims the repo to score effort and confidence before a bounty is attempted",
-      "PTY-based Claude Code spawning runs 100-turn solve sessions, then the diff is validated with the repo's tests and lints before commit",
-      "PR monitor parses reviewer comments and re-spawns Claude Code with the critique, pushing follow-up commits until the review clears",
-      "6-package monorepo (core, discovery, analyzer, solver, monitor, dashboard) with a Next.js 15 real-time dashboard",
-    ],
-    link: "https://github.com/JoshKappler/algora",
-    linkLabel: "GitHub",
-    accentColor: "#e67e22",
-  },
-  {
     title: "sniply",
     subtitle: "Full-Stack SaaS Marketplace",
     description:
