@@ -9,11 +9,12 @@ const projects = [
     title: "memo-engine",
     subtitle: "Deal Analysis + Investment Memo Platform",
     description:
-      "memo-engine is an AI deal-analysis and investment-memo platform built for a private credit investment firm. It ingests messy deal documents (PDFs, Excel models, Word drafts, Outlook .msg emails) and produces institutional-grade memos where every claim is cited back to its source. It runs agentic RAG over pgvector, uses forced tool_use for about 40 fields of structured extraction, and orchestrates the pipeline durably on Vercel Workflow DevKit. The production app is under NDA, so the linked repository is a sanitized build with placeholder branding and no client data.",
+      "memo-engine is an AI deal-analysis and investment-memo platform built for a private credit investment firm. It takes a messy deal data room (PDFs, Excel models, Word drafts, Outlook emails, scans) and produces an institutional-format credit memo where every claim is cited back to the exact source page or cell. Reasoning passes run on Claude Fable 5 over agentic RAG with pgvector; parsing, extraction, drafting, and export run as durable workflow steps. The client build is under NDA. The public demo is the same system pointed at public data: an 80-file SEC data room for AMC Entertainment, ingested and analyzed end to end, browsable down to each citation.",
     techStack: [
       "Next.js 16",
       "TypeScript",
       "Anthropic SDK",
+      "Claude Fable 5",
       "Postgres",
       "pgvector",
       "Voyage AI",
@@ -23,12 +24,14 @@ const projects = [
       "Contextual retrieval: per-chunk Sonnet 4.6 prefixes run over the full document, with the first 400K chars cached via ephemeral prompt caching so every call reads at the $0.30/M cached rate",
       "Voyage AI voyage-3 embeddings (1024-dim) batched by byte budget (≤400KB, ≤96 items) to respect the 320K-token-per-batch cap on dense financial text",
       "Forced tool_use with Zod-to-JSON-schema for ~40-field structured extraction: credit snapshot, capital structure, financials, covenants, management, comps, scenarios",
+      "Reasoning and extraction split by API constraint: Fable 5 thinks through the deal (thinking is always on), then Sonnet runs the forced tool_use extraction, because the API rejects thinking combined with forced tool choice",
       "Durable pipeline orchestration via Vercel Workflow DevKit: parse, analysis, research, internal memo, and external memo each run as a step with its own 800s budget",
       "Multi-format export: PDF via @sparticuz/chromium + puppeteer-core (Vercel-compatible headless Chromium), Excel with ExcelJS formulas and sensitivity tables, DOCX, ZIP bundle",
-      "Multi-user auth with bcrypt cost 12 and JWT sessions via jose, admin approval gate, with a legacy shared-password fallback for continuity",
     ],
     link: "https://github.com/JoshKappler/memo-engine",
     linkLabel: "GitHub",
+    secondaryLink: "https://memo.joshuakappler.com/demo",
+    secondaryLinkLabel: "Live demo",
     accentColor: "#2c3e50",
   },
   {
@@ -129,6 +132,33 @@ const projects = [
     link: "https://github.com/JoshKappler/Village",
     linkLabel: "GitHub",
     accentColor: "#9b59b6",
+  },
+  {
+    title: "sniply",
+    subtitle: "Live Two-Sided Marketplace",
+    description:
+      "A booking marketplace for barbers and stylists, live at sniply.biz. Customers find pros by map, specialty, and availability; pros run their book, services, and hours from a dashboard. This is the one project here with no AI in the runtime path. It exists to prove the unglamorous parts: real auth, race-condition-safe booking, and a test suite that covers both sides of the product.",
+    techStack: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "PostgreSQL",
+      "Tailwind 4",
+      "Playwright",
+    ],
+    highlights: [
+      "Double-booking prevention with PostgreSQL advisory locks: pg_advisory_xact_lock on barber + date serializes concurrent booking requests, which row locks alone cannot do for empty slots",
+      "Custom HMAC-SHA256 session auth with timing-safe comparison, httpOnly cookies, and role separation between customers and pros",
+      "291 test cases across 29 files, including 54 Playwright end-to-end tests covering browse, booking, messaging, reviews, and the pro dashboard",
+      "Map-based discovery with Leaflet plus filters for hair type, specialty, and availability windows",
+      "In-app messaging threads, verified reviews with pro replies, and a typed data access layer from rows to API responses",
+      "Seed data for 22 pro profiles so local dev and demos work without production data",
+    ],
+    link: "https://github.com/JoshKappler/sniply",
+    linkLabel: "GitHub",
+    secondaryLink: "https://sniply.biz",
+    secondaryLinkLabel: "Live site",
+    accentColor: "#e67e22",
   },
 ];
 

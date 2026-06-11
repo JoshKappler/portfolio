@@ -13,6 +13,7 @@ const tools = [
   { name: "Zod", category: "framework" },
   { name: "Pydantic", category: "framework" },
   { name: "Anthropic SDK", category: "ai" },
+  { name: "Claude Fable 5", category: "ai" },
   { name: "Groq", category: "ai" },
   { name: "OpenRouter", category: "ai" },
 ];
@@ -123,6 +124,7 @@ export function About() {
                 {[
                   "Hand-rolled orchestration, no LangChain, no CrewAI",
                   "Claude Code as primary dev tool",
+                  "Model tiering per step: Fable 5 reasons, Sonnet extracts, Haiku routes",
                   "Multi-provider LLM routing (Claude, Groq, OpenRouter, Ollama)",
                   "Full-stack: backend, frontend, dashboards, deployment",
                   "State machines for agent lifecycle management",

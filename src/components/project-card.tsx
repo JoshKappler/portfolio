@@ -14,6 +14,8 @@ interface ProjectProps {
   highlights: string[];
   link?: string;
   linkLabel?: string;
+  secondaryLink?: string;
+  secondaryLinkLabel?: string;
   screenshot?: string;
   gallery?: string[];
   accentColor?: string;
@@ -28,6 +30,8 @@ export function ProjectCard({
   highlights,
   link,
   linkLabel,
+  secondaryLink,
+  secondaryLinkLabel,
   screenshot,
   gallery,
   accentColor = "var(--color-accent)",
@@ -79,15 +83,34 @@ export function ProjectCard({
                 {title}
               </h3>
             </div>
-            {link && (
-              <a
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="shrink-0 mt-2 px-4 py-2 font-mono text-xs border border-border rounded-full text-text-dim hover:text-accent hover:border-accent/40 transition-all duration-300"
-              >
-                {linkLabel || "View"} &rarr;
-              </a>
+            {(link || secondaryLink) && (
+              <div className="flex shrink-0 items-center gap-2 mt-2">
+                {secondaryLink && (
+                  <a
+                    href={secondaryLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 font-mono text-xs rounded-full border transition-all duration-300 hover:brightness-110"
+                    style={{
+                      color: accentColor,
+                      borderColor: `color-mix(in srgb, ${accentColor} 45%, transparent)`,
+                      backgroundColor: `color-mix(in srgb, ${accentColor} 10%, transparent)`,
+                    }}
+                  >
+                    {secondaryLinkLabel || "Demo"} &rarr;
+                  </a>
+                )}
+                {link && (
+                  <a
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 font-mono text-xs border border-border rounded-full text-text-dim hover:text-accent hover:border-accent/40 transition-all duration-300"
+                  >
+                    {linkLabel || "View"} &rarr;
+                  </a>
+                )}
+              </div>
             )}
           </div>
 
