@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, useInView } from "motion/react";
+import { motion, useInView } from "motion/react";
 import { useRef, useState } from "react";
 import { ProjectCard } from "./project-card";
 
@@ -35,7 +35,7 @@ const projects = [
     title: "autohack",
     subtitle: "Autonomous Security Agent",
     description:
-      "A 5-package TypeScript monorepo that polls four bounty platforms, spawns hour-long Claude sessions to hunt for vulnerabilities, validates its own findings through adversarial review, and submits reports without human intervention. A separate Sonnet pass compresses verbose findings before submission. The system writes hunt outcomes, near-misses, and triager feedback to a JSON memory store so every future session starts with context from every past one.",
+      "A 5-package TypeScript monorepo that polls four bounty platforms, spawns hour-long Claude sessions to hunt for vulnerabilities, validates its own findings through adversarial review, and submits reports without human intervention. A separate Sonnet pass compresses verbose findings before submission. The system writes hunt outcomes, near-misses, and triager feedback to a JSON memory store so every future session starts with context from every past one. The same harness also runs a bounty agent on the Algora platform: it spawns Claude Code sessions for long autonomous runs, executes the test suite, opens PRs, and addresses review feedback on its own.",
     techStack: [
       "TypeScript",
       "Anthropic SDK",
@@ -79,31 +79,6 @@ const projects = [
       "Idempotent ALTER TABLE migration runner, fingerprint-based dedup across runs, Nominatim geocoding queue with a hard 1 req/sec rate limit",
     ],
     linkLabel: "Private",
-    accentColor: "#1abc9c",
-  },
-  {
-    title: "sniply",
-    subtitle: "Full-Stack SaaS Marketplace",
-    description:
-      "A two-sided marketplace for booking barbers and stylists, built and deployed end to end. Custom session auth with no external library. HMAC-SHA256 token signing with timing-safe comparison. PostgreSQL advisory locks serialize concurrent booking requests to prevent double-booking even across multiple server instances.",
-    techStack: [
-      "Next.js 16",
-      "TypeScript",
-      "PostgreSQL",
-      "Tailwind",
-      "Vitest",
-      "Playwright",
-    ],
-    highlights: [
-      "Match scoring: 40% hair type compatibility + 60% style preference overlap, with graceful fallback when profile data is incomplete",
-      "Advisory locks (pg_advisory_xact_lock) serialize booking transactions. Unlike FOR UPDATE, these work even when no row exists yet",
-      "API endpoints strip PII from bookings when queried by non-owning professionals, so only time-block data leaks for availability calculation",
-      "Browser-side image compression using Canvas API, dynamically adjusting JPEG quality from 0.80 down to 0.30 to fit a 400KB limit",
-      "54 Playwright E2E tests covering auth, booking flows, messaging, and the pro dashboard, run against production builds on a separate port",
-      "Haversine distance search with Nominatim geocoding, bi-directional JSONB messaging with per-side unread tracking",
-    ],
-    link: "https://github.com/JoshKappler/sniply",
-    linkLabel: "GitHub",
     accentColor: "#1abc9c",
   },
   {
@@ -208,26 +183,26 @@ export function Projects() {
           <ProjectCard key={project.title} index={i + 1} {...project} />
         ))}
 
-        <AnimatePresence initial={false}>
-          {expanded && (
-            <motion.div
-              key="rest"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-              className="space-y-8 overflow-hidden"
-            >
-              {restProjects.map((project, i) => (
-                <ProjectCard
-                  key={project.title}
-                  index={TOP_COUNT + i + 1}
-                  {...project}
-                />
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Always mounted so crawlers and AI screeners see every project; collapsed visually */}
+        <motion.div
+          key="rest"
+          initial={false}
+          animate={{
+            opacity: expanded ? 1 : 0,
+            height: expanded ? "auto" : 0,
+          }}
+          transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+          className="space-y-8 overflow-hidden"
+          aria-hidden={!expanded}
+        >
+          {restProjects.map((project, i) => (
+            <ProjectCard
+              key={project.title}
+              index={TOP_COUNT + i + 1}
+              {...project}
+            />
+          ))}
+        </motion.div>
 
         {/* Toggle button */}
         <div className="flex justify-center pt-4">

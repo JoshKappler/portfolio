@@ -105,13 +105,17 @@ export function Hero({ index }: { index: number }) {
           transition={{ duration: 0.5, delay: 1.0 }}
           className="max-w-xl"
         >
-          <p className="text-text-muted text-lg md:text-xl leading-relaxed mb-12">
+          <p className="text-text-muted text-lg md:text-xl leading-relaxed mb-6">
             I build production AI agents from scratch. I write the
             orchestration layer myself: tool loops, state machines, memory, and
             multi-provider routing. No LangChain, no CrewAI. Before engineering
-            I grew a YouTube channel to 2.1M subscribers, so I can ship long
-            projects to the end and explain technical things in a way people
-            actually want to watch.
+            I grew a YouTube channel (Boffy) to 2.1M subscribers, so I can ship
+            long projects to the end and explain technical things in a way
+            people actually want to watch.
+          </p>
+          <p className="font-mono text-xs text-accent tracking-[0.15em] uppercase mb-12">
+            Open to founding, forward-deployed, applied-AI, and DevRel roles ·
+            San Francisco or remote
           </p>
         </motion.div>
 
