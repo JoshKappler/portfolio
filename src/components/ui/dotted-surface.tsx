@@ -99,7 +99,7 @@ export function DottedSurface({ isLight = false }: { isLight?: boolean }) {
 
       positionAttribute.needsUpdate = true;
       renderer.render(scene, camera);
-      count += 0.1;
+      count += 0.025;
     };
 
     const handleResize = () => {
