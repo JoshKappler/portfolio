@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { DEMO_URL, BOOKING_URL, BOOKING_EXTERNAL } from "../lib/site";
 
 const headline1 = "I build autonomous";
 const headline2 = "AI agents.";
@@ -125,6 +126,55 @@ export function Hero() {
               <circle cx="12" cy="12" r="3" />
             </svg>
             <span>View Résumé</span>
+          </motion.a>
+
+          <motion.a
+            href={DEMO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.34, duration: 0.4 }}
+            className="group relative inline-flex items-center gap-2 px-5 py-2.5 border border-accent bg-accent/15 hover:bg-accent hover:text-bg text-accent transition-all duration-300 font-mono text-xs tracking-[0.2em] uppercase"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <polygon points="6 4 20 12 6 20 6 4" />
+            </svg>
+            <span>Live Demo</span>
+          </motion.a>
+
+          <motion.a
+            href={BOOKING_URL}
+            target={BOOKING_EXTERNAL ? "_blank" : undefined}
+            rel={BOOKING_EXTERNAL ? "noopener noreferrer" : undefined}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.38, duration: 0.4 }}
+            className="group relative inline-flex items-center gap-2 px-5 py-2.5 border border-border hover:border-accent hover:text-accent text-text-muted transition-all duration-300 font-mono text-xs tracking-[0.2em] uppercase"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <span>Book a Call</span>
           </motion.a>
 
           {[

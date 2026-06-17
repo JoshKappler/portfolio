@@ -3,6 +3,7 @@
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 import { useTheme } from "./theme-provider";
+import { DEMO_URL, BOOKING_URL, BOOKING_EXTERNAL } from "../lib/site";
 
 export function Contact() {
   const ref = useRef(null);
@@ -58,13 +59,29 @@ export function Contact() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col sm:flex-row sm:flex-wrap gap-4"
           >
             <a
               href="mailto:Joshua.Kappler@gmail.com"
               className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 bg-accent text-bg font-display font-semibold text-sm tracking-wide rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-accent/20"
             >
               <span className="relative z-10">Joshua.Kappler@gmail.com</span>
+            </a>
+            <a
+              href={BOOKING_URL}
+              target={BOOKING_EXTERNAL ? "_blank" : undefined}
+              rel={BOOKING_EXTERNAL ? "noopener noreferrer" : undefined}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-border text-text-muted font-display font-semibold text-sm tracking-wide rounded-xl hover:border-accent/40 hover:text-accent transition-all duration-300"
+            >
+              Book a call
+            </a>
+            <a
+              href={DEMO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-border text-text-muted font-display font-semibold text-sm tracking-wide rounded-xl hover:border-accent/40 hover:text-accent transition-all duration-300"
+            >
+              Live demo
             </a>
             <a
               href="https://www.linkedin.com/in/josh-kappler-b2b9b5374/"
