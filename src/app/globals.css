@@ -35,12 +35,11 @@ html[data-theme="light"] {
 html {
   background: var(--color-bg);
   color: var(--color-text);
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-body), system-ui, sans-serif;
-  overflow: hidden;
-  height: 100vh;
 }
 
 p {
@@ -109,6 +108,21 @@ html[data-theme="light"] body::after {
   background: var(--color-text-dim);
 }
 
+
+/* Respect users who ask for less motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
 /* Hide scrollbar on horizontal scroll galleries */
 .scrollbar-hide {

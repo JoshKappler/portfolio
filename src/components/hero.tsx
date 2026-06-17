@@ -1,9 +1,6 @@
 "use client";
 
 import { motion } from "motion/react";
-import { ShaderAnimation } from "@/components/ui/shader-animation";
-import { useSnapContext } from "./snap-container";
-import { useTheme } from "./theme-provider";
 
 const headline1 = "I build autonomous";
 const headline2 = "AI agents.";
@@ -51,31 +48,12 @@ function AnimatedText({
   );
 }
 
-export function Hero({ index }: { index: number }) {
-  const { visibleIndex, phase } = useSnapContext();
-  const { theme } = useTheme();
-  const isLight = theme === "light";
-  const isVisible = index === visibleIndex;
-  const shouldRenderBg = Math.abs(index - visibleIndex) <= 1;
-
-  let opacity = 0;
-  if (isVisible) {
-    opacity = phase === "out" ? 0 : 1;
-  }
-
+export function Hero() {
   return (
     <section
-      className="absolute inset-0 h-screen w-full flex flex-col justify-center px-6 md:px-16 lg:px-24 overflow-hidden transition-opacity duration-400 ease-in-out"
-      style={{
-        opacity,
-        pointerEvents: isVisible && phase === "idle" ? "auto" : "none",
-      }}
+      id="top"
+      className="relative min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-24 overflow-hidden"
     >
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        {shouldRenderBg && <ShaderAnimation isLight={isLight} />}
-      </div>
-      <div className={`absolute inset-0 z-[1] pointer-events-none ${isLight ? "bg-white/30" : "bg-black/50"}`} />
-
       <motion.div
         initial={{ scaleY: 0 }}
         animate={{ scaleY: 1 }}
