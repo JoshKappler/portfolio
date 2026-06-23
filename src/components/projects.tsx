@@ -35,6 +35,35 @@ const projects = [
     accentColor: "#2c3e50",
   },
   {
+    title: "claim-wright",
+    subtitle: "Full-Stack Claim Adjudication · Built in 36 Hours",
+    description:
+      "claim-wright is a fully working full-stack claim-adjudication system built end to end in a single 36-hour sprint. It reads the documents behind a security-deposit insurance claim (lease, tenant ledger, deposit-waiver addendum, move-out itemization, repair invoices) and recommends a payout capped at the policy benefit, or a decline, with a line-by-line audit trail behind every dollar. The split is the whole point: Claude Opus 4.8 does the reading and extracts structured facts, then a pure-Python deterministic engine applies the caps, rules, and eligibility gates, so a payout can never be a number the model invented. On a held-out test split it lands within $250 of the human adjudicator on 91% of claims with a median error of $0, at about $0.33 per claim.",
+    techStack: [
+      "Python 3.13",
+      "Anthropic SDK",
+      "Claude Opus 4.8",
+      "Pydantic",
+      "Django-Ninja",
+      "React 19",
+      "Vite",
+      "SQLite",
+    ],
+    highlights: [
+      "Full stack in a weekend: a Python adjudication core, a Django-Ninja API, a React 19 single-page app, and a packaged desktop build, all shipped end to end in 36 hours",
+      "Model reads, engine decides: forced tool_use extraction pulls charges, ledger balance, and eligibility, then a pure-Python function computes the payout, so every dollar traces back to code and a document line and nothing is hallucinated",
+      "91% of claims within $250 of the human decision, median error of $0, mean absolute error of $62, at about $0.33 per claim on the held-out test split",
+      "Multi-user with per-tenant SQLite databases and workspace sharing: a run can be snapshotted and shared read-only into a space, copied on share so a viewer never touches the originator's live data",
+      "Security hardening throughout: master-approved signup, PBKDF2 passwords, session tokens stored only as SHA-256 hashes, and an allow-list column projection that structurally blocks the human-answer fields from ever reaching the model",
+      "Built-in white-hat security pass: the code is reviewed by autohack, my own autonomous bug-hunter, which traces user input to sinks and has a second model try to disprove each finding",
+      "Hybrid document reading routes each PDF page by text density: about 75% read free with pure-Python pdfminer, scanned pages go to vision, and no poppler or tesseract binaries means the same code runs everywhere including the desktop build",
+      "Calibration with zero API calls: extractions are stored and the engine is a pure function, so a candidate rulebook (JSON, not code) re-scores against the human decisions by replaying stored reads",
+    ],
+    link: "https://github.com/JoshKappler/claim-wright",
+    linkLabel: "GitHub",
+    accentColor: "#b5824a",
+  },
+  {
     title: "autohack",
     subtitle: "Autonomous Security Agent",
     description:
@@ -58,6 +87,32 @@ const projects = [
     link: "https://github.com/JoshKappler/autohack",
     linkLabel: "GitHub",
     accentColor: "#e74c3c",
+  },
+  {
+    title: "pinch",
+    subtitle: "Claude Code, Driven From an Apple Watch",
+    description:
+      "pinch drives a real Claude Code session from an Apple Watch over cellular. A native watchOS SwiftUI app is the thin client; a Node and TypeScript backend runs the Claude Agent SDK against the live repos on my Mac, and a tunnel exposes it to the wrist. watchOS refuses WebSockets on the watch's network path, so the transport is plain HTTP request/response with a short-poll loop instead of a socket. Prompts go through a durable on-device outbox that retries until a confirmed 2xx, and the backend dedups by client prompt id so an at-least-once retry never double-runs a turn. Session state is recorded durably, so a backend restart or idle sweep revives the same conversation with full context through the SDK's resume.",
+    techStack: [
+      "Swift",
+      "SwiftUI",
+      "watchOS",
+      "TypeScript",
+      "Claude Agent SDK",
+      "Node.js",
+      "ngrok",
+    ],
+    highlights: [
+      "HTTP request/response with a short-poll loop instead of a socket: watchOS refuses URLSessionWebSocketTask on the watch's cellular path, so the watch polls /api/* while the browser simulator keeps the WebSocket, both driving one shared session lifecycle",
+      "Durable persisted outbox on the watch: a prompt is removed only on a confirmed 2xx, drained FIFO single-flight with Sending / Sent / Not sent states, and the backend dedups by client prompt id so a retry can never double-run a turn",
+      "Session resume across restarts: our session id maps to the SDK session id in a durable record, so an idle-swept or restarted backend rebuilds the conversation with options.resume and Claude keeps full context",
+      "Poll-cursor invariant kills duplicate replies: a resumed session continues its persisted cursor while a revived session resets to zero on a backend reset signal, so the event log never re-delivers history",
+      "Watch-aware output: a cached system-prompt append tells the model it is speaking to a wrist screen with text-to-speech, so replies stay plain-text and brief without touching tools, edits, or rigor",
+      "Stable ngrok static domain with bearer-token auth on every request; the watch can restart the backend from Settings, which builds first and only swaps the process if the build succeeds",
+    ],
+    link: "https://github.com/JoshKappler/apple-watch-claude-code-",
+    linkLabel: "GitHub",
+    accentColor: "#0a84ff",
   },
   {
     title: "property-leads",
@@ -162,7 +217,7 @@ const projects = [
   },
 ];
 
-const TOP_COUNT = 3;
+const TOP_COUNT = 4;
 
 export function Projects() {
   const ref = useRef(null);
