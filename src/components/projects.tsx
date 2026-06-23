@@ -165,30 +165,6 @@ const projects = [
     accentColor: "#4a7c59",
   },
   {
-    title: "Village",
-    subtitle: "Experiment · Emergent Multi-Agent Simulation",
-    description:
-      "Drops 4-8 AI agents into a persistent world with locations, an economy, spoilage timers, and a DM orchestrator. Each agent runs a 4-phase cognitive pipeline per tick. The DM has its own 3-tier memory and persistent beliefs across runs, intervening with crises and events to maintain narrative tension.",
-    techStack: [
-      "TypeScript",
-      "Next.js 15",
-      "Anthropic SDK",
-      "Groq",
-      "OpenRouter",
-    ],
-    highlights: [
-      "4-phase concurrent execution per tick: decision, action, reflection, planning. Each agent returns an immutable result object, mutations applied after",
-      "3-tier memory: episodic events with Nomic embeddings for semantic retrieval, learned beliefs from reflection, and a knowledge graph tracking who knows what about whom",
-      "DM orchestrator computes a tension score from agent emotions, death count, and stagnation signals, then fires interventions (crises, resource drops, new agents) to maintain drama",
-      "Scene director picks next speaker via weighted relevance scoring across 11 factors including emotional state, obligations, starvation, and conversation context",
-      "Custom distributed tracing: hierarchical spans with parent-child relationships, ring buffer (100 traces), and 14 automated health checks post-phase",
-      "AbortSignal threaded through the entire call stack for graceful cancellation of any running simulation",
-    ],
-    link: "https://github.com/JoshKappler/Village",
-    linkLabel: "GitHub",
-    accentColor: "#9b59b6",
-  },
-  {
     title: "sniply",
     subtitle: "Live Two-Sided Marketplace",
     description:
