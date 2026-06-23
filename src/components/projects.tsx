@@ -115,6 +115,32 @@ const projects = [
     accentColor: "#0a84ff",
   },
   {
+    title: "fleetview",
+    subtitle: "Terminal Cockpit for Parallel AI Agents",
+    description:
+      "fleetview is a terminal control center for running a fleet of Claude Code agents in parallel and keeping every machine I work on in sync. It is a single WezTerm + Zellij window: a folder picker launches 1 to 8 agents into named tabs, live gauges track the 5-hour and weekly rate limits, and a floating pane inspects what each subagent is doing. The whole TUI is zero-dependency Node, built-ins and raw ANSI only, with nothing to install beyond the Node that Claude Code already needs. One button syncs every repo across machines, and a background daemon keeps a fresh machine converging to my full project set on its own, updating the tool itself along the way.",
+    techStack: [
+      "Node.js",
+      "Zellij",
+      "WezTerm",
+      "ANSI TUI",
+      "launchd",
+      "GitHub CLI",
+      "chezmoi",
+    ],
+    highlights: [
+      "Zero npm dependencies: the entire tabbed TUI is Node built-ins and raw ANSI escape codes, and every script is self-locating, so the folder can be cloned anywhere and just runs",
+      "Launches 1 to 8 Claude Code agents from a folder picker into a Zellij tab layout, each tab named after its repo, with live 5-hour and weekly rate-limit gauges parsed from the status line",
+      "Conflict-safe multi-machine Git sync: pull clones missing repos and fast-forwards the rest, while push refuses any non-fast-forward, so a stale device is skipped rather than overwritten and dirty or diverged repos are left untouched",
+      "Always-on background daemon self-updates the tool, then clones and fast-forwards every GitHub repo at login and every 10 minutes, so a new machine converges to the full project set with nothing to run by hand",
+      "Nest-aware sync finds clones one level deep and updates them in place instead of re-cloning top-level duplicates",
+      "Cross-platform wiring: on Windows an AutoHotkey hotkey plus a watchdog kills the headless Zellij server when the window closes, on macOS a launchd agent runs the sync, and the OS-level config lives in a chezmoi dotfiles repo that points back at the app",
+    ],
+    link: "https://github.com/JoshKappler/claude-control-center",
+    linkLabel: "GitHub",
+    accentColor: "#7c6cf0",
+  },
+  {
     title: "property-leads",
     subtitle: "Autonomous Lead-Finding Pipeline",
     description:
