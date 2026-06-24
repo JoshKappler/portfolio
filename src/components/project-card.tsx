@@ -19,6 +19,7 @@ interface ProjectProps {
   screenshot?: string;
   gallery?: string[];
   galleryCaption?: string;
+  galleryLandscape?: boolean;
   accentColor?: string;
 }
 
@@ -36,6 +37,7 @@ export function ProjectCard({
   screenshot,
   gallery,
   galleryCaption = "AI-generated output from the pipeline",
+  galleryLandscape = false,
   accentColor = "var(--color-accent)",
 }: ProjectProps) {
   const ref = useRef(null);
@@ -150,14 +152,18 @@ export function ProjectCard({
                 {gallery.map((img, i) => (
                   <div
                     key={i}
-                    className="relative shrink-0 w-40 h-56 md:w-48 md:h-64 rounded-xl overflow-hidden border border-border/30"
+                    className={`relative shrink-0 rounded-xl overflow-hidden border border-border/30 ${
+                      galleryLandscape
+                        ? "w-72 h-[11.25rem] md:w-96 md:h-60"
+                        : "w-40 h-56 md:w-48 md:h-64"
+                    }`}
                   >
                     <Image
                       src={img}
                       alt={`${title} output ${i + 1}`}
                       fill
-                      className="object-cover"
-                      sizes="200px"
+                      className={galleryLandscape ? "object-cover object-top" : "object-cover"}
+                      sizes={galleryLandscape ? "384px" : "200px"}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-bg-card/50 via-transparent to-transparent pointer-events-none" />
                   </div>
