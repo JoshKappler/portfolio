@@ -245,6 +245,13 @@ const projects = [
       "In-app messaging threads, verified reviews with pro replies, and a typed data access layer from rows to API responses",
       "Seed data for 22 pro profiles so local dev and demos work without production data",
     ],
+    gallery: [
+      "/sniply/home.png",
+      "/sniply/browse.png",
+      "/sniply/profile.png",
+    ],
+    galleryCaption: "The live marketplace: discovery, map filters, and a pro profile",
+    galleryLandscape: true,
     link: "https://github.com/JoshKappler/sniply",
     linkLabel: "GitHub",
     secondaryLink: "https://sniply.biz",
