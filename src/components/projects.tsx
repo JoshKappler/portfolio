@@ -164,6 +164,12 @@ const projects = [
       "Nest-aware sync finds clones one level deep and updates them in place instead of re-cloning top-level duplicates",
       "Cross-platform wiring: on Windows an AutoHotkey hotkey plus a watchdog kills the headless Zellij server when the window closes, on macOS a launchd agent runs the sync, and the OS-level config lives in a chezmoi dotfiles repo that points back at the app",
     ],
+    gallery: [
+      "/fleetview/control-center.png",
+      "/fleetview/agents.png",
+    ],
+    galleryCaption: "The control center and a tab of parallel Claude agents",
+    galleryLandscape: true,
     link: "https://github.com/JoshKappler/claude-control-center",
     linkLabel: "GitHub",
     accentColor: "#7c6cf0",
