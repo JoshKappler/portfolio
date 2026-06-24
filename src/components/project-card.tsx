@@ -18,6 +18,7 @@ interface ProjectProps {
   secondaryLinkLabel?: string;
   screenshot?: string;
   gallery?: string[];
+  galleryCaption?: string;
   accentColor?: string;
 }
 
@@ -34,6 +35,7 @@ export function ProjectCard({
   secondaryLinkLabel,
   screenshot,
   gallery,
+  galleryCaption = "AI-generated output from the pipeline",
   accentColor = "var(--color-accent)",
 }: ProjectProps) {
   const ref = useRef(null);
@@ -162,7 +164,7 @@ export function ProjectCard({
                 ))}
               </div>
               <p className="mt-2 px-2 font-mono text-[10px] text-text-dim tracking-wider">
-                AI-generated output from the pipeline
+                {galleryCaption}
               </p>
             </motion.div>
           )}
