@@ -29,8 +29,8 @@ uniform vec2 u_resolution;
 uniform vec3 u_color;
 uniform float u_speed;
 uniform float u_detail;
-uniform vec2 u_mouse;
-uniform float u_stir;
+#define TRAIL 10
+uniform vec3 u_trail[TRAIL];
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -66,11 +66,15 @@ void main() {
 
   vec2 p = uv * u_detail;
 
-  // Cursor stir: swirl the noise domain around the pointer, fading with distance
-  vec2 mv = uv - u_mouse;
-  float md = max(length(mv), 0.12);
-  float infl = exp(-md * md * 6.0) * u_stir;
-  p += (vec2(-mv.y, mv.x) / md) * infl * 0.9;
+  // Finger-through-smoke: each recent pointer position is a small vortex
+  // (alternating spin, sign carried by tp.z) that fades over ~2 seconds
+  vec2 disp = vec2(0.0);
+  for (int i = 0; i < TRAIL; i++) {
+    vec3 tp = u_trail[i];
+    vec2 d = uv - tp.xy;
+    disp += vec2(-d.y, d.x) * exp(-dot(d, d) * 80.0) * tp.z * 1.5;
+  }
+  p += disp * u_detail;
 
   vec2 q = vec2(
     fbm(p + vec2(0.0, t * 0.15)),
@@ -196,8 +200,7 @@ export function EtheralShadow({
     const uColor = gl.getUniformLocation(program, "u_color");
     const uSpeed = gl.getUniformLocation(program, "u_speed");
     const uDetail = gl.getUniformLocation(program, "u_detail");
-    const uMouse = gl.getUniformLocation(program, "u_mouse");
-    const uStir = gl.getUniformLocation(program, "u_stir");
+    const uTrail = gl.getUniformLocation(program, "u_trail[0]");
 
     const resize = () => {
       const w = canvas.clientWidth || window.innerWidth;
@@ -209,32 +212,30 @@ export function EtheralShadow({
     resize();
     window.addEventListener("resize", resize);
 
-    // Pointer stirring: strength builds with cursor speed, decays each frame.
+    // Pointer stirring: drop a vortex point every ~0.035 uv units of travel,
+    // alternating spin direction so the wake curls both ways like real smoke.
     // Coordinates converted to the shader's centered, aspect-corrected uv space.
-    const mouseTarget = [10, 10];
-    const mouseSmooth = [10, 10];
-    let stir = 0;
-    let lastX = 0;
-    let lastY = 0;
-    let hasLast = false;
+    const TRAIL = 10;
+    const trail = new Float32Array(TRAIL * 3);
+    let trailHead = 0;
+    let lastX = 1e3;
+    let lastY = 1e3;
+    let spin = 1;
     const onPointerMove = (e: PointerEvent) => {
       const r = canvas.getBoundingClientRect();
       if (!r.height) return;
       const x = (e.clientX - r.left - r.width / 2) / r.height;
       const y = (r.height / 2 - (e.clientY - r.top)) / r.height;
-      if (hasLast) {
-        stir = Math.min(1.2, stir + Math.hypot(x - lastX, y - lastY) * 6);
-      }
+      const dx = x - lastX;
+      const dy = y - lastY;
+      if (dx * dx + dy * dy < 0.0012) return;
       lastX = x;
       lastY = y;
-      hasLast = true;
-      mouseTarget[0] = x;
-      mouseTarget[1] = y;
-      if (mouseSmooth[0] > 5) {
-        // First move: snap instead of gliding in from offscreen
-        mouseSmooth[0] = x;
-        mouseSmooth[1] = y;
-      }
+      trail[trailHead * 3] = x;
+      trail[trailHead * 3 + 1] = y;
+      trail[trailHead * 3 + 2] = 0.55 * spin;
+      spin = -spin;
+      trailHead = (trailHead + 1) % TRAIL;
     };
     window.addEventListener("pointermove", onPointerMove);
 
@@ -250,11 +251,8 @@ export function EtheralShadow({
       gl.uniform1f(uSpeed, 0.05 + (speedRef.current / 100) * 0.35);
       // Map scale (0..100) to FBM detail multiplier (smaller = larger soft cloud)
       gl.uniform1f(uDetail, 0.6 + (detailRef.current / 100) * 1.8);
-      mouseSmooth[0] += (mouseTarget[0] - mouseSmooth[0]) * 0.08;
-      mouseSmooth[1] += (mouseTarget[1] - mouseSmooth[1]) * 0.08;
-      stir *= 0.985;
-      gl.uniform2f(uMouse, mouseSmooth[0], mouseSmooth[1]);
-      gl.uniform1f(uStir, stir);
+      for (let i = 2; i < trail.length; i += 3) trail[i] *= 0.975;
+      gl.uniform3fv(uTrail, trail);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       raf = requestAnimationFrame(loop);
     };
