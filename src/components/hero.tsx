@@ -53,7 +53,7 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-24 overflow-hidden"
+      className="relative min-h-[72vh] flex flex-col justify-center px-6 md:px-16 lg:px-24 pt-16 overflow-hidden"
     >
       <div className="max-w-5xl relative z-[2]">
         <motion.p

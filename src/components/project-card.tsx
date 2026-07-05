@@ -1,12 +1,11 @@
 "use client";
 
 import { motion, useInView } from "motion/react";
-import { useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useTheme } from "./theme-provider";
 
 interface ProjectProps {
-  index: number;
   title: string;
   subtitle: string;
   description: string;
@@ -23,8 +22,29 @@ interface ProjectProps {
   accentColor?: string;
 }
 
+function Chevron({ dir }: { dir: "left" | "right" }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {dir === "left" ? (
+        <polyline points="15 18 9 12 15 6" />
+      ) : (
+        <polyline points="9 18 15 12 9 6" />
+      )}
+    </svg>
+  );
+}
+
 export function ProjectCard({
-  index,
   title,
   subtitle,
   description,
@@ -44,6 +64,33 @@ export function ProjectCard({
   const isInView = useInView(ref, { once: true, margin: "-60px" });
   const { theme } = useTheme();
   const isLight = theme === "light";
+
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const [canScroll, setCanScroll] = useState({ left: false, right: false });
+
+  const updateScroll = useCallback(() => {
+    const el = galleryRef.current;
+    if (!el) return;
+    setCanScroll({
+      left: el.scrollLeft > 4,
+      right: el.scrollLeft + el.clientWidth < el.scrollWidth - 4,
+    });
+  }, []);
+
+  useEffect(() => {
+    updateScroll();
+    window.addEventListener("resize", updateScroll);
+    return () => window.removeEventListener("resize", updateScroll);
+  }, [updateScroll]);
+
+  const scrollGallery = (dir: 1 | -1) => {
+    const el = galleryRef.current;
+    if (!el) return;
+    const item = el.querySelector("div");
+    const step = item ? item.clientWidth + 12 : el.clientWidth * 0.8;
+    el.scrollBy({ left: dir * step, behavior: "smooth" });
+  };
+
   return (
     <motion.article
       ref={ref}
@@ -69,23 +116,12 @@ export function ProjectCard({
           {/* Header row */}
           <div className="flex items-start justify-between mb-8">
             <div>
-              <div className="flex items-center gap-4 mb-3">
-                <span
-                  className="font-mono text-[10px] tracking-[0.3em] uppercase px-2 py-0.5 rounded-full border"
-                  style={{
-                    color: accentColor,
-                    borderColor: `color-mix(in srgb, ${accentColor} 30%, transparent)`,
-                  }}
-                >
-                  {String(index).padStart(2, "0")}
-                </span>
-                <span className="font-mono text-xs text-text-dim tracking-widest uppercase">
-                  {subtitle}
-                </span>
-              </div>
-              <h3 className="font-display text-3xl md:text-4xl font-bold tracking-tight">
+              <h3 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-accent">
                 {title}
               </h3>
+              <p className="font-mono text-xs text-text-dim tracking-widest uppercase mt-3">
+                {subtitle}
+              </p>
             </div>
             {(link || secondaryLink) && (
               <div className="flex shrink-0 items-center gap-2 mt-2">
@@ -94,12 +130,7 @@ export function ProjectCard({
                     href={secondaryLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 font-mono text-xs rounded-full border transition-all duration-300 hover:brightness-110"
-                    style={{
-                      color: accentColor,
-                      borderColor: `color-mix(in srgb, ${accentColor} 45%, transparent)`,
-                      backgroundColor: `color-mix(in srgb, ${accentColor} 10%, transparent)`,
-                    }}
+                    className="px-4 py-2 font-mono text-xs rounded-full border border-accent/45 bg-accent/10 text-accent transition-all duration-300 hover:bg-accent hover:text-bg"
                   >
                     {secondaryLinkLabel || "Demo"} &rarr;
                   </a>
@@ -109,7 +140,7 @@ export function ProjectCard({
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 font-mono text-xs border border-border rounded-full text-text-dim hover:text-accent hover:border-accent/40 transition-all duration-300"
+                    className="px-4 py-2 font-mono text-xs rounded-full border border-accent/45 text-accent transition-all duration-300 hover:bg-accent/10 hover:border-accent"
                   >
                     {linkLabel || "View"} &rarr;
                   </a>
@@ -146,28 +177,54 @@ export function ProjectCard({
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mb-8 -mx-2 overflow-hidden"
+              className="mb-8 -mx-2"
             >
-              <div className="flex gap-3 overflow-x-auto pb-3 px-2 scrollbar-hide">
-                {gallery.map((img, i) => (
-                  <div
-                    key={i}
-                    className={`relative shrink-0 rounded-xl overflow-hidden border border-border/30 ${
-                      galleryLandscape
-                        ? "w-72 h-[11.25rem] md:w-96 md:h-60"
-                        : "w-40 h-56 md:w-48 md:h-64"
-                    }`}
+              <div className="relative">
+                <div
+                  ref={galleryRef}
+                  onScroll={updateScroll}
+                  className="flex gap-3 overflow-x-auto pb-3 px-2 scrollbar-hide"
+                >
+                  {gallery.map((img, i) => (
+                    <div
+                      key={i}
+                      className={`relative shrink-0 rounded-xl overflow-hidden border border-border/30 ${
+                        galleryLandscape
+                          ? "w-72 h-[11.25rem] md:w-96 md:h-60"
+                          : "w-40 h-56 md:w-48 md:h-64"
+                      }`}
+                    >
+                      <Image
+                        src={img}
+                        alt={`${title} output ${i + 1}`}
+                        fill
+                        className={galleryLandscape ? "object-cover object-top" : "object-cover"}
+                        sizes={galleryLandscape ? "384px" : "200px"}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-bg-card/50 via-transparent to-transparent pointer-events-none" />
+                    </div>
+                  ))}
+                </div>
+                {canScroll.left && (
+                  <button
+                    type="button"
+                    aria-label="Previous screenshots"
+                    onClick={() => scrollGallery(-1)}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full border border-accent/40 bg-bg/80 backdrop-blur flex items-center justify-center text-accent hover:bg-accent hover:text-bg transition-all duration-300"
                   >
-                    <Image
-                      src={img}
-                      alt={`${title} output ${i + 1}`}
-                      fill
-                      className={galleryLandscape ? "object-cover object-top" : "object-cover"}
-                      sizes={galleryLandscape ? "384px" : "200px"}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-bg-card/50 via-transparent to-transparent pointer-events-none" />
-                  </div>
-                ))}
+                    <Chevron dir="left" />
+                  </button>
+                )}
+                {canScroll.right && (
+                  <button
+                    type="button"
+                    aria-label="Next screenshots"
+                    onClick={() => scrollGallery(1)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full border border-accent/40 bg-bg/80 backdrop-blur flex items-center justify-center text-accent hover:bg-accent hover:text-bg transition-all duration-300"
+                  >
+                    <Chevron dir="right" />
+                  </button>
+                )}
               </div>
               <p className="mt-2 px-2 font-mono text-[10px] text-text-dim tracking-wider">
                 {galleryCaption}
@@ -185,7 +242,7 @@ export function ProjectCard({
             {techStack.map((tech) => (
               <span
                 key={tech}
-                className="px-3 py-1.5 text-xs font-mono text-text-dim border border-border/60 rounded-full hover:border-border-hover hover:text-text-muted transition-colors duration-300"
+                className="px-3 py-1.5 text-xs font-mono text-accent border border-accent/30 rounded-full hover:border-accent/60 transition-colors duration-300"
               >
                 {tech}
               </span>

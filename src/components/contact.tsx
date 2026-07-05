@@ -14,7 +14,7 @@ export function Contact() {
   return (
     <section
       ref={ref}
-      className="relative min-h-screen py-20 md:py-24 px-6 md:px-16 lg:px-24 flex flex-col justify-center"
+      className="relative py-12 md:py-16 px-6 md:px-16 lg:px-24"
       id="contact"
     >
       <div className="max-w-6xl mx-auto">

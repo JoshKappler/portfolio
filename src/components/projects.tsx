@@ -273,11 +273,11 @@ export function Projects() {
   return (
     <section
       ref={ref}
-      className="relative min-h-screen py-20 md:py-24 px-6 md:px-16 lg:px-24"
+      className="relative py-8 md:py-10 px-6 md:px-16 lg:px-24"
       id="projects"
     >
       {/* Section header */}
-      <div className="max-w-6xl mx-auto mb-20">
+      <div className="max-w-6xl mx-auto mb-8">
         <motion.p
           initial={{ opacity: 0, x: -20 }}
           animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -307,8 +307,8 @@ export function Projects() {
 
       {/* Project cards */}
       <div className="max-w-5xl mx-auto space-y-8">
-        {topProjects.map((project, i) => (
-          <ProjectCard key={project.title} index={i + 1} {...project} />
+        {topProjects.map((project) => (
+          <ProjectCard key={project.title} {...project} />
         ))}
 
         {/* Always mounted so crawlers and AI screeners see every project; collapsed visually */}
@@ -323,12 +323,8 @@ export function Projects() {
           className="space-y-8 overflow-hidden"
           aria-hidden={!expanded}
         >
-          {restProjects.map((project, i) => (
-            <ProjectCard
-              key={project.title}
-              index={TOP_COUNT + i + 1}
-              {...project}
-            />
+          {restProjects.map((project) => (
+            <ProjectCard key={project.title} {...project} />
           ))}
         </motion.div>
 

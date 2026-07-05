@@ -29,6 +29,8 @@ uniform vec2 u_resolution;
 uniform vec3 u_color;
 uniform float u_speed;
 uniform float u_detail;
+uniform vec2 u_mouse;
+uniform float u_stir;
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -63,6 +65,12 @@ void main() {
   float t = u_time * u_speed;
 
   vec2 p = uv * u_detail;
+
+  // Cursor stir: swirl the noise domain around the pointer, fading with distance
+  vec2 mv = uv - u_mouse;
+  float md = max(length(mv), 0.12);
+  float infl = exp(-md * md * 6.0) * u_stir;
+  p += (vec2(-mv.y, mv.x) / md) * infl * 0.9;
 
   vec2 q = vec2(
     fbm(p + vec2(0.0, t * 0.15)),
@@ -188,6 +196,8 @@ export function EtheralShadow({
     const uColor = gl.getUniformLocation(program, "u_color");
     const uSpeed = gl.getUniformLocation(program, "u_speed");
     const uDetail = gl.getUniformLocation(program, "u_detail");
+    const uMouse = gl.getUniformLocation(program, "u_mouse");
+    const uStir = gl.getUniformLocation(program, "u_stir");
 
     const resize = () => {
       const w = canvas.clientWidth || window.innerWidth;
@@ -198,6 +208,35 @@ export function EtheralShadow({
     };
     resize();
     window.addEventListener("resize", resize);
+
+    // Pointer stirring: strength builds with cursor speed, decays each frame.
+    // Coordinates converted to the shader's centered, aspect-corrected uv space.
+    const mouseTarget = [10, 10];
+    const mouseSmooth = [10, 10];
+    let stir = 0;
+    let lastX = 0;
+    let lastY = 0;
+    let hasLast = false;
+    const onPointerMove = (e: PointerEvent) => {
+      const r = canvas.getBoundingClientRect();
+      if (!r.height) return;
+      const x = (e.clientX - r.left - r.width / 2) / r.height;
+      const y = (r.height / 2 - (e.clientY - r.top)) / r.height;
+      if (hasLast) {
+        stir = Math.min(1.2, stir + Math.hypot(x - lastX, y - lastY) * 6);
+      }
+      lastX = x;
+      lastY = y;
+      hasLast = true;
+      mouseTarget[0] = x;
+      mouseTarget[1] = y;
+      if (mouseSmooth[0] > 5) {
+        // First move: snap instead of gliding in from offscreen
+        mouseSmooth[0] = x;
+        mouseSmooth[1] = y;
+      }
+    };
+    window.addEventListener("pointermove", onPointerMove);
 
     let raf = 0;
     const start = performance.now();
@@ -211,6 +250,11 @@ export function EtheralShadow({
       gl.uniform1f(uSpeed, 0.05 + (speedRef.current / 100) * 0.35);
       // Map scale (0..100) to FBM detail multiplier (smaller = larger soft cloud)
       gl.uniform1f(uDetail, 0.6 + (detailRef.current / 100) * 1.8);
+      mouseSmooth[0] += (mouseTarget[0] - mouseSmooth[0]) * 0.08;
+      mouseSmooth[1] += (mouseTarget[1] - mouseSmooth[1]) * 0.08;
+      stir *= 0.985;
+      gl.uniform2f(uMouse, mouseSmooth[0], mouseSmooth[1]);
+      gl.uniform1f(uStir, stir);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       raf = requestAnimationFrame(loop);
     };
@@ -218,6 +262,7 @@ export function EtheralShadow({
 
     return () => {
       window.removeEventListener("resize", resize);
+      window.removeEventListener("pointermove", onPointerMove);
       cancelAnimationFrame(raf);
       gl.deleteProgram(program);
       gl.deleteShader(vs);

@@ -14,7 +14,7 @@ export function YouTube() {
   return (
     <section
       ref={ref}
-      className="relative min-h-screen py-20 md:py-24 px-6 md:px-16 lg:px-24 overflow-hidden flex flex-col justify-center"
+      className="relative py-8 md:py-10 px-6 md:px-16 lg:px-24 overflow-hidden"
       id="youtube"
     >
       <div className="relative max-w-6xl mx-auto">
