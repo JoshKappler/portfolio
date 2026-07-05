@@ -29,8 +29,6 @@ uniform vec2 u_resolution;
 uniform vec3 u_color;
 uniform float u_speed;
 uniform float u_detail;
-#define TRAIL 10
-uniform vec3 u_trail[TRAIL];
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -66,16 +64,6 @@ void main() {
 
   vec2 p = uv * u_detail;
 
-  // Finger-through-smoke: each recent pointer position is a small vortex
-  // (alternating spin, sign carried by tp.z) that fades over ~2 seconds
-  vec2 disp = vec2(0.0);
-  for (int i = 0; i < TRAIL; i++) {
-    vec3 tp = u_trail[i];
-    vec2 d = uv - tp.xy;
-    disp += vec2(-d.y, d.x) * exp(-dot(d, d) * 80.0) * tp.z * 1.5;
-  }
-  p += disp * u_detail;
-
   vec2 q = vec2(
     fbm(p + vec2(0.0, t * 0.15)),
     fbm(p + vec2(5.2, 1.3) + t * 0.10)
@@ -89,11 +77,13 @@ void main() {
   float cloud = smoothstep(0.05, 0.95, n);
   cloud = pow(cloud, 1.3);
 
+  // Hue drift stays in the warm family: deep crimson ember at one end,
+  // bright amber-gold at the other, so the base color never washes out
   float hue = sin(t * 0.4 + n * 6.2831) * 0.5 + 0.5;
-  vec3 tint = mix(
-    u_color,
-    vec3(u_color.b, u_color.r, u_color.g) * 1.05,
-    hue * 0.35
+  vec3 tint = u_color * mix(
+    vec3(1.15, 0.7, 0.6),
+    vec3(1.1, 1.5, 0.85),
+    hue
   );
 
   vec2 vUv = gl_FragCoord.xy / u_resolution - 0.5;
@@ -200,7 +190,6 @@ export function EtheralShadow({
     const uColor = gl.getUniformLocation(program, "u_color");
     const uSpeed = gl.getUniformLocation(program, "u_speed");
     const uDetail = gl.getUniformLocation(program, "u_detail");
-    const uTrail = gl.getUniformLocation(program, "u_trail[0]");
 
     const resize = () => {
       const w = canvas.clientWidth || window.innerWidth;
@@ -211,33 +200,6 @@ export function EtheralShadow({
     };
     resize();
     window.addEventListener("resize", resize);
-
-    // Pointer stirring: drop a vortex point every ~0.035 uv units of travel,
-    // alternating spin direction so the wake curls both ways like real smoke.
-    // Coordinates converted to the shader's centered, aspect-corrected uv space.
-    const TRAIL = 10;
-    const trail = new Float32Array(TRAIL * 3);
-    let trailHead = 0;
-    let lastX = 1e3;
-    let lastY = 1e3;
-    let spin = 1;
-    const onPointerMove = (e: PointerEvent) => {
-      const r = canvas.getBoundingClientRect();
-      if (!r.height) return;
-      const x = (e.clientX - r.left - r.width / 2) / r.height;
-      const y = (r.height / 2 - (e.clientY - r.top)) / r.height;
-      const dx = x - lastX;
-      const dy = y - lastY;
-      if (dx * dx + dy * dy < 0.0012) return;
-      lastX = x;
-      lastY = y;
-      trail[trailHead * 3] = x;
-      trail[trailHead * 3 + 1] = y;
-      trail[trailHead * 3 + 2] = 0.55 * spin;
-      spin = -spin;
-      trailHead = (trailHead + 1) % TRAIL;
-    };
-    window.addEventListener("pointermove", onPointerMove);
 
     let raf = 0;
     const start = performance.now();
@@ -251,8 +213,6 @@ export function EtheralShadow({
       gl.uniform1f(uSpeed, 0.05 + (speedRef.current / 100) * 0.35);
       // Map scale (0..100) to FBM detail multiplier (smaller = larger soft cloud)
       gl.uniform1f(uDetail, 0.6 + (detailRef.current / 100) * 1.8);
-      for (let i = 2; i < trail.length; i += 3) trail[i] *= 0.975;
-      gl.uniform3fv(uTrail, trail);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       raf = requestAnimationFrame(loop);
     };
@@ -260,7 +220,6 @@ export function EtheralShadow({
 
     return () => {
       window.removeEventListener("resize", resize);
-      window.removeEventListener("pointermove", onPointerMove);
       cancelAnimationFrame(raf);
       gl.deleteProgram(program);
       gl.deleteShader(vs);
