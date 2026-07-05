@@ -55,13 +55,6 @@ export function Hero() {
       id="top"
       className="relative min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-24 overflow-hidden"
     >
-      <motion.div
-        initial={{ scaleY: 0 }}
-        animate={{ scaleY: 1 }}
-        transition={{ duration: 2.0, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-        className="absolute top-0 left-[10%] md:left-[8%] w-px h-[40vh] bg-gradient-to-b from-transparent via-accent/20 to-transparent origin-top z-[2]"
-      />
-
       <div className="max-w-5xl relative z-[2]">
         <motion.p
           initial={{ opacity: 0, x: -20 }}

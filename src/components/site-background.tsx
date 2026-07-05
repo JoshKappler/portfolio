@@ -35,7 +35,7 @@ export function SiteBackground() {
         <div
           className="absolute inset-0"
           style={{
-            opacity: isLight ? 0.22 : 0.32,
+            opacity: isLight ? 0.28 : 0.4,
             background:
               "radial-gradient(ellipse 70% 60% at 25% 15%, rgba(40,80,180,0.9), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 85%, rgba(70,120,200,0.7), transparent 60%)",
           }}
@@ -44,11 +44,11 @@ export function SiteBackground() {
         // Animated cloudy shader, dialed back so it stays ambient
         <div
           className="absolute inset-0"
-          style={{ opacity: isLight ? 0.3 : 0.42 }}
+          style={{ opacity: isLight ? 0.38 : 0.52 }}
         >
           <EtheralShadow
             color={color}
-            animation={{ scale: 100, speed: 80 }}
+            animation={{ scale: 100, speed: 100 }}
             noise={{ opacity: 0.45, scale: 1.2 }}
             sizing="fill"
           />
