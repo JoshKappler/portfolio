@@ -5,7 +5,7 @@ import { EtheralShadow } from "@/components/ui/etheral-shadow";
 import { useTheme } from "./theme-provider";
 
 /**
- * A single, fixed background shared by the whole page. The blue fluid/cloudy
+ * A single, fixed background shared by the whole page. The warm ember/clay
  * shader sits behind all content at low opacity so it reads as ambient rather
  * than competing with the text. Honors prefers-reduced-motion by swapping the
  * animated WebGL layer for a static gradient.
@@ -23,7 +23,7 @@ export function SiteBackground() {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  const color = isLight ? "rgba(70, 120, 200, 1)" : "rgba(40, 80, 180, 1)";
+  const color = isLight ? "rgba(190, 100, 60, 1)" : "rgba(160, 75, 45, 1)";
 
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none" aria-hidden="true">
@@ -31,13 +31,13 @@ export function SiteBackground() {
       <div className="absolute inset-0 bg-bg" />
 
       {reducedMotion ? (
-        // Static, motion-free fallback in the same blue family
+        // Static, motion-free fallback in the same ember family
         <div
           className="absolute inset-0"
           style={{
             opacity: isLight ? 0.28 : 0.4,
             background:
-              "radial-gradient(ellipse 70% 60% at 25% 15%, rgba(40,80,180,0.9), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 85%, rgba(70,120,200,0.7), transparent 60%)",
+              "radial-gradient(ellipse 70% 60% at 25% 15%, rgba(160,75,45,0.9), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 85%, rgba(190,100,60,0.7), transparent 60%)",
           }}
         />
       ) : (
