@@ -260,7 +260,7 @@ const projects = [
   },
 ];
 
-const TOP_COUNT = 4;
+const TOP_COUNT = 5;
 
 export function Projects() {
   const ref = useRef(null);
