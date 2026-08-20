@@ -177,7 +177,7 @@ export function Hero() {
             { label: "GitHub", href: "https://github.com/JoshKappler" },
             {
               label: "LinkedIn",
-              href: "https://www.linkedin.com/in/josh-kappler-b2b9b5374/",
+              href: "https://www.linkedin.com/in/josh-kappler/",
             },
             { label: "Email", href: "mailto:Joshua.Kappler@gmail.com" },
           ].map((link, i) => (

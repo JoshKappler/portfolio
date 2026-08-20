@@ -84,7 +84,7 @@ export function Contact() {
               Live demo
             </a>
             <a
-              href="https://www.linkedin.com/in/josh-kappler-b2b9b5374/"
+              href="https://www.linkedin.com/in/josh-kappler/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-border text-text-muted font-display font-semibold text-sm tracking-wide rounded-xl hover:border-accent/40 hover:text-accent transition-all duration-300"
