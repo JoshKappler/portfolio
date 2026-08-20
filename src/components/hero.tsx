@@ -3,8 +3,8 @@
 import { motion } from "motion/react";
 import { DEMO_URL, BOOKING_URL, BOOKING_EXTERNAL } from "../lib/site";
 
-const headline1 = "I build autonomous";
-const headline2 = "AI agents.";
+const headline1 = "I build developer tools";
+const headline2 = "and AI agents.";
 
 function AnimatedText({
   text,
@@ -78,18 +78,17 @@ export function Hero() {
           className="max-w-xl"
         >
           <p className="text-text-muted text-lg md:text-xl leading-relaxed mb-6">
-            I build production AI agents from scratch. I write the
-            orchestration layer myself: tool loops, state machines, memory, and
-            multi-provider routing. No LangChain, no CrewAI. I&apos;m now a
-            Developer Experience Engineer at General Translation, where I work
-            on localization infrastructure for developers. Before engineering
+            At General Translation I build the developer-facing side of
+            localization: open-source SDKs, a CLI, and the platform behind
+            them. I also build AI agents from scratch and write the
+            orchestration layer myself: tool loops, state machines, memory,
+            multi-provider routing. No LangChain, no CrewAI. Before engineering
             I grew a YouTube channel (Boffy) to 2.1M subscribers, so I can ship
             long projects to the end and explain technical things in a way
             people actually want to watch.
           </p>
           <p className="font-mono text-xs text-accent tracking-[0.15em] uppercase mb-12">
-            Open to founding, forward-deployed, applied-AI, and DevRel roles ·
-            San Francisco or remote
+            First DX Engineer at General Translation · San Francisco
           </p>
         </motion.div>
 

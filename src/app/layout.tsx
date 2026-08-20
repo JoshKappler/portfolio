@@ -23,20 +23,20 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Josh Kappler · AI Engineer & Developer Advocate",
+  title: "Josh Kappler · AI & DX Engineer",
   description:
-    "I build autonomous AI agents from scratch, and I can explain them to 2.1M people. Open to AI engineering and developer advocacy roles.",
+    "First Developer Experience Engineer at General Translation. I build autonomous AI agents from scratch and grew a YouTube channel to 2.1M subscribers.",
   openGraph: {
-    title: "Josh Kappler · AI Engineer & Developer Advocate",
+    title: "Josh Kappler · AI & DX Engineer",
     description:
-      "AI engineer who builds autonomous agents from scratch. 2.1M YouTube subscribers. Open to engineering and developer advocacy roles.",
+      "First Developer Experience Engineer at General Translation. I build autonomous AI agents from scratch and grew a YouTube channel to 2.1M subscribers.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Josh Kappler · AI Engineer & Developer Advocate",
+    title: "Josh Kappler · AI & DX Engineer",
     description:
-      "AI engineer who builds autonomous agents from scratch. 2.1M YouTube subscribers. Open to engineering and developer advocacy roles.",
+      "First Developer Experience Engineer at General Translation. I build autonomous AI agents from scratch and grew a YouTube channel to 2.1M subscribers.",
   },
 };
 

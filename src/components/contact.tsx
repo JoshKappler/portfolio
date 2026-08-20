@@ -47,12 +47,12 @@ export function Contact() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-text-muted text-lg leading-relaxed mb-10 max-w-xl"
           >
-            I&apos;m looking for AI engineering or developer-advocacy roles at
-            early-stage startups in the Bay Area or remote. I spent seven years
-            making gaming videos for a 2.1M-subscriber audience, a lot of it
-            explaining game modding and PC hardware, and now I build AI agents
-            from scratch. If you&apos;re building something interesting, I want
-            to hear about it.
+            I&apos;m the first Developer Experience Engineer at General
+            Translation. I spent seven years making gaming videos for a
+            2.1M-subscriber audience, a lot of it explaining game modding and
+            PC hardware, and now I build developer tools and AI agents for a
+            living. If you&apos;re building something interesting, I want to
+            hear about it.
           </motion.p>
 
           <motion.div
