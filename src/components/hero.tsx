@@ -80,7 +80,9 @@ export function Hero() {
           <p className="text-text-muted text-lg md:text-xl leading-relaxed mb-6">
             I build production AI agents from scratch. I write the
             orchestration layer myself: tool loops, state machines, memory, and
-            multi-provider routing. No LangChain, no CrewAI. Before engineering
+            multi-provider routing. No LangChain, no CrewAI. I&apos;m now a
+            Developer Experience Engineer at General Translation, where I work
+            on localization infrastructure for developers. Before engineering
             I grew a YouTube channel (Boffy) to 2.1M subscribers, so I can ship
             long projects to the end and explain technical things in a way
             people actually want to watch.

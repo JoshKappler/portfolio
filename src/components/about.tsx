@@ -79,6 +79,18 @@ export function About() {
                 skill developer advocacy runs on, which is why it interests me
                 as much as engineering does.
               </motion.p>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                Now it&apos;s my job. I&apos;m the first Developer Experience
+                Engineer at General Translation, which builds full-stack
+                localization infrastructure. I work across the open-source
+                gt-next and gt-react libraries, the CLI, and the translation
+                platform.
+              </motion.p>
             </div>
           </div>
 
