@@ -1,12 +1,13 @@
 /* The de Falco family seal, stylized from a photo of the wax stamp (over a
    century old): the marquess coronet above a falcon displayed, over the
    cipher's eye holding an interlaced DF, inside the double ring of the oval
-   face. Grapevines climb each flank and slip behind the coronet. Letters are
-   Great Vibes outlines (OFL); falcon from openclipart 319705 (public domain).
-   The eye's inner curve also clips the monogram, so the swash tails end
-   tucked beneath the lids. The whole face sits a degree and a half off true,
-   with squeeze-out flecks past the rim and patches where the strike missed,
-   the way a hand-pressed stamp lands. */
+   face. Scraggly grapevines climb each flank, hung with leaves, tendrils and
+   grape bunches, and slip behind the coronet. Letters are Great Vibes
+   outlines (OFL); falcon from openclipart 319705 (public domain). The eye's
+   inner curve also clips the monogram, so the swash tails end tucked beneath
+   the lids. The whole face sits a degree and a half off true, with fine
+   grain roughening the stroke edges and specks around the rim, the way a
+   hand-pressed stamp lands. */
 export function CrestMark({ className }: { className?: string }) {
   return (
     <svg
@@ -37,6 +38,14 @@ export function CrestMark({ className }: { className?: string }) {
             result="wob"
           />
           <feTurbulence
+            type="turbulence"
+            baseFrequency="0.55"
+            numOctaves="2"
+            seed="9"
+            result="fine"
+          />
+          <feDisplacementMap in="wob" in2="fine" scale="0.55" result="wob2" />
+          <feTurbulence
             type="fractalNoise"
             baseFrequency="0.85"
             numOctaves="2"
@@ -49,170 +58,195 @@ export function CrestMark({ className }: { className?: string }) {
             values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 25 -19.2"
             result="holes"
           />
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.05 0.11"
-            numOctaves="3"
-            seed="11"
-            result="press"
-          />
-          <feColorMatrix
-            in="press"
-            type="matrix"
-            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 30 -22.6"
-            result="pholes"
-          />
-          <feComposite
-            in="holes"
-            in2="pholes"
-            operator="over"
-            result="allholes"
-          />
-          <feComposite in="wob" in2="allholes" operator="out" />
+          <feComposite in="wob2" in2="holes" operator="out" />
         </filter>
       </defs>
       <g filter="url(#crest-age)" transform="rotate(-1.6 50 65)">
         <ellipse cx="50" cy="65" rx="45" ry="59" strokeWidth="3.6" />
         <ellipse cx="50" cy="65" rx="39.5" ry="53.5" strokeWidth="1.6" />
-        <g>
+        <g fill="none">
           <path
-            d="M 77.5 93 Q 82 72 74.5 53 Q 70.5 44 65.2 35.8"
-            strokeWidth="1.2"
-            fill="none"
+            d="M 77.3 93.5 Q 83.4 84 80.2 74 Q 77.5 66 79.8 57"
+            strokeWidth="1.25"
           />
-          <line x1="78.6" y1="86.7" x2="79.2" y2="86.5" strokeWidth="0.55" />
-          <g transform="translate(79.23,86.49) rotate(68.6)">
+          <path
+            d="M 79.8 57 Q 80.5 49 72.5 44 Q 68.5 40.5 66 36.5"
+            strokeWidth="0.85"
+          />
+          <line x1="80.1" y1="87.8" x2="79.7" y2="87.3" strokeWidth="0.5" />
+          <g transform="translate(79.72,87.33) rotate(-40.6)">
             <path
-              d="M 0 0 C -1.72 -0.11 -3.10 -1.03 -2.88 -2.42 C -2.76 -3.33 -1.95 -3.56 -1.32 -3.33 C -1.72 -4.60 -0.80 -5.86 0.00 -6.32 C 0.80 -5.86 1.72 -4.60 1.32 -3.33 C 1.95 -3.56 2.76 -3.33 2.88 -2.42 C 3.10 -1.03 1.72 -0.11 0 0 Z"
+              d="M 0 0 C -1.53 -0.10 -2.73 -0.92 -2.48 -2.15 C -2.35 -2.97 -1.63 -3.17 -1.07 -2.97 C -1.23 -4.19 -0.27 -5.37 0.21 -5.83 C 0.65 -5.37 1.53 -4.19 1.28 -2.97 C 1.85 -3.17 2.56 -2.97 2.63 -2.15 C 2.79 -0.92 1.54 -0.10 0 0 Z"
               fill="currentColor"
               stroke="none"
             />
           </g>
-          <g transform="translate(79.03,82.22) rotate(-27.1)">
+          <g transform="translate(81.09,83.88) rotate(-49.0)">
             <path
-              d="M 0 0 C 1.80 -0.75 3.45 -1.20 4.05 -2.85 C 4.50 -4.20 3.30 -5.10 2.25 -4.50 C 1.42 -3.97 1.65 -2.85 2.63 -2.70"
+              d="M -1.1 0.55 Q -0.5 0.15 0 0  0.00 0.00 L 0.15 -0.65 L 0.48 -1.21 L 0.95 -1.63 L 1.51 -1.89 L 2.11 -1.97 L 2.68 -1.87 L 3.19 -1.61 L 3.58 -1.22 L 3.83 -0.75 L 3.93 -0.24 L 3.87 0.26 L 3.67 0.70 L 3.36 1.05 L 2.97 1.29 L 2.55 1.39 L 2.13 1.36 L 1.75 1.22 L 1.45 0.97 L 1.24 0.66 L 1.15 0.32 L 1.16 -0.02 L 1.26 -0.32 L 1.45 -0.57 L 1.68 -0.74 L 1.95 -0.82 L 2.20 -0.82 L 2.43 -0.74 L 2.61 -0.60 L 2.74 -0.43 L 2.79 -0.25 L 2.79 -0.07 L 2.73 0.09 L 2.63 0.20"
               strokeWidth="0.55"
-              fill="none"
             />
           </g>
-          <line x1="79.2" y1="78.1" x2="79.8" y2="78.9" strokeWidth="0.55" />
-          <g
-            transform="translate(79.85,78.89) rotate(-41.4)"
-            fill="currentColor"
-            stroke="none"
-          >
-            <circle cx="-1.55" cy="0.50" r="0.90" />
-            <circle cx="0.00" cy="0.25" r="0.90" />
-            <circle cx="1.55" cy="0.50" r="0.90" />
-            <circle cx="-0.80" cy="1.90" r="0.90" />
-            <circle cx="0.80" cy="1.90" r="0.90" />
-            <circle cx="0.00" cy="3.40" r="0.90" />
-          </g>
-          <line x1="78.9" y1="71.7" x2="78.3" y2="71.4" strokeWidth="0.55" />
-          <g transform="translate(78.29,71.42) rotate(-66.2)">
+          <line x1="81.3" y1="79.6" x2="81.5" y2="79.0" strokeWidth="0.5" />
+          <g transform="translate(81.51,79.02) rotate(15.7)">
             <path
-              d="M 0 0 C -1.42 -0.10 -2.56 -0.85 -2.38 -1.99 C -2.28 -2.75 -1.61 -2.94 -1.09 -2.75 C -1.42 -3.80 -0.66 -4.84 0.00 -5.22 C 0.66 -4.84 1.42 -3.80 1.09 -2.75 C 1.61 -2.94 2.28 -2.75 2.38 -1.99 C 2.56 -0.85 1.42 -0.10 0 0 Z"
+              d="M 0 0 C -1.27 -0.08 -2.34 -0.76 -2.27 -1.77 C -2.25 -2.44 -1.67 -2.61 -1.19 -2.44 C -1.46 -3.45 -0.79 -4.41 -0.45 -4.79 C -0.03 -4.41 0.81 -3.45 0.74 -2.44 C 1.19 -2.61 1.79 -2.44 1.94 -1.77 C 2.20 -0.76 1.25 -0.08 0 0 Z"
               fill="currentColor"
               stroke="none"
             />
           </g>
-          <line x1="78.1" y1="65.4" x2="78.6" y2="64.9" strokeWidth="0.55" />
-          <g transform="translate(78.61,64.92) rotate(50.6)">
+          <line x1="80.7" y1="76.0" x2="80.1" y2="76.0" strokeWidth="0.5" />
+          <g transform="translate(80.12,75.96) rotate(-79.9)">
             <path
-              d="M 0 0 C -1.72 -0.11 -3.10 -1.03 -2.88 -2.42 C -2.76 -3.33 -1.95 -3.56 -1.32 -3.33 C -1.72 -4.60 -0.80 -5.86 0.00 -6.32 C 0.80 -5.86 1.72 -4.60 1.32 -3.33 C 1.95 -3.56 2.76 -3.33 2.88 -2.42 C 3.10 -1.03 1.72 -0.11 0 0 Z"
+              d="M 0 0 C -1.29 -0.09 -2.37 -0.77 -2.26 -1.80 C -2.21 -2.49 -1.62 -2.66 -1.14 -2.49 C -1.38 -3.52 -0.66 -4.51 -0.30 -4.90 C 0.11 -4.51 0.94 -3.52 0.83 -2.49 C 1.30 -2.66 1.91 -2.49 2.04 -1.80 C 2.27 -0.77 1.28 -0.09 0 0 Z"
               fill="currentColor"
               stroke="none"
             />
           </g>
-          <line x1="76.6" y1="59.1" x2="77.3" y2="59.8" strokeWidth="0.55" />
+          <line x1="79.2" y1="70.4" x2="78.6" y2="70.3" strokeWidth="0.5" />
+          <g transform="translate(78.65,70.27) rotate(-83.5)">
+            <path
+              d="M 0 0 C -1.47 -0.10 -2.61 -0.88 -2.36 -2.06 C -2.23 -2.85 -1.53 -3.05 -1.00 -2.85 C -1.14 -4.03 -0.21 -5.16 0.26 -5.60 C 0.68 -5.16 1.51 -4.03 1.26 -2.85 C 1.81 -3.05 2.49 -2.85 2.55 -2.06 C 2.69 -0.88 1.48 -0.10 0 0 Z"
+              fill="currentColor"
+              stroke="none"
+            />
+          </g>
+          <path d="M 78.8 66.6 Q 79.6 67.1 79.5 67.7" strokeWidth="0.55" />
           <g
-            transform="translate(77.34,59.79) rotate(-48.6)"
+            transform="translate(79.53,67.65) rotate(-40.3)"
             fill="currentColor"
             stroke="none"
           >
-            <circle cx="-1.40" cy="0.45" r="0.81" />
-            <circle cx="0.00" cy="0.23" r="0.81" />
-            <circle cx="1.40" cy="0.45" r="0.81" />
-            <circle cx="-0.72" cy="1.71" r="0.81" />
-            <circle cx="0.72" cy="1.71" r="0.81" />
-            <circle cx="0.00" cy="3.06" r="0.81" />
+            <circle cx="-1.69" cy="0.39" r="0.76" />
+            <circle cx="-0.05" cy="0.19" r="0.76" />
+            <circle cx="1.71" cy="0.34" r="0.76" />
+            <circle cx="-1.34" cy="1.84" r="0.76" />
+            <circle cx="0.42" cy="1.76" r="0.76" />
+            <circle cx="2.14" cy="1.81" r="0.76" />
+            <circle cx="-0.41" cy="3.10" r="0.76" />
+            <circle cx="1.20" cy="3.19" r="0.76" />
+            <circle cx="0.63" cy="4.50" r="0.76" />
           </g>
-          <line x1="70.6" y1="45.1" x2="71.0" y2="44.5" strokeWidth="0.55" />
-          <g transform="translate(71.02,44.48) rotate(33.2)">
+          <line x1="79.0" y1="60.9" x2="79.6" y2="60.8" strokeWidth="0.5" />
+          <g transform="translate(79.63,60.77) rotate(81.1)">
             <path
-              d="M 0 0 C -1.27 -0.09 -2.29 -0.77 -2.13 -1.78 C -2.04 -2.46 -1.44 -2.63 -0.98 -2.46 C -1.27 -3.40 -0.59 -4.33 0.00 -4.67 C 0.59 -4.33 1.27 -3.40 0.98 -2.46 C 1.44 -2.63 2.04 -2.46 2.13 -1.78 C 2.29 -0.77 1.27 -0.09 0 0 Z"
+              d="M 0 0 C -1.30 -0.09 -2.24 -0.79 -1.90 -1.84 C -1.70 -2.55 -1.06 -2.72 -0.61 -2.55 C -0.61 -3.60 0.34 -4.61 0.79 -5.00 C 1.13 -4.61 1.76 -3.60 1.41 -2.55 C 1.92 -2.72 2.51 -2.55 2.49 -1.84 C 2.49 -0.79 1.33 -0.09 0 0 Z"
+              fill="currentColor"
+              stroke="none"
+            />
+          </g>
+          <g transform="translate(79.26,51.77) rotate(-60.5)">
+            <path
+              d="M -1.1 0.55 Q -0.5 0.15 0 0  0.00 0.00 L 0.17 -0.72 L 0.53 -1.34 L 1.04 -1.81 L 1.66 -2.10 L 2.32 -2.19 L 2.97 -2.08 L 3.53 -1.80 L 3.97 -1.37 L 4.26 -0.84 L 4.37 -0.27 L 4.31 0.29 L 4.09 0.79 L 3.74 1.19 L 3.30 1.46 L 2.82 1.59 L 2.34 1.56 L 1.91 1.40 L 1.56 1.12 L 1.32 0.77 L 1.20 0.37 L 1.20 -0.02 L 1.32 -0.38 L 1.53 -0.67 L 1.81 -0.88 L 2.12 -0.99 L 2.43 -0.99 L 2.71 -0.91 L 2.94 -0.75 L 3.10 -0.55 L 3.18 -0.32 L 3.18 -0.09 L 3.12 0.11 L 3.01 0.27 L 2.86 0.38 L 2.71 0.42"
+              strokeWidth="0.55"
+            />
+          </g>
+          <line x1="76.5" y1="47.3" x2="76.8" y2="46.7" strokeWidth="0.5" />
+          <g transform="translate(76.79,46.73) rotate(19.3)">
+            <path
+              d="M 0 0 C -1.50 -0.10 -2.70 -0.90 -2.49 -2.10 C -2.39 -2.90 -1.69 -3.10 -1.14 -2.90 C -1.33 -4.10 -0.43 -5.25 0.03 -5.70 C 0.47 -5.25 1.37 -4.10 1.16 -2.90 C 1.72 -3.10 2.42 -2.90 2.51 -2.10 C 2.71 -0.90 1.50 -0.10 0 0 Z"
+              fill="currentColor"
+              stroke="none"
+            />
+          </g>
+          <line x1="68.6" y1="40.0" x2="68.8" y2="39.4" strokeWidth="0.5" />
+          <g transform="translate(68.79,39.45) rotate(34.4)">
+            <path
+              d="M 0 0 C -1.04 -0.07 -1.82 -0.63 -1.59 -1.47 C -1.46 -2.03 -0.96 -2.17 -0.59 -2.03 C -0.63 -2.87 0.08 -3.67 0.43 -3.99 C 0.71 -3.67 1.26 -2.87 1.02 -2.03 C 1.42 -2.17 1.90 -2.03 1.91 -1.47 C 1.96 -0.63 1.06 -0.07 0 0 Z"
               fill="currentColor"
               stroke="none"
             />
           </g>
         </g>
-        <g transform="translate(100,0) scale(-1,1)">
+        <g transform="translate(100,0) scale(-1,1)" fill="none">
           <path
-            d="M 77.5 93 Q 82 72 74.5 53 Q 70.5 44 65.2 35.8"
-            strokeWidth="1.2"
-            fill="none"
+            d="M 77.3 93.5 Q 83.5 84 81.2 74 Q 76.4 66 80.3 57"
+            strokeWidth="1.25"
           />
-          <line x1="78.6" y1="86.7" x2="79.2" y2="86.5" strokeWidth="0.55" />
-          <g transform="translate(79.23,86.49) rotate(68.6)">
+          <path
+            d="M 80.3 57 Q 79.2 49 72.5 44 Q 68.5 40.5 66 36.5"
+            strokeWidth="0.85"
+          />
+          <line x1="80.2" y1="87.8" x2="79.8" y2="87.3" strokeWidth="0.5" />
+          <g transform="translate(79.83,87.31) rotate(-46.6)">
             <path
-              d="M 0 0 C -1.72 -0.11 -3.10 -1.03 -2.88 -2.42 C -2.76 -3.33 -1.95 -3.56 -1.32 -3.33 C -1.72 -4.60 -0.80 -5.86 0.00 -6.32 C 0.80 -5.86 1.72 -4.60 1.32 -3.33 C 1.95 -3.56 2.76 -3.33 2.88 -2.42 C 3.10 -1.03 1.72 -0.11 0 0 Z"
+              d="M 0 0 C -1.52 -0.10 -2.63 -0.92 -2.25 -2.14 C -2.03 -2.96 -1.28 -3.17 -0.75 -2.96 C -0.78 -4.19 0.31 -5.36 0.83 -5.82 C 1.23 -5.36 1.98 -4.19 1.60 -2.96 C 2.19 -3.17 2.87 -2.96 2.86 -2.14 C 2.89 -0.92 1.55 -0.10 0 0 Z"
               fill="currentColor"
               stroke="none"
             />
           </g>
-          <g transform="translate(79.03,82.22) rotate(-27.1)">
+          <g transform="translate(81.36,83.88) rotate(-44.5)">
             <path
-              d="M 0 0 C 1.80 -0.75 3.45 -1.20 4.05 -2.85 C 4.50 -4.20 3.30 -5.10 2.25 -4.50 C 1.42 -3.97 1.65 -2.85 2.63 -2.70"
+              d="M -1.1 0.55 Q -0.5 0.15 0 0  0.00 0.00 L 0.15 -0.65 L 0.48 -1.21 L 0.95 -1.63 L 1.51 -1.89 L 2.11 -1.97 L 2.68 -1.87 L 3.19 -1.61 L 3.58 -1.22 L 3.83 -0.75 L 3.93 -0.24 L 3.87 0.26 L 3.67 0.70 L 3.36 1.05 L 2.97 1.29 L 2.55 1.39 L 2.13 1.36 L 1.75 1.22 L 1.45 0.97 L 1.24 0.66 L 1.15 0.32 L 1.16 -0.02 L 1.26 -0.32 L 1.45 -0.57 L 1.68 -0.74 L 1.95 -0.82 L 2.20 -0.82 L 2.43 -0.74 L 2.61 -0.60 L 2.74 -0.43 L 2.79 -0.25 L 2.79 -0.07 L 2.73 0.09 L 2.63 0.20"
               strokeWidth="0.55"
-              fill="none"
             />
           </g>
-          <line x1="79.2" y1="78.1" x2="79.8" y2="78.9" strokeWidth="0.55" />
-          <g
-            transform="translate(79.85,78.89) rotate(-41.4)"
-            fill="currentColor"
-            stroke="none"
-          >
-            <circle cx="-1.55" cy="0.50" r="0.90" />
-            <circle cx="0.00" cy="0.25" r="0.90" />
-            <circle cx="1.55" cy="0.50" r="0.90" />
-            <circle cx="-0.80" cy="1.90" r="0.90" />
-            <circle cx="0.80" cy="1.90" r="0.90" />
-            <circle cx="0.00" cy="3.40" r="0.90" />
-          </g>
-          <line x1="78.9" y1="71.7" x2="78.3" y2="71.4" strokeWidth="0.55" />
-          <g transform="translate(78.29,71.42) rotate(-66.2)">
+          <line x1="81.8" y1="79.6" x2="82.1" y2="79.0" strokeWidth="0.5" />
+          <g transform="translate(82.12,79.04) rotate(43.0)">
             <path
-              d="M 0 0 C -1.42 -0.10 -2.56 -0.85 -2.38 -1.99 C -2.28 -2.75 -1.61 -2.94 -1.09 -2.75 C -1.42 -3.80 -0.66 -4.84 0.00 -5.22 C 0.66 -4.84 1.42 -3.80 1.09 -2.75 C 1.61 -2.94 2.28 -2.75 2.38 -1.99 C 2.56 -0.85 1.42 -0.10 0 0 Z"
+              d="M 0 0 C -1.32 -0.09 -2.38 -0.79 -2.21 -1.84 C -2.13 -2.54 -1.52 -2.72 -1.03 -2.54 C -1.22 -3.60 -0.44 -4.61 -0.05 -5.00 C 0.35 -4.61 1.15 -3.60 0.98 -2.54 C 1.46 -2.72 2.08 -2.54 2.18 -1.84 C 2.36 -0.79 1.32 -0.09 0 0 Z"
               fill="currentColor"
               stroke="none"
             />
           </g>
-          <line x1="78.1" y1="65.4" x2="78.6" y2="64.9" strokeWidth="0.55" />
-          <g transform="translate(78.61,64.92) rotate(50.6)">
+          <line x1="81.6" y1="76.0" x2="81.0" y2="75.9" strokeWidth="0.5" />
+          <g transform="translate(81.01,75.90) rotate(-79.8)">
             <path
-              d="M 0 0 C -1.72 -0.11 -3.10 -1.03 -2.88 -2.42 C -2.76 -3.33 -1.95 -3.56 -1.32 -3.33 C -1.72 -4.60 -0.80 -5.86 0.00 -6.32 C 0.80 -5.86 1.72 -4.60 1.32 -3.33 C 1.95 -3.56 2.76 -3.33 2.88 -2.42 C 3.10 -1.03 1.72 -0.11 0 0 Z"
+              d="M 0 0 C -1.26 -0.08 -2.29 -0.76 -2.16 -1.76 C -2.10 -2.44 -1.52 -2.61 -1.05 -2.44 C -1.25 -3.45 -0.53 -4.41 -0.16 -4.79 C 0.23 -4.41 1.02 -3.45 0.88 -2.44 C 1.34 -2.61 1.93 -2.44 2.04 -1.76 C 2.24 -0.76 1.26 -0.08 0 0 Z"
               fill="currentColor"
               stroke="none"
             />
           </g>
-          <line x1="76.6" y1="59.1" x2="77.3" y2="59.8" strokeWidth="0.55" />
+          <line x1="79.5" y1="70.4" x2="79.0" y2="70.4" strokeWidth="0.5" />
+          <g transform="translate(78.95,70.36) rotate(-75.0)">
+            <path
+              d="M 0 0 C -1.43 -0.10 -2.56 -0.86 -2.34 -2.01 C -2.22 -2.77 -1.55 -2.96 -1.03 -2.77 C -1.19 -3.92 -0.30 -5.02 0.14 -5.45 C 0.56 -5.02 1.39 -3.92 1.17 -2.77 C 1.70 -2.96 2.37 -2.77 2.44 -2.01 C 2.60 -0.86 1.44 -0.10 0 0 Z"
+              fill="currentColor"
+              stroke="none"
+            />
+          </g>
+          <path d="M 78.7 66.6 Q 79.5 67.1 79.5 67.6" strokeWidth="0.55" />
           <g
-            transform="translate(77.34,59.79) rotate(-48.6)"
+            transform="translate(79.46,67.64) rotate(-37.5)"
             fill="currentColor"
             stroke="none"
           >
-            <circle cx="-1.40" cy="0.45" r="0.81" />
-            <circle cx="0.00" cy="0.23" r="0.81" />
-            <circle cx="1.40" cy="0.45" r="0.81" />
-            <circle cx="-0.72" cy="1.71" r="0.81" />
-            <circle cx="0.72" cy="1.71" r="0.81" />
-            <circle cx="0.00" cy="3.06" r="0.81" />
+            <circle cx="-1.54" cy="0.34" r="0.76" />
+            <circle cx="0.02" cy="0.12" r="0.76" />
+            <circle cx="1.79" cy="0.44" r="0.76" />
+            <circle cx="-1.40" cy="1.72" r="0.76" />
+            <circle cx="0.43" cy="1.60" r="0.76" />
+            <circle cx="2.00" cy="1.88" r="0.76" />
+            <circle cx="-0.51" cy="3.07" r="0.76" />
+            <circle cx="1.32" cy="3.31" r="0.76" />
+            <circle cx="0.54" cy="4.59" r="0.76" />
           </g>
-          <line x1="70.6" y1="45.1" x2="71.0" y2="44.5" strokeWidth="0.55" />
-          <g transform="translate(71.02,44.48) rotate(33.2)">
+          <line x1="79.0" y1="60.9" x2="79.6" y2="60.8" strokeWidth="0.5" />
+          <g transform="translate(79.60,60.81) rotate(74.1)">
             <path
-              d="M 0 0 C -1.27 -0.09 -2.29 -0.77 -2.13 -1.78 C -2.04 -2.46 -1.44 -2.63 -0.98 -2.46 C -1.27 -3.40 -0.59 -4.33 0.00 -4.67 C 0.59 -4.33 1.27 -3.40 0.98 -2.46 C 1.44 -2.63 2.04 -2.46 2.13 -1.78 C 2.29 -0.77 1.27 -0.09 0 0 Z"
+              d="M 0 0 C -1.41 -0.09 -2.55 -0.84 -2.40 -1.96 C -2.32 -2.71 -1.67 -2.90 -1.15 -2.71 C -1.37 -3.83 -0.56 -4.91 -0.15 -5.33 C 0.28 -4.91 1.15 -3.83 1.00 -2.71 C 1.51 -2.90 2.17 -2.71 2.28 -1.96 C 2.50 -0.84 1.40 -0.09 0 0 Z"
+              fill="currentColor"
+              stroke="none"
+            />
+          </g>
+          <g transform="translate(78.83,51.77) rotate(-68.2)">
+            <path
+              d="M -1.1 0.55 Q -0.5 0.15 0 0  0.00 0.00 L 0.17 -0.72 L 0.53 -1.34 L 1.04 -1.81 L 1.66 -2.10 L 2.32 -2.19 L 2.97 -2.08 L 3.53 -1.80 L 3.97 -1.37 L 4.26 -0.84 L 4.37 -0.27 L 4.31 0.29 L 4.09 0.79 L 3.74 1.19 L 3.30 1.46 L 2.82 1.59 L 2.34 1.56 L 1.91 1.40 L 1.56 1.12 L 1.32 0.77 L 1.20 0.37 L 1.20 -0.02 L 1.32 -0.38 L 1.53 -0.67 L 1.81 -0.88 L 2.12 -0.99 L 2.43 -0.99 L 2.71 -0.91 L 2.94 -0.75 L 3.10 -0.55 L 3.18 -0.32 L 3.18 -0.09 L 3.12 0.11 L 3.01 0.27 L 2.86 0.38 L 2.71 0.42"
+              strokeWidth="0.55"
+            />
+          </g>
+          <line x1="76.0" y1="47.3" x2="76.3" y2="46.7" strokeWidth="0.5" />
+          <g transform="translate(76.29,46.74) rotate(28.2)">
+            <path
+              d="M 0 0 C -1.38 -0.09 -2.52 -0.82 -2.41 -1.92 C -2.37 -2.65 -1.74 -2.83 -1.23 -2.65 C -1.49 -3.74 -0.74 -4.79 -0.35 -5.20 C 0.09 -4.79 0.98 -3.74 0.87 -2.65 C 1.36 -2.83 2.01 -2.65 2.15 -1.92 C 2.41 -0.82 1.36 -0.09 0 0 Z"
+              fill="currentColor"
+              stroke="none"
+            />
+          </g>
+          <line x1="68.6" y1="40.0" x2="68.8" y2="39.4" strokeWidth="0.5" />
+          <g transform="translate(68.79,39.45) rotate(18.0)">
+            <path
+              d="M 0 0 C -1.04 -0.07 -1.82 -0.63 -1.59 -1.47 C -1.46 -2.03 -0.95 -2.17 -0.58 -2.03 C -0.63 -2.87 0.09 -3.67 0.44 -3.99 C 0.72 -3.67 1.26 -2.87 1.03 -2.03 C 1.43 -2.17 1.90 -2.03 1.91 -1.47 C 1.96 -0.63 1.06 -0.07 0 0 Z"
               fill="currentColor"
               stroke="none"
             />
@@ -299,7 +333,7 @@ export function CrestMark({ className }: { className?: string }) {
           fill="currentColor"
           stroke="none"
         >
-          <path d="M 0 0 C -1.13 -0.08 -2.03 -0.68 -1.88 -1.58 C -1.80 -2.17 -1.27 -2.33 -0.86 -2.17 C -1.13 -3.00 -0.52 -3.82 0.00 -4.13 C 0.52 -3.82 1.13 -3.00 0.86 -2.17 C 1.27 -2.33 1.80 -2.17 1.88 -1.58 C 2.03 -0.68 1.13 -0.08 0 0 Z" />
+          <path d="M 0 0 C -1.08 -0.07 -1.94 -0.65 -1.80 -1.51 C -1.73 -2.09 -1.22 -2.23 -0.83 -2.09 C -0.97 -2.95 -0.32 -3.78 0.00 -4.10 C 0.32 -3.78 0.97 -2.95 0.83 -2.09 C 1.22 -2.23 1.73 -2.09 1.80 -1.51 C 1.94 -0.65 1.08 -0.07 0 0 Z" />
         </g>
         <g transform="translate(100,0) scale(-1,1)">
           <g
@@ -307,7 +341,7 @@ export function CrestMark({ className }: { className?: string }) {
             fill="currentColor"
             stroke="none"
           >
-            <path d="M 0 0 C -1.13 -0.08 -2.03 -0.68 -1.88 -1.58 C -1.80 -2.17 -1.27 -2.33 -0.86 -2.17 C -1.13 -3.00 -0.52 -3.82 0.00 -4.13 C 0.52 -3.82 1.13 -3.00 0.86 -2.17 C 1.27 -2.33 1.80 -2.17 1.88 -1.58 C 2.03 -0.68 1.13 -0.08 0 0 Z" />
+            <path d="M 0 0 C -1.08 -0.07 -1.94 -0.65 -1.80 -1.51 C -1.73 -2.09 -1.22 -2.23 -0.83 -2.09 C -0.97 -2.95 -0.32 -3.78 0.00 -4.10 C 0.32 -3.78 0.97 -2.95 0.83 -2.09 C 1.22 -2.23 1.73 -2.09 1.80 -1.51 C 1.94 -0.65 1.08 -0.07 0 0 Z" />
           </g>
         </g>
         <g transform="translate(22.03,33.18) scale(0.07)">
@@ -320,62 +354,32 @@ export function CrestMark({ className }: { className?: string }) {
           </g>
         </g>
         <g fill="currentColor" stroke="none">
-          <ellipse
-            cx="95.2"
-            cy="82.0"
-            rx="0.7"
-            ry="0.52"
-            transform="rotate(16 95.2 82.0)"
-          />
-          <ellipse
-            cx="75.2"
-            cy="117.8"
-            rx="0.5"
-            ry="0.38"
-            transform="rotate(78 75.2 117.8)"
-          />
-          <ellipse
-            cx="38.7"
-            cy="124.5"
-            rx="0.85"
-            ry="0.64"
-            transform="rotate(144 38.7 124.5)"
-          />
-          <ellipse
-            cx="12.9"
-            cy="104.4"
-            rx="0.45"
-            ry="0.34"
-            transform="rotate(141 12.9 104.4)"
-          />
-          <ellipse
-            cx="4.8"
-            cy="46.9"
-            rx="0.6"
-            ry="0.45"
-            transform="rotate(217 4.8 46.9)"
-          />
-          <ellipse
-            cx="28.8"
-            cy="10.3"
-            rx="0.75"
-            ry="0.56"
-            transform="rotate(283 28.8 10.3)"
-          />
-          <ellipse
-            cx="63.1"
-            cy="5.2"
-            rx="0.5"
-            ry="0.38"
-            transform="rotate(286 63.1 5.2)"
-          />
-          <ellipse
-            cx="91.3"
-            cy="35.0"
-            rx="0.6"
-            ry="0.45"
-            transform="rotate(351 91.3 35.0)"
-          />
+          <circle cx="51.6" cy="124.2" r="0.22" />
+          <circle cx="6.7" cy="85.4" r="0.26" />
+          <circle cx="11.8" cy="103.6" r="0.22" />
+          <circle cx="60.9" cy="6.7" r="0.20" />
+          <circle cx="83.5" cy="110.5" r="0.40" />
+          <circle cx="34.2" cy="125.1" r="0.35" />
+          <circle cx="24.2" cy="15.8" r="0.17" />
+          <circle cx="20.1" cy="111.7" r="0.39" />
+          <circle cx="3.7" cy="73.5" r="0.33" />
+          <circle cx="41.5" cy="5.2" r="0.19" />
+          <circle cx="31.3" cy="10.5" r="0.34" />
+          <circle cx="85.1" cy="103.6" r="0.16" />
+          <circle cx="12.2" cy="30.1" r="0.41" />
+          <circle cx="20.4" cy="17.0" r="0.39" />
+          <circle cx="23.4" cy="115.2" r="0.39" />
+          <circle cx="78.2" cy="113.1" r="0.16" />
+          <circle cx="3.7" cy="45.5" r="0.21" />
+          <circle cx="60.4" cy="127.3" r="0.42" />
+          <circle cx="32.3" cy="10.1" r="0.37" />
+          <circle cx="25.8" cy="116.9" r="0.17" />
+          <circle cx="49.9" cy="3.5" r="0.20" />
+          <circle cx="40.8" cy="6.4" r="0.19" />
+          <circle cx="4.8" cy="47.7" r="0.30" />
+          <circle cx="59.2" cy="127.6" r="0.37" />
+          <circle cx="41.0" cy="6.5" r="0.17" />
+          <circle cx="67.5" cy="7.0" r="0.24" />
         </g>
         <path
           fillRule="evenodd"
