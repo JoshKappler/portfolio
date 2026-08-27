@@ -25,6 +25,11 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
+/* Justified paragraphs end on a centered line, matching the centered masthead. */
+main {
+  text-align-last: center;
+}
+
 a {
   text-underline-offset: 3px;
 }
