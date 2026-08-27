@@ -25,9 +25,9 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-/* Paragraphs and list entries justify, and on wide screens the last line
-   stretches to meet both edges too; narrow columns wrap too few words per
-   line for that, so they center the last line instead. Browsers without
+/* Paragraphs and list entries justify with the last line centered. The
+   StretchLast component marks blocks whose last line already nearly fills
+   the column, and only those stretch to meet both edges. Browsers without
    text-align-last fall back to fully centered text. */
 main {
   text-align: center;
@@ -39,11 +39,9 @@ main {
     text-align-last: center;
     text-wrap: pretty;
   }
-  @media (min-width: 42rem) {
-    main > p,
-    main li {
-      text-align-last: justify;
-    }
+  main > p.stretch-last,
+  main li.stretch-last {
+    text-align-last: justify;
   }
 }
 

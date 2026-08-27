@@ -11,7 +11,9 @@ understated register: one narrow text column, no hero effects, no webfonts.
   mode, no theme toggle, no theme-provider. Paper has no dark mode.
 - All homepage content lives inline in `src/app/page.tsx` as `projects`,
   `playground`, and `headerLinks` arrays: one line of copy per item.
-- `src/components/globe.tsx` is the only client component and the only visual
+- Two client components only. `src/components/stretch-last.tsx` measures each
+  paragraph's last line and stretches it to both edges only when it already
+  nearly fills the column. `src/components/globe.tsx` is the only visual
   effect: a canvas-2D JK mark that shatters into a spinning glyph globe,
   vendored from gt-logo-loader-studio into `src/components/globe/`. It links
   to that repo and holds still under `prefers-reduced-motion`.

@@ -1,4 +1,5 @@
 import { Globe } from "@/components/globe";
+import { StretchLast } from "@/components/stretch-last";
 import { DEMO_URL } from "@/lib/site";
 
 type ItemLink = { label: string; href: string };
@@ -138,6 +139,7 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
 export default function Home() {
   return (
     <main className="mx-auto max-w-[37rem] border-border px-6 py-14 text-[17px] leading-relaxed min-[42rem]:border-x">
+      <StretchLast />
       <Globe />
 
       <header className="mt-6 text-center">
