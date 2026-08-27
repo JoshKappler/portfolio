@@ -51,7 +51,7 @@ const COS_T = Math.cos(TILT);
 const SIN_T = Math.sin(TILT);
 const MELT0 = 0.05;
 const MELT_SPAN = 0.19;
-const REFILL_SPAN = 0.175;
+const REFILL_SPAN = MELT_SPAN;
 const REFILL_END = 0.955;
 const MAX_SHIFT = 0.045;
 export const RASTER_OUT = [0, 0.05];
@@ -352,8 +352,8 @@ export function createGlobe(config = {}) {
     site.out = null;
   }
   for (const site of backSites) {
-    site.back = refillStartOf(site.piece) + REFILL_SPAN * invSmooth5(1 - site.meltPoint) + (site.jitter - 0.5) * 0.01;
-    site.flyBack = 0.06 + 0.03 * site.jitter;
+    site.back = refillStartOf(site.piece) + REFILL_SPAN * invSmooth5(1 - site.meltPoint) + (site.jitter - 0.5) * 0.012;
+    site.flyBack = 0.07 + 0.035 * site.jitter;
     site.ret = null;
   }
 
@@ -409,10 +409,14 @@ export function createGlobe(config = {}) {
         bestPos = pos;
       }
     }
-    if (!best) continue;
+    if (!best) {
+      for (const site of freeBack) if (!best || site.launch > best.launch) best = site;
+      if (!best) continue;
+      bestPos = targetAt(target, best.launch);
+    }
     freeBack.delete(best);
     target.leaveAt = best.launch;
-    best.ret = { target, launch: best.launch, fromX: bestPos.x, fromY: bestPos.y, ctrl: bendControl(bestPos.x, bestPos.y, best.x, best.y, best.jitter) };
+    best.ret = { target, launch: best.launch, fromX: bestPos.x, fromY: bestPos.y, fromZ: bestPos.z, ctrl: bendControl(bestPos.x, bestPos.y, best.x, best.y, best.jitter) };
   }
 
   function charOf(target, clockMs) {
@@ -589,22 +593,23 @@ export function createGlobe(config = {}) {
       const x = inv * inv * site.ret.fromX + 2 * inv * u * site.ret.ctrl[0] + u * u * site.x;
       const y = inv * inv * site.ret.fromY + 2 * inv * u * site.ret.ctrl[1] + u * u * site.y;
       if (target.kind === 'dot') {
-        sprites.push({ kind: 'dot', flight: true, x, y, r: 5.2 - 1.2 * u, alpha: 0.55 * Math.min(1, u / 0.1 + 0.4) });
+        sprites.push({ kind: 'dot', flight: true, x, y, r: 5.2 - 1.2 * u, alpha: 0.55 * (0.6 + 0.4 * u) });
         continue;
       }
       const { glyph } = charOf(target, clockMs);
       const birth = 1 - smooth5((u - 0.55) / 0.45);
+      const settle = smooth5((0.3 - u) / 0.3);
       sprites.push({
         kind: 'glyph',
         flight: true,
         birth,
-        chunkW: site.chunkW * (0.55 + 0.45 * birth),
-        chunkH: site.chunkH * (0.55 + 0.45 * birth),
+        chunkW: site.chunkW * (1 - 0.45 * birth),
+        chunkH: site.chunkH * (1 - 0.45 * birth),
         rot: site.jitter * Math.PI + (site.jitter - 0.5) * 3.2 * (1 - u),
         x,
         y,
         size: (26 + 12 * target.jitter) * (1 - u) + (44 + 14 * site.jitter) * u,
-        alpha: 0.95 * Math.min(1, u / 0.1 + 0.4),
+        alpha: 0.95 * (1 - settle) + 0.92 * limbRamp(site.ret.fromZ) * settle,
         char: glyph,
         wide: target.wide,
       });
