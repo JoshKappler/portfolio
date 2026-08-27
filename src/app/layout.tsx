@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 const description =
-  "Developer tools and AI agents. Founding DX Engineer at General Translation. Previously grew a YouTube channel to 2.1M subscribers.";
+  "Software engineer in San Francisco. Founding DX Engineer at General Translation. Previously grew a YouTube channel to 2.1M subscribers.";
 
 export const metadata: Metadata = {
   title: "Josh Kappler",

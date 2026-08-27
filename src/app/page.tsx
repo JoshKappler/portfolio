@@ -142,7 +142,7 @@ export default function Home() {
       <header className="mt-6 text-center">
         <h1 className="text-3xl">Josh Kappler</h1>
         <p className="mt-1 font-mono text-[13px] text-text-muted">
-          Founding DX Engineer · San Francisco
+          Software Engineer · San Francisco
         </p>
         <nav className="mt-4 font-mono text-[13px]">
           {headerLinks.map((link) => (
@@ -169,13 +169,15 @@ export default function Home() {
         >
           General Translation
         </a>
-        , where I build the developer-facing side of localization: open-source
-        SDKs, a CLI, and the platform behind them.
+        , where I&apos;ve built the dashboard&apos;s AI assistant, an
+        autonomous outbound growth engine, and a content engine that turns the
+        docs into demo videos and tutorials, plus fixes in the open-source
+        SDKs.
       </p>
       <p className="mt-4">
-        I build AI agents from scratch and write the orchestration layer
-        myself: tool loops, state machines, memory, routing. No agent
-        frameworks.
+        I ship whole products: the frontend, the backend, the data model, and
+        the AI inside them. When that means agents, I write the orchestration
+        myself: tool loops, state machines, memory, routing. No frameworks.
       </p>
       <p className="mt-4">
         Before engineering I ran{" "}
@@ -202,6 +204,10 @@ export default function Home() {
           <a href="mailto:Joshua.Kappler@gmail.com" className="underline">
             Joshua.Kappler@gmail.com
           </a>
+          , call or text{" "}
+          <a href="tel:+15122109934" className="underline">
+            512-210-9934
+          </a>
           , or{" "}
           <a
             href={BOOKING_URL}
@@ -216,7 +222,7 @@ export default function Home() {
       </section>
 
       <footer className="mt-14 border-t border-border pt-4 text-center font-mono text-xs text-text-muted">
-        Josh Kappler · 2026
+        Josh Kappler · President, Boffy LLC · 2026
       </footer>
     </main>
   );
