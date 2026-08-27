@@ -5,7 +5,7 @@ import { SquareParagraphs } from "@/components/square-paragraphs";
 import { DEMO_URL } from "@/lib/site";
 
 type ItemLink = { label: string; href: string };
-type Item = { name: string; href?: string; line: string; links?: ItemLink[] };
+type Item = { name: string; href?: string; line: string };
 
 const projects: Item[] = [
   {
@@ -67,26 +67,22 @@ const playground: Item[] = [
   {
     name: "chadGPT",
     href: "https://chadgpt.joshuakappler.com",
-    line: "A hostile chatbot on a green CRT. He answers your question correctly, and then insults you for asking. Has a phone number.",
-    links: [{ label: "GitHub", href: "https://github.com/JoshKappler/chadGPT" }],
+    line: "A hostile chatbot on a green CRT. He answers your question correctly, and then insults you for asking. He has a real phone number.",
   },
   {
     name: "chud",
     href: "https://chud.joshuakappler.com",
-    line: "A goblin voice assistant with a jiggly skin. He talks back to you. You can beat him up if you want; he stays grumpy until he heals.",
-    links: [{ label: "GitHub", href: "https://github.com/JoshKappler/chud" }],
+    line: "A goblin voice assistant with a jiggly skin. He talks back to you. You can beat him up if you want; he just stays grumpy until he heals.",
   },
   {
     name: "deskfly",
     href: "https://deskfly.joshuakappler.com",
-    line: "A fruit fly's real connectome, living on my desktop.",
-    links: [{ label: "GitHub", href: "https://github.com/JoshKappler/deskfly" }],
+    line: "A fruit fly's real connectome, living as a fly on my desktop.",
   },
   {
     name: "scuttle",
     href: "https://scuttle.joshuakappler.com",
-    line: "A voxel pirate roguelite in the browser. Cannonballs remove real voxels, compartments flood, and ships list, capsize, and sink.",
-    links: [{ label: "GitHub", href: "https://github.com/JoshKappler/scuttle" }],
+    line: "A voxel pirate roguelite in the browser. Cannonballs remove real voxels, compartments flood, and the ships list, capsize, and sink.",
   },
 ];
 
@@ -120,22 +116,6 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
               <span className="font-bold">{item.name}</span>
             )}
             <span className="font-bold">.</span> {item.line}
-            {item.links && item.links.length > 0 && (
-              <span className="font-mono text-[0.8125rem]">
-                {" "}
-                {item.links.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mx-1 underline"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </span>
-            )}
           </li>
         ))}
       </ul>
