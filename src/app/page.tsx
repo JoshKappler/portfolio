@@ -205,7 +205,7 @@ export default function Home() {
             Joshua.Kappler@gmail.com
           </a>
           , call or text{" "}
-          <a href="tel:+15122109934" className="underline">
+          <a href="tel:+15122109934" className="whitespace-nowrap underline">
             512-210-9934
           </a>
           , or{" "}
@@ -213,7 +213,7 @@ export default function Home() {
             href={BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline"
+            className="whitespace-nowrap underline"
           >
             book a call
           </a>
