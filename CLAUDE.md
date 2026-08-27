@@ -37,7 +37,9 @@ understated register: one narrow text column, no hero effects, no webfonts.
 - `src/components/crest-mark.tsx` is the de Falco family seal, stylized from
   a photo of the wax stamp; it closes the page and `public/crest.png` is its
   transparent render, used by Josh's email signature. Regenerate the PNG when
-  the mark changes; the signature hotlinks it.
+  the mark changes; the signature hotlinks it, and the social card
+  `src/app/opengraph-image.png` embeds it (regenerate that too, via
+  `scripts/generate-og-image.html`).
 - The footer colophon claims system fonts and no trackers. Adding a webfont,
   analytics, or any third-party script makes it false; update or remove the
   line in the same change.
