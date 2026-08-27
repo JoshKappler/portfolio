@@ -60,6 +60,11 @@ const projects: Item[] = [
 
 const playground: Item[] = [
   {
+    name: "herdr layout",
+    href: "https://github.com/JoshKappler/herdr-layout",
+    line: "The terminal cockpit I live in: a forked agent multiplexer whose UI I rebuilt to herd nine parallel Claude Code sessions. Boxed-tab sidebar, a live action line per session, a native detail panel.",
+  },
+  {
     name: "chadGPT",
     href: "https://github.com/JoshKappler/chadGPT",
     line: "A hostile chatbot on a green CRT. He answers your question correctly, and then insults you for asking. Has a phone number.",
