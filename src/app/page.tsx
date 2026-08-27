@@ -1,5 +1,5 @@
 import { Globe } from "@/components/globe";
-import { StretchLast } from "@/components/stretch-last";
+import { SquareParagraphs } from "@/components/square-paragraphs";
 import { DEMO_URL } from "@/lib/site";
 
 type ItemLink = { label: string; href: string };
@@ -9,50 +9,50 @@ const projects: Item[] = [
   {
     name: "Ask AI",
     href: "https://dash.generaltranslation.com",
-    line: "The assistant on the General Translation dashboard, live in production. Docs-grounded, with read-only account tools, per-plan model tiers, rate limits, and usage billing.",
+    line: "The assistant on the General Translation dashboard, live in production today. Grounded in the docs, with read-only account tools, per-plan model tiers, per-plan rate limits, and per-plan usage billing.",
   },
   {
     name: "GTM dashboard",
-    line: "General Translation's internal growth dashboard. Agent pipelines find leads, research and score them, and draft the outreach; a reviewer model gates every draft.",
+    line: "General Translation's internal growth dashboard. Agent pipelines find the leads, research and score them, and then draft the outreach; a separate reviewer model gates every outgoing draft.",
   },
   {
     name: "autovid",
     href: "https://autovid.joshuakappler.com",
-    line: "A pipeline built at General Translation that turns docs pages into finished demo videos, 22 of them live so far: it writes the scene script, scaffolds a real app, drives a real browser and a code editor, records the run, and cuts the finished video.",
+    line: "A pipeline built at General Translation that turns docs pages into finished demo videos, 22 of them live so far: it writes the scene script, scaffolds a real working app, drives a real browser and a real code editor, records the whole run, and then cuts together the finished video.",
   },
   {
     name: "memo engine",
     href: DEMO_URL,
-    line: "Built for a private credit firm. It reads a deal's documents and writes the credit memo, with every claim cited to the exact source page. The demo runs an 80-file deal end to end.",
+    line: "Built for a private credit firm. It reads a deal's documents and writes the credit memo, with every claim cited back to the exact source page. The demo runs a full 80-file deal start to finish.",
   },
   {
     name: "claim wright",
     href: "https://github.com/JoshKappler/claim-wright",
-    line: "Insurance claim adjudication where Claude reads the documents and a deterministic engine computes the payout. Median error against the human adjudicator: $0. Built in 36 hours.",
+    line: "Insurance claim adjudication where Claude reads the documents and a deterministic engine computes the payout. Median error against the human adjudicator: $0. Built end to end in 36 hours.",
   },
   {
     name: "autohack",
     href: "https://github.com/JoshKappler/autohack",
-    line: "An autonomous bug-hunter that watches seven bounty platforms, spawns hour-long hunts, adversarially reviews its own findings, and drafts submission-ready reports.",
+    line: "An autonomous bug-hunter that watches seven public bug bounty platforms, spawns hour-long hunts, adversarially reviews every one of its own findings, and then drafts submission-ready reports.",
   },
   {
     name: "pinch",
     href: "https://github.com/JoshKappler/apple-watch-claude-code",
-    line: "Claude Code, driven from an Apple Watch over cellular. The agent runs on my Mac behind an authenticated tunnel; the watch is a native watchOS client: dictate a prompt, pinch to send, roll the crown to approve diffs, shake your wrist to stop it.",
+    line: "Claude Code, driven from an Apple Watch over a cellular connection. The agent itself runs on my Mac behind an authenticated tunnel; the watch is a native watchOS client: dictate a prompt, pinch to send it, roll the crown to approve diffs, shake your wrist to stop it.",
   },
   {
     name: "fleetview",
     href: "https://github.com/JoshKappler/claude-control-center",
-    line: "A terminal cockpit that runs up to eight Claude agents in parallel and keeps every machine I own in sync. Agents survive crashes and reboots. Plain Node, raw ANSI, zero npm dependencies.",
+    line: "A terminal cockpit that runs up to eight Claude agents in parallel and keeps every machine I own in sync. The agents survive crashes and reboots. Plain Node, raw ANSI, zero npm dependencies.",
   },
   {
     name: "survival station",
     href: "https://github.com/JoshKappler/survival-station",
-    line: "An air-gapped, solar-powered AI survival computer for a non-technical user: local models, an 85 GB offline library with all of English Wikipedia, offline US maps, no internet ever.",
+    line: "An air-gapped, solar-powered AI survival computer built for a non-technical user: local models, an 85 GB offline library with all of English Wikipedia, full offline US maps, no internet ever.",
   },
   {
     name: "property leads",
-    line: "Built for a Chicago property holding company that buys foreclosures for cash. Four agents on an hourly cron find, research, and score properties, about $0.22 per 33-property batch.",
+    line: "Built for a Chicago property holding company that buys foreclosures for cash. Four agents on an hourly cron find, research, and score the properties, all at roughly $0.22 per 33-property batch.",
   },
 ];
 
@@ -60,13 +60,13 @@ const playground: Item[] = [
   {
     name: "chadGPT",
     href: "https://github.com/JoshKappler/chadGPT",
-    line: "A hostile chatbot on a green CRT. He answers your question correctly, then insults you for asking. Has a phone number.",
+    line: "A hostile chatbot on a green CRT. He answers your question correctly, and then insults you for asking. Has a phone number.",
     links: [{ label: "Live", href: "https://chadgpt.joshuakappler.com" }],
   },
   {
     name: "chud",
     href: "https://github.com/JoshKappler/chud",
-    line: "A goblin voice assistant with a jiggly skin. He talks back. You can beat him up; he stays grumpy until he heals.",
+    line: "A goblin voice assistant with a jiggly skin. He talks back to you. You can beat him up if you want; he stays grumpy until he heals.",
     links: [{ label: "Live", href: "https://chud.joshuakappler.com" }],
   },
   {
@@ -114,7 +114,7 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
             )}
             <span className="font-bold">.</span> {item.line}
             {item.links && item.links.length > 0 && (
-              <span className="font-mono text-[13px]">
+              <span className="font-mono text-[0.8125rem]">
                 {" "}
                 {item.links.map((link) => (
                   <a
@@ -138,16 +138,19 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
 
 export default function Home() {
   return (
-    <main className="mx-auto max-w-[37rem] border-border px-6 py-14 text-[17px] leading-relaxed min-[42rem]:border-x">
-      <StretchLast />
+    <main
+      data-paper
+      className="mx-auto max-w-[37rem] border-x-[0.0625rem] border-border px-6 py-14 text-[1.0625rem] leading-relaxed"
+    >
+      <SquareParagraphs />
       <Globe />
 
       <header className="mt-6 text-center">
         <h1 className="text-3xl">Josh Kappler</h1>
-        <p className="mt-1 font-mono text-[13px] text-text-muted">
+        <p className="mt-1 font-mono text-[0.8125rem] text-text-muted">
           Software Engineer · San Francisco
         </p>
-        <nav className="mt-4 font-mono text-[13px]">
+        <nav className="mt-4 font-mono text-[0.8125rem]">
           {headerLinks.map((link) => (
             <a
               key={link.label}
@@ -195,8 +198,8 @@ export default function Home() {
         >
           Boffy
         </a>
-        , a YouTube channel with 2.1M subscribers and 270M views across 136
-        long-form videos.
+        , a YouTube channel with 2.1M subscribers and 270M lifetime views
+        across its 136 long-form videos.
       </p>
 
       <ItemList title="projects" items={projects} />

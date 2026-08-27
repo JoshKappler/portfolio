@@ -25,9 +25,19 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-/* Paragraphs and list entries justify with the last line centered. The
-   StretchLast component marks blocks whose last line already nearly fills
-   the column, and only those stretch to meet both edges. Browsers without
+/* One fixed composition at every width, like a sheet of paper: below the
+   full 37rem column the root font scales with the viewport, and every
+   length on the page is rem or em, so lines wrap identically at any size. */
+html:has(main[data-paper]) {
+  font-size: min(16px, calc(100vw / 37));
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Paragraphs and list entries are squares: justified, last line stretched
+   to both edges. The copy is tuned so Georgia fills each last line
+   naturally; SquareParagraphs centers the rare last line that falls short
+   when another font wraps the text elsewhere. Browsers without
    text-align-last fall back to fully centered text. */
 main {
   text-align: center;
@@ -36,12 +46,11 @@ main {
   main > p,
   main li {
     text-align: justify;
-    text-align-last: center;
-    text-wrap: pretty;
-  }
-  main > p.stretch-last,
-  main li.stretch-last {
     text-align-last: justify;
+  }
+  main > p.loose-last,
+  main li.loose-last {
+    text-align-last: center;
   }
 }
 

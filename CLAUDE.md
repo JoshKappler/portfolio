@@ -22,8 +22,10 @@ understated register: one narrow text column, no hero effects, no webfonts.
   system Georgia.ttf by file). Regenerate; never hand-edit.
 - There are no visual dependencies. Do not add animation, background, or
   font packages; the plainness is the design.
-- `/resume` renders `public/resume.pdf` in an iframe and uses the theme token
-  names `bg`, `border`, `accent`, `text-muted`. Keep those names defined in
-  globals.css when changing colors.
+- `/resume` shows `public/resume.png` (a 300 DPI render of `public/resume.pdf`,
+  regenerate both together) on black, with a Download menu offering PDF and
+  PNG. No iframe: the browser PDF viewer's own toolbar cannot be suppressed
+  reliably. The page uses the theme token names `bg`, `border`, `text`; keep
+  those defined in globals.css when changing colors.
 - Copy style: first person, short declarative sentences, real numbers only,
   no em dashes.
