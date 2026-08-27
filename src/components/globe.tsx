@@ -5,8 +5,7 @@ import { STAGE_HALF, createGlobe } from "./globe/globe-core.js";
 import { MARK_GEOMETRY } from "./globe/mark-geometry.js";
 import { drawGlobeScene, setInk } from "./globe/globe-draw.js";
 
-const LIGHT_INK = "25, 25, 25";
-const DARK_INK = "232, 230, 222";
+const INK = "42, 35, 24";
 
 // Smooth 0..1 ramp of tau across [from, to]; the raster and the strip ink
 // crossfade on complementary ramps so the strips never show at full strength
@@ -37,18 +36,16 @@ export function Globe() {
     const canvas = ref.current;
     if (!canvas) return;
 
-    const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const stillQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const globe = createGlobe({ holdMs: 1400 });
     const { holdMs, moveMs } = globe.timing;
     let frame = 0;
     let startedAt: number | null = null;
 
-    const marks: { light?: HTMLCanvasElement; dark?: HTMLCanvasElement } = {};
+    let mark: HTMLCanvasElement | undefined;
     const markImage = new Image();
     markImage.onload = () => {
-      marks.light = tintedMark(markImage, `rgb(${LIGHT_INK})`);
-      marks.dark = tintedMark(markImage, `rgb(${DARK_INK})`);
+      mark = tintedMark(markImage, `rgb(${INK})`);
       if (stillQuery.matches) draw(0);
     };
     markImage.src = "/jk-mark.png";
@@ -65,10 +62,9 @@ export function Globe() {
       }
       const context = canvas.getContext("2d");
       if (!context) return;
-      const dark = darkQuery.matches;
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
       context.clearRect(0, 0, box.width, box.height);
-      setInk(dark ? DARK_INK : LIGHT_INK);
+      setInk(INK);
       const scale = Math.min(box.width, box.height) / (STAGE_HALF * 2);
       const view = {
         scale,
@@ -86,7 +82,6 @@ export function Globe() {
       if (!hold) {
         drawGlobeScene(context, view, globe, tau, tau * moveMs, 1 - markAlpha);
       }
-      const mark = dark ? marks.dark : marks.light;
       if (markAlpha > 0.01 && mark) {
         const origin = view.toCanvas([0, 0]);
         const size = MARK_GEOMETRY.mark.imgW * scale;
@@ -99,9 +94,7 @@ export function Globe() {
 
     if (stillQuery.matches) {
       draw(0);
-      const redraw = () => draw(0);
-      darkQuery.addEventListener("change", redraw);
-      return () => darkQuery.removeEventListener("change", redraw);
+      return;
     }
 
     const loop = (now: number) => {

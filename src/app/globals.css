@@ -1,19 +1,12 @@
 @import "tailwindcss";
 
+/* One scheme only: the page is parchment in every browser, like paper. */
 :root {
-  --paper: #fcfcf8;
-  --ink: #191919;
-  --ink-muted: #6e6e66;
-  --line: #d9d9d0;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #121212;
-    --ink: #e8e6de;
-    --ink-muted: #93938a;
-    --line: #333330;
-  }
+  color-scheme: light;
+  --paper: #f2e8d5;
+  --ink: #2a2318;
+  --ink-muted: #7a6f5a;
+  --line: #d8cbae;
 }
 
 /* The /resume page still uses these token names; keep them defined. */
@@ -29,7 +22,7 @@
 body {
   background: var(--paper);
   color: var(--ink);
-  font-family: "Times New Roman", Times, Georgia, serif;
+  font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 a {

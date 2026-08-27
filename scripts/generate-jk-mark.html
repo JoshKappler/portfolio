@@ -2,28 +2,28 @@
 <meta charset="utf-8" />
 <style>
   @font-face {
-    font-family: 'JKTimes';
-    src: url('file:///System/Library/Fonts/Supplemental/Times%20New%20Roman.ttf');
+    font-family: 'JKSerif';
+    src: url('file:///System/Library/Fonts/Supplemental/Georgia.ttf');
   }
 </style>
 <canvas id="c" width="1200" height="1200"></canvas>
 <script>
-  // Renders JK from the literal Times New Roman system font file, then samples
+  // Renders JK from the system Georgia font file, then samples
   // the raster into the vertical strip elements the globe engine consumes.
   // Result lands on window.__RESULT after the font load is proven.
   const SIZE = 1200;
   const COL = 20;
 
   async function run() {
-    const loaded = await document.fonts.load('1000px JKTimes', 'JK');
-    if (loaded.length < 1) throw new Error('Times New Roman.ttf did not load');
+    const loaded = await document.fonts.load('880px JKSerif', 'JK');
+    if (loaded.length < 1) throw new Error('Georgia.ttf did not load');
 
     const canvas = document.getElementById('c');
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#fff';
     ctx.textBaseline = 'alphabetic';
     ctx.letterSpacing = '30px';
-    ctx.font = '400 1000px JKTimes';
+    ctx.font = '400 880px JKSerif';
     const m = ctx.measureText('JK');
     const textW = m.width;
     const capH = m.actualBoundingBoxAscent;
