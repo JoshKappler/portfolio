@@ -1,5 +1,5 @@
 import { Globe } from "@/components/globe";
-import { BOOKING_URL, DEMO_URL } from "@/lib/site";
+import { DEMO_URL } from "@/lib/site";
 
 type ItemLink = { label: string; href: string };
 type Item = { name: string; href?: string; line: string; links?: ItemLink[] };
@@ -12,15 +12,15 @@ const projects: Item[] = [
   },
   {
     name: "GTM dashboard",
-    line: "General Translation's internal growth dashboard. Agent pipelines find leads, research and score them, and draft the outreach; a reviewer model gates every draft. Internal tool, no public link.",
+    line: "General Translation's internal growth dashboard. Agent pipelines find leads, research and score them, and draft the outreach; a reviewer model gates every draft.",
   },
   {
-    name: "memo-engine",
+    name: "memo engine",
     href: DEMO_URL,
-    line: "Reads a private-credit deal data room and writes a credit memo with every claim cited to its source page. The public demo ingests an 80-file SEC data room end to end.",
+    line: "Built for a private credit firm. It reads a deal's documents and writes the credit memo, with every claim cited to the exact source page. The demo runs an 80-file deal end to end.",
   },
   {
-    name: "claim-wright",
+    name: "claim wright",
     href: "https://github.com/JoshKappler/claim-wright",
     line: "Insurance claim adjudication where Claude reads the documents and a deterministic engine computes the payout. Median error against the human adjudicator: $0. Built in 36 hours.",
   },
@@ -32,7 +32,7 @@ const projects: Item[] = [
   {
     name: "pinch",
     href: "https://github.com/JoshKappler/apple-watch-claude-code",
-    line: "Claude Code, driven from an Apple Watch over cellular.",
+    line: "Claude Code, driven from an Apple Watch over cellular. A native watchOS client: dictate a prompt, pinch to send, roll the crown to approve diffs. The agent runs on my Mac behind an authenticated tunnel.",
   },
   {
     name: "fleetview",
@@ -40,19 +40,13 @@ const projects: Item[] = [
     line: "A terminal cockpit that runs up to eight Claude agents in parallel and keeps every machine I own in sync. Zero npm dependencies.",
   },
   {
-    name: "sniply",
-    href: "https://github.com/JoshKappler/sniply",
-    line: "A live booking marketplace for barbers and stylists. The one project here with no AI in it. 234 tests.",
-    links: [{ label: "Live", href: "https://sniply.biz" }],
-  },
-  {
-    name: "survival-station",
+    name: "survival station",
     href: "https://github.com/JoshKappler/survival-station",
     line: "An air-gapped, solar-powered AI survival computer for a non-technical user: local models, an offline encyclopedia, offline maps, no internet ever.",
   },
   {
-    name: "property-leads",
-    line: "An autonomous lead-finding pipeline for a real-estate cash buyer. Four agents on an hourly cron, about $0.22 per 33-property batch. Private client work.",
+    name: "property leads",
+    line: "Built for a Chicago property holding company that buys foreclosures for cash. Four agents on an hourly cron find, research, and score properties, about $0.22 per 33-property batch.",
   },
 ];
 
@@ -171,8 +165,9 @@ export default function Home() {
         </a>
         , where I&apos;ve built the dashboard&apos;s AI assistant, an
         autonomous outbound growth engine, and a content engine that turns the
-        docs into demo videos and tutorials, plus fixes in the open-source
-        SDKs.
+        docs into demo videos and tutorials. 150+ merged PRs so far, from the
+        React SDK&apos;s core to the CLI adapters that migrate react-intl and
+        react-i18next apps automatically.
       </p>
       <p className="mt-4">
         I ship whole products: the frontend, the backend, the data model, and
@@ -205,14 +200,6 @@ export default function Home() {
           </a>
           <a href="tel:+15122109934" className="underline">
             512-210-9934
-          </a>
-          <a
-            href={BOOKING_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline"
-          >
-            book a call
           </a>
         </div>
       </section>

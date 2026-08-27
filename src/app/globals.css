@@ -25,9 +25,12 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-/* Justified paragraphs end on a centered line, matching the centered masthead. */
+/* Justified paragraphs end on a centered line, matching the centered masthead.
+   text-wrap: pretty lets the browser rebalance whole paragraphs so justified
+   lines stretch evenly instead of leaving a few gappy lines. */
 main {
   text-align-last: center;
+  text-wrap: pretty;
 }
 
 a {
