@@ -67,6 +67,7 @@ const playground: Item[] = [
     name: "deskfly",
     href: "https://github.com/JoshKappler/deskfly",
     line: "A fruit fly's real connectome, living on my desktop.",
+    links: [{ label: "Live", href: "https://deskfly.joshuakappler.com" }],
   },
   {
     name: "scuttle",
