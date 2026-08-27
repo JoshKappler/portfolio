@@ -27,11 +27,11 @@ const projects: Item[] = [
   {
     name: "autohack",
     href: "https://github.com/JoshKappler/autohack",
-    line: "An autonomous bug-hunter that polls four bounty platforms, spawns hour-long hunts, adversarially reviews its own findings, and submits reports on its own.",
+    line: "An autonomous bug-hunter that watches seven bounty platforms, spawns hour-long hunts, adversarially reviews its own findings, and drafts submission-ready reports.",
   },
   {
     name: "pinch",
-    href: "https://github.com/JoshKappler/apple-watch-claude-code-",
+    href: "https://github.com/JoshKappler/apple-watch-claude-code",
     line: "Claude Code, driven from an Apple Watch over cellular.",
   },
   {
@@ -42,7 +42,7 @@ const projects: Item[] = [
   {
     name: "sniply",
     href: "https://github.com/JoshKappler/sniply",
-    line: "A live booking marketplace for barbers and stylists. The one project here with no AI in it. 291 tests.",
+    line: "A live booking marketplace for barbers and stylists. The one project here with no AI in it. 234 tests.",
     links: [{ label: "Live", href: "https://sniply.biz" }],
   },
   {
@@ -58,14 +58,15 @@ const projects: Item[] = [
 
 const playground: Item[] = [
   {
-    name: "claude-thunder",
-    href: "https://claude-thunder.vercel.app",
-    line: "A WW2 dogfighter that runs in the browser.",
+    name: "chadGPT",
+    href: "https://github.com/JoshKappler/chadGPT",
+    line: "A hostile chatbot on a green CRT. He answers your question correctly, then insults you for asking. Has a phone number.",
+    links: [{ label: "Live", href: "https://chadgpt.joshuakappler.com" }],
   },
   {
     name: "chud",
     href: "https://github.com/JoshKappler/chud",
-    line: "A goblin voice assistant with a jiggly WebGL skin. It talks back. Runs locally.",
+    line: "A goblin voice assistant with a jiggly skin. He talks back. You can beat him up; he stays grumpy until he heals.",
   },
   {
     name: "deskfly",
@@ -91,12 +92,12 @@ const headerLinks: ItemLink[] = [
 function ItemList({ title, items }: { title: string; items: Item[] }) {
   return (
     <section className="mt-12">
-      <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+      <h2 className="text-center font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
         {title}
       </h2>
       <ul className="mt-4 space-y-5">
         {items.map((item) => (
-          <li key={item.name} className="text-pretty">
+          <li key={item.name}>
             {item.href ? (
               <a
                 href={item.href}
@@ -135,10 +136,10 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
 
 export default function Home() {
   return (
-    <main className="mx-auto max-w-[37rem] px-6 py-14 text-center text-[17px] leading-relaxed">
+    <main className="mx-auto max-w-[37rem] px-6 py-14 text-justify text-[17px] leading-relaxed hyphens-auto">
       <Globe />
 
-      <header className="mt-6">
+      <header className="mt-6 text-center">
         <h1 className="text-3xl">Josh Kappler</h1>
         <p className="mt-1 font-mono text-[13px] text-text-muted">
           Founding DX Engineer · San Francisco
@@ -158,7 +159,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <p className="mt-10 text-pretty">
+      <p className="mt-10">
         I&apos;m the founding DX Engineer at{" "}
         <a
           href="https://generaltranslation.com"
@@ -171,12 +172,12 @@ export default function Home() {
         , where I build the developer-facing side of localization: open-source
         SDKs, a CLI, and the platform behind them.
       </p>
-      <p className="mt-4 text-pretty">
+      <p className="mt-4">
         I build AI agents from scratch and write the orchestration layer
         myself: tool loops, state machines, memory, routing. No agent
         frameworks.
       </p>
-      <p className="mt-4 text-pretty">
+      <p className="mt-4">
         Before engineering I ran{" "}
         <a
           href="https://youtube.com/boffy"
@@ -193,7 +194,7 @@ export default function Home() {
       <ItemList title="playground" items={playground} />
 
       <section className="mt-12">
-        <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+        <h2 className="text-center font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
           contact
         </h2>
         <p className="mt-4">
@@ -214,7 +215,7 @@ export default function Home() {
         </p>
       </section>
 
-      <footer className="mt-14 border-t border-border pt-4 font-mono text-xs text-text-muted">
+      <footer className="mt-14 border-t border-border pt-4 text-center font-mono text-xs text-text-muted">
         Josh Kappler · 2026
       </footer>
     </main>
