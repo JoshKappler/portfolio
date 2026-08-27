@@ -216,7 +216,7 @@ export default function Home() {
         <h2 className="text-center font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
           contact
         </h2>
-        <div className="relative mt-6 text-center">
+        <div className="relative mt-4 text-center">
           <ContactEmail />
           <p className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
             I read everything.
@@ -236,8 +236,10 @@ export default function Home() {
       </div>
 
       <footer className="mt-12 border-t border-border pt-4 text-center font-mono text-xs text-text-muted">
-        <p>Founding Developer Experience Engineer, General Translation, Inc.</p>
-        <p className="mt-1">Josh Kappler · President, Boffy LLC · 2026</p>
+        <p>Josh Kappler · President, Boffy LLC · 2026</p>
+        <p className="mt-1">
+          Founding Developer Experience Engineer, General Translation, Inc.
+        </p>
         <p className="mt-1">Set in Georgia. System fonts only, no trackers.</p>
       </footer>
     </main>

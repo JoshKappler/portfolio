@@ -24,7 +24,7 @@ export function ContactEmail() {
       <button
         type="button"
         onClick={copy}
-        className="cursor-pointer underline [text-underline-offset:3px]"
+        className="cursor-pointer underline decoration-1 [text-decoration-skip-ink:none] [text-underline-offset:0.3em]"
       >
         {EMAIL}
       </button>
