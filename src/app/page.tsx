@@ -32,17 +32,17 @@ const projects: Item[] = [
   {
     name: "pinch",
     href: "https://github.com/JoshKappler/apple-watch-claude-code",
-    line: "Claude Code, driven from an Apple Watch over cellular. A native watchOS client: dictate a prompt, pinch to send, roll the crown to approve diffs. The agent runs on my Mac behind an authenticated tunnel.",
+    line: "Claude Code, driven from an Apple Watch over cellular. The agent runs on my Mac behind an authenticated tunnel; the watch is a native watchOS client: dictate a prompt, pinch to send, roll the crown to approve diffs, shake your wrist to stop it.",
   },
   {
     name: "fleetview",
     href: "https://github.com/JoshKappler/claude-control-center",
-    line: "A terminal cockpit that runs up to eight Claude agents in parallel and keeps every machine I own in sync. Zero npm dependencies.",
+    line: "A terminal cockpit that runs up to eight Claude agents in parallel and keeps every machine I own in sync. Agents survive crashes and reboots. Plain Node, raw ANSI, zero npm dependencies.",
   },
   {
     name: "survival station",
     href: "https://github.com/JoshKappler/survival-station",
-    line: "An air-gapped, solar-powered AI survival computer for a non-technical user: local models, an offline encyclopedia, offline maps, no internet ever.",
+    line: "An air-gapped, solar-powered AI survival computer for a non-technical user: local models, an 85 GB offline library with all of English Wikipedia, offline US maps, no internet ever.",
   },
   {
     name: "property leads",
@@ -132,7 +132,7 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
 
 export default function Home() {
   return (
-    <main className="mx-auto max-w-[37rem] px-6 py-14 text-[17px] leading-relaxed">
+    <main className="mx-auto max-w-[37rem] border-border px-6 py-14 text-[17px] leading-relaxed min-[42rem]:border-x">
       <Globe />
 
       <header className="mt-6 text-center">
@@ -155,7 +155,11 @@ export default function Home() {
         </nav>
       </header>
 
-      <p className="mt-10">
+      <div aria-hidden className="mt-8 text-center text-text-muted">
+        *&nbsp;&nbsp;*&nbsp;&nbsp;*
+      </div>
+
+      <p className="mt-8">
         I&apos;m the founding DX Engineer at{" "}
         <a
           href="https://generaltranslation.com"
@@ -184,7 +188,8 @@ export default function Home() {
         >
           Boffy
         </a>
-        , a YouTube channel with 2.1M subscribers and 270M views.
+        , a YouTube channel with 2.1M subscribers and 270M views across 136
+        long-form videos.
       </p>
 
       <ItemList title="projects" items={projects} />
@@ -194,7 +199,7 @@ export default function Home() {
         <h2 className="text-center font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
           contact
         </h2>
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-10 gap-y-2">
+        <div className="mt-4 flex flex-wrap items-baseline justify-between gap-y-2">
           <a href="mailto:Joshua.Kappler@gmail.com" className="underline">
             Joshua.Kappler@gmail.com
           </a>
@@ -205,7 +210,8 @@ export default function Home() {
       </section>
 
       <footer className="mt-14 border-t border-border pt-4 text-center font-mono text-xs text-text-muted">
-        Josh Kappler · President, Boffy LLC · 2026
+        <p>Founding Developer Experience Engineer, General Translation, Inc.</p>
+        <p className="mt-1">Josh Kappler · President, Boffy LLC · 2026</p>
       </footer>
     </main>
   );

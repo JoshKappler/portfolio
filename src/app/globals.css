@@ -25,18 +25,25 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-/* Justified blocks with a centered last line, but only where the browser can
-   do both; anything else falls back to fully centered text so no device ever
-   shows a lopsided last line. */
+/* Paragraphs and list entries justify, and on wide screens the last line
+   stretches to meet both edges too; narrow columns wrap too few words per
+   line for that, so they center the last line instead. Browsers without
+   text-align-last fall back to fully centered text. */
 main {
   text-align: center;
 }
-@supports (text-align-last: center) {
-  main {
+@supports (text-align-last: justify) {
+  main > p,
+  main li {
     text-align: justify;
     text-align-last: center;
-    hyphens: auto;
     text-wrap: pretty;
+  }
+  @media (min-width: 42rem) {
+    main > p,
+    main li {
+      text-align-last: justify;
+    }
   }
 }
 
