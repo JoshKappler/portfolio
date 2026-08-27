@@ -2,70 +2,76 @@ import { Globe } from "@/components/globe";
 import { BOOKING_URL, DEMO_URL } from "@/lib/site";
 
 type ItemLink = { label: string; href: string };
-type Item = { name: string; line: string; links: ItemLink[] };
+type Item = { name: string; href?: string; line: string; links?: ItemLink[] };
 
 const projects: Item[] = [
   {
+    name: "ask ai",
+    href: "https://dash.generaltranslation.com",
+    line: "The assistant on the General Translation dashboard, live in production. Docs-grounded, with read-only account tools, per-plan model tiers, rate limits, and usage billing.",
+  },
+  {
+    name: "gtm dashboard",
+    href: undefined,
+    line: "General Translation's internal growth dashboard. Agent pipelines find leads, research and score them, and draft the outreach; a reviewer model gates every draft. Internal tool, no public link.",
+  },
+  {
     name: "memo-engine",
+    href: DEMO_URL,
     line: "Reads a private-credit deal data room and writes an institutional credit memo with every claim cited back to its source page. The public demo ingests an 80-file SEC data room end to end.",
-    links: [{ label: "demo", href: DEMO_URL }],
   },
   {
     name: "claim-wright",
+    href: "https://github.com/JoshKappler/claim-wright",
     line: "Insurance claim adjudication where Claude reads the documents and a deterministic engine computes the payout. Median error against the human adjudicator: $0. Built in 36 hours.",
-    links: [{ label: "github", href: "https://github.com/JoshKappler/claim-wright" }],
   },
   {
     name: "autohack",
+    href: "https://github.com/JoshKappler/autohack",
     line: "An autonomous bug-hunter that polls four bounty platforms, spawns hour-long hunts, adversarially reviews its own findings, and submits reports on its own.",
-    links: [{ label: "github", href: "https://github.com/JoshKappler/autohack" }],
   },
   {
     name: "pinch",
+    href: "https://github.com/JoshKappler/apple-watch-claude-code-",
     line: "Claude Code, driven from an Apple Watch over cellular.",
-    links: [
-      { label: "github", href: "https://github.com/JoshKappler/apple-watch-claude-code-" },
-    ],
   },
   {
     name: "fleetview",
+    href: "https://github.com/JoshKappler/claude-control-center",
     line: "A terminal cockpit that runs up to eight Claude agents in parallel and keeps every machine I own in sync. Zero npm dependencies.",
-    links: [
-      { label: "github", href: "https://github.com/JoshKappler/claude-control-center" },
-    ],
   },
   {
     name: "sniply",
+    href: "https://github.com/JoshKappler/sniply",
     line: "A live booking marketplace for barbers and stylists. The one project here with no AI in it. 291 tests.",
-    links: [
-      { label: "live", href: "https://sniply.biz" },
-      { label: "github", href: "https://github.com/JoshKappler/sniply" },
-    ],
+    links: [{ label: "live", href: "https://sniply.biz" }],
   },
   {
     name: "survival-station",
+    href: "https://github.com/JoshKappler/survival-station",
     line: "An air-gapped, solar-powered AI survival computer for a non-technical user: local models, an offline encyclopedia, offline maps, no internet ever.",
-    links: [
-      { label: "github", href: "https://github.com/JoshKappler/survival-station" },
-    ],
   },
   {
     name: "property-leads",
     line: "An autonomous lead-finding pipeline for a real-estate cash buyer. Four agents on an hourly cron, about $0.22 per 33-property batch. Private client work.",
-    links: [],
   },
 ];
 
 const playground: Item[] = [
   {
+    name: "this globe",
+    href: "https://github.com/JoshKappler/gt-logo-loader-studio",
+    line: "The JK up top is General Translation's logo loader wearing my initials: the mark crumbles into glyphs from thirteen scripts, spins the Earth westward, and reassembles. Canvas 2D, no libraries.",
+  },
+  {
     name: "claude-thunder",
+    href: "https://claude-thunder.vercel.app",
     line: "A WW2 dogfighter that runs in the browser.",
-    links: [{ label: "play", href: "https://claude-thunder.vercel.app" }],
   },
   {
     name: "deskfly",
+    href: "https://github.com/JoshKappler/deskfly",
     line: "A fruit fly's real connectome, living on my desktop.",
-    links: [{ label: "github", href: "https://github.com/JoshKappler/deskfly" }],
   },
 ];
 
@@ -86,15 +92,27 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
       <ul className="mt-4 space-y-4">
         {items.map((item) => (
           <li key={item.name}>
-            <span className="font-bold">{item.name}.</span> {item.line}
-            {item.links.length > 0 && (
+            {item.href ? (
+              <a
+                href={item.href}
+                target={item.href.startsWith("/") ? undefined : "_blank"}
+                rel="noopener noreferrer"
+                className="font-bold underline"
+              >
+                {item.name}
+              </a>
+            ) : (
+              <span className="font-bold">{item.name}</span>
+            )}
+            <span className="font-bold">.</span> {item.line}
+            {item.links && item.links.length > 0 && (
               <span className="font-mono text-[13px]">
                 {" "}
                 {item.links.map((link) => (
                   <a
                     key={link.label}
                     href={link.href}
-                    target={link.href.startsWith("/") ? undefined : "_blank"}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="mr-2 underline"
                   >
@@ -117,7 +135,7 @@ export default function Home() {
         <div>
           <h1 className="text-3xl">Josh Kappler</h1>
           <p className="mt-1 font-mono text-[13px] text-text-muted">
-            ai &amp; dx engineer · san francisco
+            founding dx engineer · san francisco
           </p>
           <nav className="mt-4 font-mono text-[13px]">
             {headerLinks.map((link) => (
@@ -137,7 +155,7 @@ export default function Home() {
       </header>
 
       <p className="mt-10">
-        I&apos;m the first DX Engineer at{" "}
+        I&apos;m the founding DX Engineer at{" "}
         <a
           href="https://generaltranslation.com"
           target="_blank"

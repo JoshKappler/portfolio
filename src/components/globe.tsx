@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import createGlobe from "cobe";
+import { STAGE_HALF, createGlobe, rasterAlphaAt } from "./globe/globe-core.js";
+import { MARK_GEOMETRY } from "./globe/mark-geometry.js";
+import { drawGlobeScene, drawMarkInk, setInk } from "./globe/globe-draw.js";
 
-const SAN_FRANCISCO: [number, number] = [37.77, -122.42];
+const LIGHT_INK = "25, 25, 25";
+const DARK_INK = "232, 230, 222";
 
 export function Globe() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -14,47 +17,58 @@ export function Globe() {
 
     const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const stillQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let globe: ReturnType<typeof createGlobe> | null = null;
+    const globe = createGlobe({ holdMs: 1400 });
+    const { holdMs, moveMs } = globe.timing;
     let frame = 0;
-    let phi = 0;
+    let startedAt: number | null = null;
 
-    const spin = () => {
-      phi += 0.004;
-      globe?.update({ phi });
-      frame = requestAnimationFrame(spin);
+    const draw = (elapsed: number) => {
+      const box = canvas.getBoundingClientRect();
+      if (box.width < 2 || box.height < 2) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const pixelWidth = Math.round(box.width * dpr);
+      const pixelHeight = Math.round(box.height * dpr);
+      if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+        canvas.width = pixelWidth;
+        canvas.height = pixelHeight;
+      }
+      const context = canvas.getContext("2d");
+      if (!context) return;
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      context.clearRect(0, 0, box.width, box.height);
+      setInk(darkQuery.matches ? DARK_INK : LIGHT_INK);
+      const scale = Math.min(box.width, box.height) / (STAGE_HALF * 2);
+      const view = {
+        scale,
+        toCanvas: (point: [number, number]): [number, number] => [
+          (point[0] - MARK_GEOMETRY.mark.mcx) * scale + box.width / 2,
+          (point[1] - MARK_GEOMETRY.mark.mcy) * scale + box.height / 2,
+        ],
+      };
+      const t = elapsed % (holdMs + moveMs);
+      const hold = t < holdMs;
+      const tau = hold ? 0 : (t - holdMs) / moveMs;
+      if (!hold) drawGlobeScene(context, view, globe, tau, tau * moveMs);
+      drawMarkInk(context, view, hold ? 1 : rasterAlphaAt(tau));
     };
 
-    const build = () => {
-      globe?.destroy();
-      const dark = darkQuery.matches;
-      globe = createGlobe(canvas, {
-        devicePixelRatio: 2,
-        width: 240,
-        height: 240,
-        phi,
-        theta: 0.25,
-        dark: dark ? 1 : 0,
-        diffuse: 1.2,
-        mapSamples: 12000,
-        mapBrightness: dark ? 2.5 : 5.5,
-        baseColor: dark ? [0.42, 0.42, 0.4] : [0.84, 0.84, 0.8],
-        markerColor: dark ? [0.95, 0.93, 0.87] : [0.12, 0.12, 0.12],
-        glowColor: dark ? [0.07, 0.07, 0.07] : [0.99, 0.99, 0.97],
-        markers: [{ location: SAN_FRANCISCO, size: 0.07 }],
-      });
-    };
+    if (stillQuery.matches) {
+      draw(0);
+      const redraw = () => draw(0);
+      darkQuery.addEventListener("change", redraw);
+      return () => darkQuery.removeEventListener("change", redraw);
+    }
 
-    build();
-    if (!stillQuery.matches) frame = requestAnimationFrame(spin);
-    darkQuery.addEventListener("change", build);
-    return () => {
-      cancelAnimationFrame(frame);
-      darkQuery.removeEventListener("change", build);
-      globe?.destroy();
+    const loop = (now: number) => {
+      frame = requestAnimationFrame(loop);
+      if (startedAt == null) startedAt = now;
+      draw(now - startedAt);
     };
+    frame = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   return (
-    <canvas ref={ref} className="h-[120px] w-[120px] shrink-0" aria-hidden="true" />
+    <canvas ref={ref} className="h-[200px] w-[200px] shrink-0" aria-hidden="true" />
   );
 }
