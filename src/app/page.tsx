@@ -62,7 +62,7 @@ const playground: Item[] = [
   {
     name: "herdr layout",
     href: "https://github.com/JoshKappler/herdr-layout",
-    line: "The terminal cockpit I live in: a forked agent multiplexer whose UI I rebuilt to herd nine parallel Claude Code sessions. Boxed-tab sidebar, a live action line per session, a native detail panel.",
+    line: "The terminal cockpit I live in: a forked agent multiplexer whose UI I rebuilt to herd nine Claude Code sessions. Boxed-tab sidebar, a live action line per session, a native detail panel.",
   },
   {
     name: "chadGPT",
