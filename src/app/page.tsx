@@ -15,6 +15,11 @@ const projects: Item[] = [
     line: "General Translation's internal growth dashboard. Agent pipelines find leads, research and score them, and draft the outreach; a reviewer model gates every draft.",
   },
   {
+    name: "autovid",
+    href: "https://autovid.joshuakappler.com",
+    line: "A pipeline built at General Translation that turns docs pages into finished demo videos: it writes the scene script, scaffolds a real app, drives a browser and an editor, records the run, and cuts the video. 22 videos live.",
+  },
+  {
     name: "memo engine",
     href: DEMO_URL,
     line: "Built for a private credit firm. It reads a deal's documents and writes the credit memo, with every claim cited to the exact source page. The demo runs an 80-file deal end to end.",
