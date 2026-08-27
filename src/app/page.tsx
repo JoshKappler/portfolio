@@ -1,4 +1,5 @@
 import { ContactEmail } from "@/components/contact-email";
+import { FalconMark } from "@/components/falcon-mark";
 import { Globe } from "@/components/globe";
 import { Postmark } from "@/components/postmark";
 import { SquareParagraphs } from "@/components/square-paragraphs";
@@ -226,13 +227,7 @@ export default function Home() {
       </section>
 
       <div aria-hidden className="mt-14 text-center leading-none">
-        <svg
-          viewBox="0 0 10 10"
-          className="inline-block h-[0.45rem] w-[0.45rem] text-text"
-          fill="currentColor"
-        >
-          <rect width="10" height="10" />
-        </svg>
+        <FalconMark className="inline-block w-[2.75rem] text-text" />
       </div>
 
       <footer className="mt-12 border-t border-border pt-4 text-center font-mono text-xs text-text-muted">
