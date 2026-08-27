@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { STAGE_HALF, createGlobe, rasterAlphaAt } from "./globe/globe-core.js";
+import { STAGE_HALF, createGlobe } from "./globe/globe-core.js";
 import { MARK_GEOMETRY } from "./globe/mark-geometry.js";
-import { drawGlobeScene, setInk } from "./globe/globe-draw.js";
+import { drawGlobeScene, setInk, setMark } from "./globe/globe-draw.js";
 
 const INK = "42, 35, 24";
 
@@ -34,10 +34,9 @@ export function Globe() {
     let frame = 0;
     let startedAt: number | null = null;
 
-    let mark: HTMLCanvasElement | undefined;
     const markImage = new Image();
     markImage.onload = () => {
-      mark = tintedMark(markImage, `rgb(${INK})`);
+      setMark(tintedMark(markImage, `rgb(${INK})`));
       if (stillQuery.matches) draw(0);
     };
     markImage.src = "/jk-mark.png";
@@ -68,21 +67,9 @@ export function Globe() {
       const t = elapsed % (holdMs + moveMs);
       const hold = t < holdMs;
       const tau = hold ? 0 : (t - holdMs) / moveMs;
-      // The raster covers the identical full-strength scene only inside the
-      // core's RASTER_OUT/RASTER_IN windows, before the first piece moves and
-      // after the last glyph lands, so the handoff never dims the ink.
-      const markAlpha = hold ? 1 : rasterAlphaAt(tau);
-      if (!hold) {
-        drawGlobeScene(context, view, globe, tau, tau * moveMs);
-      }
-      if (markAlpha > 0.01 && mark) {
-        const origin = view.toCanvas([0, 0]);
-        const size = MARK_GEOMETRY.mark.imgW * scale;
-        context.save();
-        context.globalAlpha = markAlpha;
-        context.drawImage(mark, origin[0], origin[1], size, size);
-        context.restore();
-      }
+      // One layer, no handoff: the scene's own ink is the rendered mark image,
+      // eroded by the melt, so the intact letters are the true font pixels.
+      drawGlobeScene(context, view, globe, tau, tau * moveMs);
     };
 
     if (stillQuery.matches) {

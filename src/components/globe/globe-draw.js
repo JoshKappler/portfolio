@@ -2,14 +2,25 @@
 // standalone component. The caller provides the context and a view transform
 // ({ toCanvas(point), scale }); all motion math comes from a createGlobe
 // instance so surfaces cannot drift.
-import { bars, pointAlong, smooth5, tips, widthAlong } from './globe-core.js';
+import { bars, pointAlong, smooth5, widthAlong } from './globe-core.js';
+import { MARK_GEOMETRY } from './mark-geometry.js';
 
 let INK = '250, 250, 250';
 export function setInk(rgb) {
   INK = rgb;
 }
+// The mark ink is the caller's rendered glyph image, never a reconstruction:
+// each frame draws it whole and erodes the melted spans out of it, so the
+// intact letters are always the true font pixels. Erosion covers bars only;
+// this mark has no tip appendages.
+let markSprite = null;
+export function setMark(canvas) {
+  markSprite = canvas;
+}
+let erosionLayer = null;
 const EDGE_FADE = 34;
 const EDGE_SLICES = 8;
+const ERODE_PAD = 8;
 
 function makeGlyphBuckets() {
   const buckets = new Map();
@@ -35,7 +46,7 @@ function makeGlyphBuckets() {
   };
 }
 
-function drawRibbonWindow(context, view, bar, from, to, alpha) {
+function drawRibbonWindow(context, view, bar, from, to, alpha, pad = 0) {
   const span = to - from;
   if (span < 1 || alpha < 0.01) return;
   const count = Math.max(3, Math.ceil(span / 8) + 1);
@@ -51,7 +62,7 @@ function drawRibbonWindow(context, view, bar, from, to, alpha) {
     const dx = after[0] - before[0];
     const dy = after[1] - before[1];
     const magnitude = Math.hypot(dx, dy) || 1;
-    const width = widthAlong(bar.widths, bar.cumulative, from + span * i / (count - 1));
+    const width = widthAlong(bar.widths, bar.cumulative, from + span * i / (count - 1)) + pad;
     left.push([center[i][0] - dy / magnitude * width, center[i][1] + dx / magnitude * width]);
     right.push([center[i][0] + dy / magnitude * width, center[i][1] - dx / magnitude * width]);
   }
@@ -81,56 +92,54 @@ function drawRibbonWindow(context, view, bar, from, to, alpha) {
   context.fill();
 }
 
-function drawBarInk(context, view, globe, tau) {
-  bars.forEach((bar, barIndex) => {
-    const level = globe.pieceLevelAt(tau, barIndex);
-    if (level <= 0.002) return;
-    const length = bar.total * level;
-    const from = bar.anchorAtEnd ? bar.total - length : 0;
-    const to = bar.anchorAtEnd ? bar.total : length;
-    const fadeSpan = Math.min(EDGE_FADE, length);
-    if (level > 0.998) {
-      drawRibbonWindow(context, view, bar, from, to, 1);
-      return;
+function erodeBar(context, view, bar, level) {
+  const length = bar.total * level;
+  const fadeSpan = Math.min(EDGE_FADE, length);
+  if (bar.anchorAtEnd) {
+    const edge = bar.total - length;
+    drawRibbonWindow(context, view, bar, 0, edge + 0.75, 1, ERODE_PAD);
+    for (let slice = 0; slice < EDGE_SLICES; slice += 1) {
+      const a = edge + fadeSpan * slice / EDGE_SLICES;
+      const b = edge + fadeSpan * (slice + 1) / EDGE_SLICES + 0.75;
+      drawRibbonWindow(context, view, bar, a, b, 1 - smooth5((slice + 0.5) / EDGE_SLICES), ERODE_PAD);
     }
-    if (bar.anchorAtEnd) {
-      drawRibbonWindow(context, view, bar, from + fadeSpan, to, 1);
-      for (let slice = 0; slice < EDGE_SLICES; slice += 1) {
-        const a = from + fadeSpan * slice / EDGE_SLICES;
-        const b = from + fadeSpan * (slice + 1) / EDGE_SLICES + 0.75;
-        drawRibbonWindow(context, view, bar, a, b, smooth5((slice + 0.5) / EDGE_SLICES));
-      }
-    } else {
-      drawRibbonWindow(context, view, bar, from, to - fadeSpan, 1);
-      for (let slice = 0; slice < EDGE_SLICES; slice += 1) {
-        const a = to - fadeSpan * (slice + 1) / EDGE_SLICES - 0.75;
-        const b = to - fadeSpan * slice / EDGE_SLICES;
-        drawRibbonWindow(context, view, bar, a, b, smooth5((slice + 0.5) / EDGE_SLICES));
-      }
+  } else {
+    const edge = length;
+    drawRibbonWindow(context, view, bar, edge - 0.75, bar.total, 1, ERODE_PAD);
+    for (let slice = 0; slice < EDGE_SLICES; slice += 1) {
+      const a = edge - fadeSpan * (slice + 1) / EDGE_SLICES - 0.75;
+      const b = edge - fadeSpan * slice / EDGE_SLICES;
+      drawRibbonWindow(context, view, bar, a, b, 1 - smooth5((slice + 0.5) / EDGE_SLICES), ERODE_PAD);
     }
-  });
+  }
 }
 
-function drawTips(context, view, globe, tau) {
-  tips.forEach((tip, tipIndex) => {
-    const shapes = globe.tipShapesAt(tau, tipIndex);
-    if (!shapes.length) return;
-    context.save();
-    context.beginPath();
-    context.moveTo(...view.toCanvas(tip.poly[0]));
-    for (let i = 1; i < tip.poly.length; i += 1) context.lineTo(...view.toCanvas(tip.poly[i]));
-    context.closePath();
-    context.clip();
-    context.fillStyle = `rgba(${INK}, 1)`;
-    for (const shape of shapes) {
-      context.beginPath();
-      context.moveTo(...view.toCanvas(shape[0]));
-      for (let i = 1; i < shape.length; i += 1) context.lineTo(...view.toCanvas(shape[i]));
-      context.closePath();
-      context.fill();
-    }
-    context.restore();
+function drawMarkInk(context, view, globe, tau) {
+  if (!markSprite || globe.inkLevelAt(tau) <= 0.002) return;
+  const target = context.canvas;
+  if (!erosionLayer || erosionLayer.width !== target.width || erosionLayer.height !== target.height) {
+    erosionLayer = document.createElement('canvas');
+    erosionLayer.width = target.width;
+    erosionLayer.height = target.height;
+  }
+  const layer = erosionLayer.getContext('2d');
+  layer.setTransform(1, 0, 0, 1, 0, 0);
+  layer.clearRect(0, 0, erosionLayer.width, erosionLayer.height);
+  layer.setTransform(context.getTransform());
+  const origin = view.toCanvas([0, 0]);
+  const size = MARK_GEOMETRY.mark.imgW * view.scale;
+  layer.drawImage(markSprite, origin[0], origin[1], size, size);
+  layer.globalCompositeOperation = 'destination-out';
+  bars.forEach((bar, barIndex) => {
+    const level = globe.pieceLevelAt(tau, barIndex);
+    if (level > 0.998) return;
+    erodeBar(layer, view, bar, level);
   });
+  layer.globalCompositeOperation = 'source-over';
+  context.save();
+  context.setTransform(1, 0, 0, 1, 0, 0);
+  context.drawImage(erosionLayer, 0, 0);
+  context.restore();
 }
 
 export function drawGlobeScene(context, view, globe, tau, clockMs, inkAlpha = 1) {
@@ -161,8 +170,7 @@ export function drawGlobeScene(context, view, globe, tau, clockMs, inkAlpha = 1)
   if (inkAlpha > 0.01) {
     context.save();
     context.globalAlpha *= inkAlpha;
-    drawBarInk(context, view, globe, tau);
-    drawTips(context, view, globe, tau);
+    drawMarkInk(context, view, globe, tau);
     context.restore();
   }
 }
