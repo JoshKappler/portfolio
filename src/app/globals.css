@@ -25,12 +25,19 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-/* Justified paragraphs end on a centered line, matching the centered masthead.
-   text-wrap: pretty lets the browser rebalance whole paragraphs so justified
-   lines stretch evenly instead of leaving a few gappy lines. */
+/* Justified blocks with a centered last line, but only where the browser can
+   do both; anything else falls back to fully centered text so no device ever
+   shows a lopsided last line. */
 main {
-  text-align-last: center;
-  text-wrap: pretty;
+  text-align: center;
+}
+@supports (text-align-last: center) {
+  main {
+    text-align: justify;
+    text-align-last: center;
+    hyphens: auto;
+    text-wrap: pretty;
+  }
 }
 
 a {

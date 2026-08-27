@@ -132,7 +132,7 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
 
 export default function Home() {
   return (
-    <main className="mx-auto max-w-[37rem] px-6 py-14 text-justify text-[17px] leading-relaxed hyphens-auto">
+    <main className="mx-auto max-w-[37rem] px-6 py-14 text-[17px] leading-relaxed">
       <Globe />
 
       <header className="mt-6 text-center">
@@ -167,9 +167,7 @@ export default function Home() {
         </a>
         , where I&apos;ve built the dashboard&apos;s AI assistant, an
         autonomous outbound growth engine, and a content engine that turns the
-        docs into demo videos and tutorials. 150+ merged PRs so far, from the
-        React SDK&apos;s core to the CLI adapters that migrate react-intl and
-        react-i18next apps automatically.
+        docs into demo videos and tutorials.
       </p>
       <p className="mt-4">
         I ship whole products: the frontend, the backend, the data model, and
