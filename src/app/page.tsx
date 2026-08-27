@@ -199,26 +199,22 @@ export default function Home() {
         <h2 className="text-center font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
           contact
         </h2>
-        <p className="mt-4">
-          Email me at{" "}
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-10 gap-y-2">
           <a href="mailto:Joshua.Kappler@gmail.com" className="underline">
             Joshua.Kappler@gmail.com
           </a>
-          , call or text{" "}
-          <a href="tel:+15122109934" className="whitespace-nowrap underline">
+          <a href="tel:+15122109934" className="underline">
             512-210-9934
           </a>
-          , or{" "}
           <a
             href={BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="whitespace-nowrap underline"
+            className="underline"
           >
             book a call
           </a>
-          .
-        </p>
+        </div>
       </section>
 
       <footer className="mt-14 border-t border-border pt-4 text-center font-mono text-xs text-text-muted">
