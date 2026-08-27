@@ -57,3 +57,17 @@ main {
 a {
   text-underline-offset: 3px;
 }
+
+/* Printed, the page becomes plain ink on white: same composition, no side
+   rules. The globe and nav carry print:hidden in their markup. */
+@media print {
+  :root {
+    --paper: #fff;
+    --ink: #000;
+    --ink-muted: #555;
+    --line: #bbb;
+  }
+  main[data-paper] {
+    border: none;
+  }
+}

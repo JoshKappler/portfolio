@@ -11,9 +11,9 @@ understated register: one narrow text column, no hero effects, no webfonts.
   mode, no theme toggle, no theme-provider. Paper has no dark mode.
 - All homepage content lives inline in `src/app/page.tsx` as `projects`,
   `playground`, and `headerLinks` arrays: one line of copy per item.
-- Two client components only. `src/components/stretch-last.tsx` measures each
-  paragraph's last line and stretches it to both edges only when it already
-  nearly fills the column. `src/components/globe.tsx` is the only visual
+- Three client components only. `square-paragraphs.tsx` centers a block's
+  last line when a non-Georgia font wraps it short of 85%. `contact-email.tsx`
+  copies the address on click. `src/components/globe.tsx` is the main visual
   effect: a canvas-2D JK mark that shatters into a spinning glyph globe,
   vendored from gt-logo-loader-studio into `src/components/globe/`. It links
   to that repo and holds still under `prefers-reduced-motion`.
@@ -29,3 +29,9 @@ understated register: one narrow text column, no hero effects, no webfonts.
   those defined in globals.css when changing colors.
 - Copy style: first person, short declarative sentences, real numbers only,
   no em dashes.
+- The footer colophon claims system fonts and no trackers. Adding a webfont,
+  analytics, or any third-party script makes it false; update or remove the
+  line in the same change.
+- `@media print` renders the page as ink on white; the globe and header nav
+  carry `print:hidden`. Keep new decorative elements printable or hide them
+  the same way.

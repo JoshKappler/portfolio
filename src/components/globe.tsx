@@ -112,7 +112,7 @@ export function Globe() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Source for the JK globe animation on GitHub"
-      className="mx-auto block h-[12.5rem] w-[12.5rem]"
+      className="mx-auto block h-[12.5rem] w-[12.5rem] print:hidden"
     >
       <canvas ref={ref} className="block h-full w-full" aria-hidden="true" />
     </a>

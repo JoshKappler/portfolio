@@ -1,4 +1,6 @@
+import { ContactEmail } from "@/components/contact-email";
 import { Globe } from "@/components/globe";
+import { Postmark } from "@/components/postmark";
 import { SquareParagraphs } from "@/components/square-paragraphs";
 import { DEMO_URL } from "@/lib/site";
 
@@ -150,7 +152,7 @@ export default function Home() {
         <p className="mt-1 font-mono text-[0.8125rem] text-text-muted">
           Software Engineer · San Francisco
         </p>
-        <nav className="mt-4 font-mono text-[0.8125rem]">
+        <nav className="mt-4 font-mono text-[0.8125rem] print:hidden">
           {headerLinks.map((link) => (
             <a
               key={link.label}
@@ -209,19 +211,29 @@ export default function Home() {
         <h2 className="text-center font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
           contact
         </h2>
-        <div className="mt-4 flex flex-wrap items-baseline justify-between gap-y-2">
-          <a href="mailto:Joshua.Kappler@gmail.com" className="underline">
-            Joshua.Kappler@gmail.com
-          </a>
-          <a href="tel:+15122109934" className="underline">
-            512-210-9934
-          </a>
+        <div className="relative mt-6 text-center">
+          <ContactEmail />
+          <p className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+            I read everything.
+          </p>
+          <Postmark className="absolute -top-5 right-0 h-[5.5rem] w-[5.5rem] -rotate-6 text-text opacity-40" />
         </div>
       </section>
 
-      <footer className="mt-14 border-t border-border pt-4 text-center font-mono text-xs text-text-muted">
+      <div aria-hidden className="mt-14 text-center leading-none">
+        <svg
+          viewBox="0 0 10 10"
+          className="inline-block h-[0.45rem] w-[0.45rem] text-text"
+          fill="currentColor"
+        >
+          <rect width="10" height="10" />
+        </svg>
+      </div>
+
+      <footer className="mt-12 border-t border-border pt-4 text-center font-mono text-xs text-text-muted">
         <p>Founding Developer Experience Engineer, General Translation, Inc.</p>
         <p className="mt-1">Josh Kappler · President, Boffy LLC · 2026</p>
+        <p className="mt-1">Set in Georgia. System fonts only, no trackers.</p>
       </footer>
     </main>
   );
