@@ -64,6 +64,7 @@ const playground: Item[] = [
   },
   {
     name: "chud",
+    href: "https://github.com/JoshKappler/chud",
     line: "A goblin voice assistant with a jiggly WebGL skin. It talks back. Runs locally.",
   },
   {
@@ -72,8 +73,10 @@ const playground: Item[] = [
     line: "A fruit fly's real connectome, living on my desktop.",
   },
   {
-    name: "forte",
-    line: "A physics-first melee fighting game, mid-build.",
+    name: "scuttle",
+    href: "https://github.com/JoshKappler/scuttle",
+    line: "A voxel pirate roguelite in the browser. Cannonballs remove real voxels, compartments flood, and ships list, capsize, and sink.",
+    links: [{ label: "Live", href: "https://scuttle-gold.vercel.app" }],
   },
 ];
 

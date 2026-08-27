@@ -133,7 +133,7 @@ function drawTips(context, view, globe, tau) {
   });
 }
 
-export function drawGlobeScene(context, view, globe, tau, clockMs) {
+export function drawGlobeScene(context, view, globe, tau, clockMs, inkAlpha = 1) {
   const ringAlpha = globe.ringAlphaAt(tau);
   if (ringAlpha > 0.01) {
     const center = view.toCanvas([mcx, mcy]);
@@ -167,6 +167,11 @@ export function drawGlobeScene(context, view, globe, tau, clockMs) {
     buckets.add(sprite.size * view.scale, birth * sprite.alpha, sprite.char, canvasPos[0], canvasPos[1]);
   }
   buckets.flush(context);
-  drawBarInk(context, view, globe, tau);
-  drawTips(context, view, globe, tau);
+  if (inkAlpha > 0.01) {
+    context.save();
+    context.globalAlpha *= inkAlpha;
+    drawBarInk(context, view, globe, tau);
+    drawTips(context, view, globe, tau);
+    context.restore();
+  }
 }

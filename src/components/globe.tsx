@@ -1,12 +1,20 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { STAGE_HALF, createGlobe, rasterAlphaAt } from "./globe/globe-core.js";
+import { STAGE_HALF, createGlobe } from "./globe/globe-core.js";
 import { MARK_GEOMETRY } from "./globe/mark-geometry.js";
 import { drawGlobeScene, setInk } from "./globe/globe-draw.js";
 
 const LIGHT_INK = "25, 25, 25";
 const DARK_INK = "232, 230, 222";
+
+// Smooth 0..1 ramp of tau across [from, to]; the raster and the strip ink
+// crossfade on complementary ramps so the strips never show at full strength
+// under a faded mark.
+function ramp(tau: number, from: number, to: number) {
+  const u = Math.min(1, Math.max(0, (tau - from) / (to - from)));
+  return u * u * (3 - 2 * u);
+}
 
 function tintedMark(image: HTMLImageElement, color: string) {
   const off = document.createElement("canvas");
@@ -72,8 +80,12 @@ export function Globe() {
       const t = elapsed % (holdMs + moveMs);
       const hold = t < holdMs;
       const tau = hold ? 0 : (t - holdMs) / moveMs;
-      if (!hold) drawGlobeScene(context, view, globe, tau, tau * moveMs);
-      const markAlpha = hold ? 1 : rasterAlphaAt(tau);
+      const markAlpha = hold
+        ? 1
+        : Math.max(1 - ramp(tau, 0.06, 0.16), ramp(tau, 0.93, 0.99));
+      if (!hold) {
+        drawGlobeScene(context, view, globe, tau, tau * moveMs, 1 - markAlpha);
+      }
       const mark = dark ? marks.dark : marks.light;
       if (markAlpha > 0.01 && mark) {
         const origin = view.toCanvas([0, 0]);
@@ -102,10 +114,14 @@ export function Globe() {
   }, []);
 
   return (
-    <canvas
-      ref={ref}
+    <a
+      href="https://github.com/JoshKappler/gt-logo-loader-studio"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Source for the JK globe animation on GitHub"
       className="mx-auto block h-[200px] w-[200px]"
-      aria-hidden="true"
-    />
+    >
+      <canvas ref={ref} className="block h-full w-full" aria-hidden="true" />
+    </a>
   );
 }
