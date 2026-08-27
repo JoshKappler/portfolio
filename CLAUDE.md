@@ -29,6 +29,11 @@ understated register: one narrow text column, no hero effects, no webfonts.
   those defined in globals.css when changing colors.
 - Copy style: first person, short declarative sentences, real numbers only,
   no em dashes.
+- Every paragraph and list entry renders as a square: justified with the
+  last line stretched. New or edited copy must be word-tuned until its last
+  line naturally fills 91-99% of the column (measure in the browser with
+  text-align-last: center). A line that falls short of 85% gets centered by
+  square-paragraphs.tsx and visibly breaks the pattern.
 - The footer colophon claims system fonts and no trackers. Adding a webfont,
   analytics, or any third-party script makes it false; update or remove the
   line in the same change.
