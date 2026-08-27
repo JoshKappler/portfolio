@@ -17,7 +17,7 @@ const projects: Item[] = [
   {
     name: "autovid",
     href: "https://autovid.joshuakappler.com",
-    line: "A pipeline built at General Translation that turns docs pages into finished demo videos: it writes the scene script, scaffolds a real app, drives a browser and an editor, records the run, and cuts the video. 22 videos live.",
+    line: "A pipeline built at General Translation that turns docs pages into finished demo videos, 22 of them live so far: it writes the scene script, scaffolds a real app, drives a real browser and a code editor, records the run, and cuts the finished video.",
   },
   {
     name: "memo engine",
