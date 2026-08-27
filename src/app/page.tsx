@@ -225,7 +225,7 @@ export default function Home() {
       </section>
 
       <div aria-hidden className="mt-14 text-center leading-none">
-        <CrestMark className="inline-block h-[4rem] text-text" />
+        <CrestMark className="inline-block h-[8rem] text-text" />
       </div>
 
       <footer className="mt-12 border-t border-border pt-4 text-center font-mono text-xs text-text-muted">
