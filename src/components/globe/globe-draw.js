@@ -133,18 +133,6 @@ function drawTips(context, view, globe, tau) {
   });
 }
 
-const FULL_INK = { pieceLevelAt: () => 1 };
-
-// Draws the fully assembled mark from the same geometry the melt uses, so the
-// hold frame and the reform crossfade cannot drift from the animation.
-export function drawMarkInk(context, view, alpha) {
-  if (alpha < 0.01) return;
-  context.save();
-  context.globalAlpha = alpha;
-  drawBarInk(context, view, FULL_INK, 0);
-  context.restore();
-}
-
 export function drawGlobeScene(context, view, globe, tau, clockMs) {
   const ringAlpha = globe.ringAlphaAt(tau);
   if (ringAlpha > 0.01) {

@@ -1,0 +1,73 @@
+<!doctype html>
+<meta charset="utf-8" />
+<canvas id="c" width="1200" height="1200"></canvas>
+<script>
+  // Renders JK in Times New Roman, then samples the raster into the vertical
+  // strip elements the globe engine consumes. Result lands on window.__RESULT.
+  const SIZE = 1200;
+  const COL = 20;
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.textBaseline = 'alphabetic';
+  ctx.letterSpacing = '30px';
+  ctx.font = '400 1000px "Times New Roman", Times, serif';
+  const m = ctx.measureText('JK');
+  const textW = m.width;
+  const capH = m.actualBoundingBoxAscent;
+  const desc = m.actualBoundingBoxDescent;
+  const x = (SIZE - textW) / 2;
+  const y = (SIZE + capH - desc) / 2;
+  ctx.fillText('JK', x, y);
+
+  const data = ctx.getImageData(0, 0, SIZE, SIZE).data;
+  const inkAt = (px, py) => data[(py * SIZE + px) * 4 + 3] > 127;
+
+  let x0 = SIZE, x1 = 0, y0 = SIZE, y1 = 0;
+  for (let py = 0; py < SIZE; py += 1) for (let px = 0; px < SIZE; px += 1) {
+    if (!inkAt(px, py)) continue;
+    if (px < x0) x0 = px; if (px > x1) x1 = px;
+    if (py < y0) y0 = py; if (py > y1) y1 = py;
+  }
+
+  const elements = [];
+  for (let cx = 0; cx < SIZE; cx += COL) {
+    let run = null;
+    for (let py = 0; py <= SIZE; py += 1) {
+      let ink = false;
+      if (py < SIZE) for (let px = cx; px < Math.min(cx + COL, SIZE); px += 1) {
+        if (inkAt(px, py)) { ink = true; break; }
+      }
+      if (ink && !run) run = [py, py];
+      else if (ink) run[1] = py;
+      else if (run) {
+        if (run[1] - run[0] >= 8) {
+          const mid = cx + COL / 2;
+          const hw = COL / 2 + 1;
+          elements.push({
+            name: `S${elements.length}`,
+            homePts: [[mid, run[0]], [mid, (run[0] + run[1]) / 2], [mid, run[1]]],
+            homeHw: [hw, hw, hw],
+          });
+        }
+        run = null;
+      }
+    }
+  }
+
+  window.__RESULT = JSON.stringify({
+    geometry: {
+      mark: {
+        x0, x1, y0, y1,
+        mcx: Math.round((x0 + x1) / 2),
+        mcy: Math.round((y0 + y1) / 2),
+        img: 'jk-mark.png',
+        imgW: SIZE,
+      },
+      e0Face: null,
+      elements,
+      apps: [],
+    },
+    png: canvas.toDataURL('image/png'),
+  });
+</script>

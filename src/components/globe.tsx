@@ -3,10 +3,24 @@
 import { useEffect, useRef } from "react";
 import { STAGE_HALF, createGlobe, rasterAlphaAt } from "./globe/globe-core.js";
 import { MARK_GEOMETRY } from "./globe/mark-geometry.js";
-import { drawGlobeScene, drawMarkInk, setInk } from "./globe/globe-draw.js";
+import { drawGlobeScene, setInk } from "./globe/globe-draw.js";
 
 const LIGHT_INK = "25, 25, 25";
 const DARK_INK = "232, 230, 222";
+
+function tintedMark(image: HTMLImageElement, color: string) {
+  const off = document.createElement("canvas");
+  off.width = image.naturalWidth;
+  off.height = image.naturalHeight;
+  const ctx = off.getContext("2d");
+  if (ctx) {
+    ctx.drawImage(image, 0, 0);
+    ctx.globalCompositeOperation = "source-in";
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, off.width, off.height);
+  }
+  return off;
+}
 
 export function Globe() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -22,6 +36,15 @@ export function Globe() {
     let frame = 0;
     let startedAt: number | null = null;
 
+    const marks: { light?: HTMLCanvasElement; dark?: HTMLCanvasElement } = {};
+    const markImage = new Image();
+    markImage.onload = () => {
+      marks.light = tintedMark(markImage, `rgb(${LIGHT_INK})`);
+      marks.dark = tintedMark(markImage, `rgb(${DARK_INK})`);
+      if (stillQuery.matches) draw(0);
+    };
+    markImage.src = "/jk-mark.png";
+
     const draw = (elapsed: number) => {
       const box = canvas.getBoundingClientRect();
       if (box.width < 2 || box.height < 2) return;
@@ -34,9 +57,10 @@ export function Globe() {
       }
       const context = canvas.getContext("2d");
       if (!context) return;
+      const dark = darkQuery.matches;
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
       context.clearRect(0, 0, box.width, box.height);
-      setInk(darkQuery.matches ? DARK_INK : LIGHT_INK);
+      setInk(dark ? DARK_INK : LIGHT_INK);
       const scale = Math.min(box.width, box.height) / (STAGE_HALF * 2);
       const view = {
         scale,
@@ -49,7 +73,16 @@ export function Globe() {
       const hold = t < holdMs;
       const tau = hold ? 0 : (t - holdMs) / moveMs;
       if (!hold) drawGlobeScene(context, view, globe, tau, tau * moveMs);
-      drawMarkInk(context, view, hold ? 1 : rasterAlphaAt(tau));
+      const markAlpha = hold ? 1 : rasterAlphaAt(tau);
+      const mark = dark ? marks.dark : marks.light;
+      if (markAlpha > 0.01 && mark) {
+        const origin = view.toCanvas([0, 0]);
+        const size = MARK_GEOMETRY.mark.imgW * scale;
+        context.save();
+        context.globalAlpha = markAlpha;
+        context.drawImage(mark, origin[0], origin[1], size, size);
+        context.restore();
+      }
     };
 
     if (stillQuery.matches) {
@@ -71,7 +104,7 @@ export function Globe() {
   return (
     <canvas
       ref={ref}
-      className="h-[112px] w-[112px] shrink-0 sm:h-[200px] sm:w-[200px]"
+      className="mx-auto block h-[200px] w-[200px]"
       aria-hidden="true"
     />
   );

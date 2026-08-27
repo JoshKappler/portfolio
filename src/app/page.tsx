@@ -12,13 +12,12 @@ const projects: Item[] = [
   },
   {
     name: "GTM dashboard",
-    href: undefined,
     line: "General Translation's internal growth dashboard. Agent pipelines find leads, research and score them, and draft the outreach; a reviewer model gates every draft. Internal tool, no public link.",
   },
   {
     name: "memo-engine",
     href: DEMO_URL,
-    line: "Reads a private-credit deal data room and writes an institutional credit memo with every claim cited back to its source page. The public demo ingests an 80-file SEC data room end to end.",
+    line: "Reads a private-credit deal data room and writes a credit memo with every claim cited to its source page. The public demo ingests an 80-file SEC data room end to end.",
   },
   {
     name: "claim-wright",
@@ -92,9 +91,9 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
       <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
         {title}
       </h2>
-      <ul className="mt-4 space-y-4">
+      <ul className="mt-4 space-y-5">
         {items.map((item) => (
-          <li key={item.name}>
+          <li key={item.name} className="text-pretty">
             {item.href ? (
               <a
                 href={item.href}
@@ -117,7 +116,7 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mr-2 underline"
+                    className="mx-1 underline"
                   >
                     {link.label}
                   </a>
@@ -133,31 +132,30 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
 
 export default function Home() {
   return (
-    <main className="mx-auto max-w-[37rem] px-6 py-14 text-[17px] leading-relaxed">
-      <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-8">
-        <div className="min-w-0">
-          <h1 className="text-3xl">Josh Kappler</h1>
-          <p className="mt-1 font-mono text-[13px] text-text-muted">
-            Founding DX Engineer · San Francisco
-          </p>
-          <nav className="mt-4 font-mono text-[13px]">
-            {headerLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : undefined}
-                rel="noopener noreferrer"
-                className="mr-3 underline"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-        </div>
-        <Globe />
+    <main className="mx-auto max-w-[37rem] px-6 py-14 text-center text-[17px] leading-relaxed">
+      <Globe />
+
+      <header className="mt-6">
+        <h1 className="text-3xl">Josh Kappler</h1>
+        <p className="mt-1 font-mono text-[13px] text-text-muted">
+          Founding DX Engineer · San Francisco
+        </p>
+        <nav className="mt-4 font-mono text-[13px]">
+          {headerLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel="noopener noreferrer"
+              className="mx-1.5 underline"
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
       </header>
 
-      <p className="mt-10">
+      <p className="mt-10 text-pretty">
         I&apos;m the founding DX Engineer at{" "}
         <a
           href="https://generaltranslation.com"
@@ -168,11 +166,14 @@ export default function Home() {
           General Translation
         </a>
         , where I build the developer-facing side of localization: open-source
-        SDKs, a CLI, and the platform behind them. I build AI agents from
-        scratch and write the orchestration layer myself: tool loops, state
-        machines, memory, routing. No agent frameworks.
+        SDKs, a CLI, and the platform behind them.
       </p>
-      <p className="mt-4">
+      <p className="mt-4 text-pretty">
+        I build AI agents from scratch and write the orchestration layer
+        myself: tool loops, state machines, memory, routing. No agent
+        frameworks.
+      </p>
+      <p className="mt-4 text-pretty">
         Before engineering I ran{" "}
         <a
           href="https://youtube.com/boffy"
