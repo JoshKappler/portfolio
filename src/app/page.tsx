@@ -61,6 +61,7 @@ const playground: Item[] = [
     name: "chud",
     href: "https://github.com/JoshKappler/chud",
     line: "A goblin voice assistant with a jiggly skin. He talks back. You can beat him up; he stays grumpy until he heals.",
+    links: [{ label: "Live", href: "https://chud.joshuakappler.com" }],
   },
   {
     name: "deskfly",
