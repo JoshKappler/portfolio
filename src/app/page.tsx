@@ -66,27 +66,27 @@ const playground: Item[] = [
   },
   {
     name: "chadGPT",
-    href: "https://github.com/JoshKappler/chadGPT",
+    href: "https://chadgpt.joshuakappler.com",
     line: "A hostile chatbot on a green CRT. He answers your question correctly, and then insults you for asking. Has a phone number.",
-    links: [{ label: "Live", href: "https://chadgpt.joshuakappler.com" }],
+    links: [{ label: "GitHub", href: "https://github.com/JoshKappler/chadGPT" }],
   },
   {
     name: "chud",
-    href: "https://github.com/JoshKappler/chud",
+    href: "https://chud.joshuakappler.com",
     line: "A goblin voice assistant with a jiggly skin. He talks back to you. You can beat him up if you want; he stays grumpy until he heals.",
-    links: [{ label: "Live", href: "https://chud.joshuakappler.com" }],
+    links: [{ label: "GitHub", href: "https://github.com/JoshKappler/chud" }],
   },
   {
     name: "deskfly",
-    href: "https://github.com/JoshKappler/deskfly",
+    href: "https://deskfly.joshuakappler.com",
     line: "A fruit fly's real connectome, living on my desktop.",
-    links: [{ label: "Live", href: "https://deskfly.joshuakappler.com" }],
+    links: [{ label: "GitHub", href: "https://github.com/JoshKappler/deskfly" }],
   },
   {
     name: "scuttle",
-    href: "https://github.com/JoshKappler/scuttle",
+    href: "https://scuttle.joshuakappler.com",
     line: "A voxel pirate roguelite in the browser. Cannonballs remove real voxels, compartments flood, and ships list, capsize, and sink.",
-    links: [{ label: "Live", href: "https://scuttle-gold.vercel.app" }],
+    links: [{ label: "GitHub", href: "https://github.com/JoshKappler/scuttle" }],
   },
 ];
 
