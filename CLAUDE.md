@@ -34,6 +34,10 @@ understated register: one narrow text column, no hero effects, no webfonts.
   line naturally fills 91-99% of the column (measure in the browser with
   text-align-last: center). A line that falls short of 85% gets centered by
   square-paragraphs.tsx and visibly breaks the pattern.
+- `src/components/crest-mark.tsx` is the de Falco family seal, stylized from
+  a photo of the wax stamp; it closes the page and `public/crest.png` is its
+  transparent render, used by Josh's email signature. Regenerate the PNG when
+  the mark changes; the signature hotlinks it.
 - The footer colophon claims system fonts and no trackers. Adding a webfont,
   analytics, or any third-party script makes it false; update or remove the
   line in the same change.

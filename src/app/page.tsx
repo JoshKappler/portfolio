@@ -1,7 +1,6 @@
 import { ContactEmail } from "@/components/contact-email";
-import { FalconMark } from "@/components/falcon-mark";
+import { CrestMark } from "@/components/crest-mark";
 import { Globe } from "@/components/globe";
-import { Postmark } from "@/components/postmark";
 import { SquareParagraphs } from "@/components/square-paragraphs";
 import { DEMO_URL } from "@/lib/site";
 
@@ -222,12 +221,11 @@ export default function Home() {
           <p className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
             I read everything.
           </p>
-          <Postmark className="absolute -top-5 right-0 h-[5.5rem] w-[5.5rem] -rotate-6 text-text opacity-40" />
         </div>
       </section>
 
       <div aria-hidden className="mt-14 text-center leading-none">
-        <FalconMark className="inline-block w-[2.75rem] text-text" />
+        <CrestMark className="inline-block h-[3.25rem] text-text" />
       </div>
 
       <footer className="mt-12 border-t border-border pt-4 text-center font-mono text-xs text-text-muted">
