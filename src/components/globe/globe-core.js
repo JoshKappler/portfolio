@@ -197,12 +197,16 @@ function buildSites(count) {
     for (let i = 0; i < n; i += 1) {
       const distance = ((i + 0.5) / n) * bar.total;
       const position = pointAlong(bar.points, bar.cumulative, distance);
+      const ahead = pointAlong(bar.points, bar.cumulative, Math.min(bar.total, distance + 3));
+      const behind = pointAlong(bar.points, bar.cumulative, Math.max(0, distance - 3));
       sites.push({
         x: position[0],
         y: position[1],
         piece: barIndex,
         meltPoint: bar.anchorAtEnd ? distance / bar.total : 1 - distance / bar.total,
         width: widthAlong(bar.widths, bar.cumulative, distance),
+        seg: bar.total / n,
+        angle: Math.atan2(ahead[1] - behind[1], ahead[0] - behind[0]),
       });
     }
   });
@@ -217,14 +221,20 @@ function buildSites(count) {
           piece: bars.length + tipIndex,
           meltPoint: 1 - fraction,
           width: arm.width / 2,
+          seg: arm.length / n,
+          angle: Math.atan2(arm.freeEnd[1] - arm.elbow[1], arm.freeEnd[0] - arm.elbow[0]),
         });
       }
     });
   });
+  // Each fragment is the sliver of stroke it replaces: chunkW runs along the
+  // stroke, chunkH spans its full thickness, and angle keeps it lying in the
+  // stroke at birth so the mark visibly breaks apart instead of turning into
+  // loose squares.
   sites.forEach((site, index) => {
     site.jitter = ((index * 59) % 103) / 103;
-    site.chunkW = clamp(site.width * 1.7, 18, 64);
-    site.chunkH = clamp(spacing * 1.9, 14, 50);
+    site.chunkW = clamp(site.seg * 2.6, 20, 48);
+    site.chunkH = site.width * 2;
   });
   return sites;
 }
@@ -520,7 +530,6 @@ export function createGlobe(config = {}) {
     return shapes;
   }
 
-  const ringAlphaAt = (tau) => fadeIn(tau, 0.1, 0.28) * (1 - fadeIn(tau, 0.86, 0.945)) * (0.5 + 0.5 * oceanLevel);
   const stragglerFade = (tau) => 1 - fadeIn(tau, 0.93, 0.965);
 
   function glyphSprites(tau, clockMs) {
@@ -530,6 +539,7 @@ export function createGlobe(config = {}) {
       let exist = 1;
       if (target.arrivedAt != null && tau < target.arrivedAt) exist = 0;
       if (target.leaveAt != null && tau >= target.leaveAt) exist = 0;
+      if (target.arrivedAt == null) exist *= fadeIn(tau, 0.04, 0.075);
       if (target.leaveAt == null) exist *= stragglerFade(tau);
       if (exist <= 0.01) continue;
       const pos = projectPoint(target, facingRad);
@@ -568,7 +578,7 @@ export function createGlobe(config = {}) {
         continue;
       }
       const { glyph } = charOf(target, clockMs);
-      const birth = smooth5(u / 0.45);
+      const birth = smooth5((u - 0.15) / 0.45);
       const settle = smooth5((u - 0.7) / 0.3);
       sprites.push({
         kind: 'glyph',
@@ -576,7 +586,7 @@ export function createGlobe(config = {}) {
         birth,
         chunkW: site.chunkW * (1 - 0.45 * birth),
         chunkH: site.chunkH * (1 - 0.45 * birth),
-        rot: site.jitter * Math.PI + (site.jitter - 0.5) * 3.2 * u,
+        rot: site.angle + (site.jitter - 0.5) * 3.2 * u,
         x,
         y,
         size: (44 + 14 * site.jitter) * (1 - u) + (26 + 12 * target.jitter) * u,
@@ -597,7 +607,7 @@ export function createGlobe(config = {}) {
         continue;
       }
       const { glyph } = charOf(target, clockMs);
-      const birth = 1 - smooth5((u - 0.55) / 0.45);
+      const birth = smooth5((0.85 - u) / 0.45);
       const settle = smooth5((0.3 - u) / 0.3);
       sprites.push({
         kind: 'glyph',
@@ -605,7 +615,7 @@ export function createGlobe(config = {}) {
         birth,
         chunkW: site.chunkW * (1 - 0.45 * birth),
         chunkH: site.chunkH * (1 - 0.45 * birth),
-        rot: site.jitter * Math.PI + (site.jitter - 0.5) * 3.2 * (1 - u),
+        rot: site.angle + (site.jitter - 0.5) * 3.2 * (1 - u),
         x,
         y,
         size: (26 + 12 * target.jitter) * (1 - u) + (44 + 14 * site.jitter) * u,
@@ -625,7 +635,6 @@ export function createGlobe(config = {}) {
     inkLevelAt,
     pieceLevelAt,
     tipShapesAt,
-    ringAlphaAt,
     stats: {
       flightsOut: outSites.filter((site) => site.out).length,
       flightsBack: backSites.filter((site) => site.ret).length,

@@ -2,7 +2,7 @@
 // standalone component. The caller provides the context and a view transform
 // ({ toCanvas(point), scale }); all motion math comes from a createGlobe
 // instance so surfaces cannot drift.
-import { R, bars, mcx, mcy, pointAlong, smooth5, tips, widthAlong } from './globe-core.js';
+import { bars, pointAlong, smooth5, tips, widthAlong } from './globe-core.js';
 
 let INK = '250, 250, 250';
 export function setInk(rgb) {
@@ -134,15 +134,6 @@ function drawTips(context, view, globe, tau) {
 }
 
 export function drawGlobeScene(context, view, globe, tau, clockMs, inkAlpha = 1) {
-  const ringAlpha = globe.ringAlphaAt(tau);
-  if (ringAlpha > 0.01) {
-    const center = view.toCanvas([mcx, mcy]);
-    context.beginPath();
-    context.arc(center[0], center[1], R * view.scale, 0, Math.PI * 2);
-    context.strokeStyle = `rgba(${INK}, ${(0.09 * ringAlpha).toFixed(3)})`;
-    context.lineWidth = 1;
-    context.stroke();
-  }
   const buckets = makeGlyphBuckets();
   for (const sprite of globe.glyphSprites(tau, clockMs)) {
     const canvasPos = view.toCanvas([sprite.x, sprite.y]);

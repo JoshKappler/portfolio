@@ -1,21 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { STAGE_HALF, createGlobe } from "./globe/globe-core.js";
+import { STAGE_HALF, createGlobe, rasterAlphaAt } from "./globe/globe-core.js";
 import { MARK_GEOMETRY } from "./globe/mark-geometry.js";
 import { drawGlobeScene, setInk } from "./globe/globe-draw.js";
 
 const INK = "42, 35, 24";
-
-// Smooth 0..1 ramp of tau across [from, to]; the raster and the strip ink
-// crossfade on complementary ramps so the strips never show at full strength
-// under a faded mark. The two crossfade windows must stay reflections of each
-// other around tau 1.005, the pivot of the melt (0.05-0.285) and refill
-// (0.72-0.955) windows, so the fade dip always hides inside piece motion.
-function ramp(tau: number, from: number, to: number) {
-  const u = Math.min(1, Math.max(0, (tau - from) / (to - from)));
-  return u * u * (3 - 2 * u);
-}
 
 function tintedMark(image: HTMLImageElement, color: string) {
   const off = document.createElement("canvas");
@@ -78,11 +68,12 @@ export function Globe() {
       const t = elapsed % (holdMs + moveMs);
       const hold = t < holdMs;
       const tau = hold ? 0 : (t - holdMs) / moveMs;
-      const markAlpha = hold
-        ? 1
-        : Math.max(1 - ramp(tau, 0.06, 0.16), ramp(tau, 0.845, 0.945));
+      // The raster covers the identical full-strength scene only inside the
+      // core's RASTER_OUT/RASTER_IN windows, before the first piece moves and
+      // after the last glyph lands, so the handoff never dims the ink.
+      const markAlpha = hold ? 1 : rasterAlphaAt(tau);
       if (!hold) {
-        drawGlobeScene(context, view, globe, tau, tau * moveMs, 1 - markAlpha);
+        drawGlobeScene(context, view, globe, tau, tau * moveMs);
       }
       if (markAlpha > 0.01 && mark) {
         const origin = view.toCanvas([0, 0]);
