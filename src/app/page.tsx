@@ -6,12 +6,12 @@ type Item = { name: string; href?: string; line: string; links?: ItemLink[] };
 
 const projects: Item[] = [
   {
-    name: "ask ai",
+    name: "Ask AI",
     href: "https://dash.generaltranslation.com",
     line: "The assistant on the General Translation dashboard, live in production. Docs-grounded, with read-only account tools, per-plan model tiers, rate limits, and usage billing.",
   },
   {
-    name: "gtm dashboard",
+    name: "GTM dashboard",
     href: undefined,
     line: "General Translation's internal growth dashboard. Agent pipelines find leads, research and score them, and draft the outreach; a reviewer model gates every draft. Internal tool, no public link.",
   },
@@ -44,7 +44,7 @@ const projects: Item[] = [
     name: "sniply",
     href: "https://github.com/JoshKappler/sniply",
     line: "A live booking marketplace for barbers and stylists. The one project here with no AI in it. 291 tests.",
-    links: [{ label: "live", href: "https://sniply.biz" }],
+    links: [{ label: "Live", href: "https://sniply.biz" }],
   },
   {
     name: "survival-station",
@@ -59,28 +59,31 @@ const projects: Item[] = [
 
 const playground: Item[] = [
   {
-    name: "this globe",
-    href: "https://github.com/JoshKappler/gt-logo-loader-studio",
-    line: "The JK up top is General Translation's logo loader wearing my initials: the mark crumbles into glyphs from thirteen scripts, spins the Earth westward, and reassembles. Canvas 2D, no libraries.",
-  },
-  {
     name: "claude-thunder",
     href: "https://claude-thunder.vercel.app",
     line: "A WW2 dogfighter that runs in the browser.",
+  },
+  {
+    name: "chud",
+    line: "A goblin voice assistant with a jiggly WebGL skin. It talks back. Runs locally.",
   },
   {
     name: "deskfly",
     href: "https://github.com/JoshKappler/deskfly",
     line: "A fruit fly's real connectome, living on my desktop.",
   },
+  {
+    name: "forte",
+    line: "A physics-first melee fighting game, mid-build.",
+  },
 ];
 
 const headerLinks: ItemLink[] = [
-  { label: "resume", href: "/resume" },
-  { label: "github", href: "https://github.com/JoshKappler" },
-  { label: "youtube", href: "https://youtube.com/boffy" },
-  { label: "linkedin", href: "https://www.linkedin.com/in/josh-kappler" },
-  { label: "email", href: "mailto:Joshua.Kappler@gmail.com" },
+  { label: "Resume", href: "/resume" },
+  { label: "GitHub", href: "https://github.com/JoshKappler" },
+  { label: "YouTube", href: "https://youtube.com/boffy" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/josh-kappler" },
+  { label: "Email", href: "mailto:Joshua.Kappler@gmail.com" },
 ];
 
 function ItemList({ title, items }: { title: string; items: Item[] }) {
@@ -131,11 +134,11 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
 export default function Home() {
   return (
     <main className="mx-auto max-w-[37rem] px-6 py-14 text-[17px] leading-relaxed">
-      <header className="flex items-start justify-between gap-4">
-        <div>
+      <header className="flex flex-wrap items-start justify-between gap-x-4 gap-y-8">
+        <div className="min-w-0">
           <h1 className="text-3xl">Josh Kappler</h1>
           <p className="mt-1 font-mono text-[13px] text-text-muted">
-            founding dx engineer · san francisco
+            Founding DX Engineer · San Francisco
           </p>
           <nav className="mt-4 font-mono text-[13px]">
             {headerLinks.map((link) => (
@@ -208,7 +211,7 @@ export default function Home() {
       </section>
 
       <footer className="mt-14 border-t border-border pt-4 font-mono text-xs text-text-muted">
-        josh kappler · 2026
+        Josh Kappler · 2026
       </footer>
     </main>
   );

@@ -69,6 +69,10 @@ export function Globe() {
   }, []);
 
   return (
-    <canvas ref={ref} className="h-[200px] w-[200px] shrink-0" aria-hidden="true" />
+    <canvas
+      ref={ref}
+      className="h-[112px] w-[112px] shrink-0 sm:h-[200px] sm:w-[200px]"
+      aria-hidden="true"
+    />
   );
 }
