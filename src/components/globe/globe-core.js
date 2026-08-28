@@ -339,89 +339,107 @@ export function createGlobe(config = {}) {
   const backSites = buildSites(Math.max(1, needBack.length));
   for (const site of outSites) {
     site.emit = meltStartOf(site.piece) + MELT_SPAN * invSmooth5(site.meltPoint) + (site.jitter - 0.5) * 0.012;
-    site.flyOut = 0.07 + 0.035 * site.jitter;
     site.out = null;
   }
   for (const site of backSites) {
     site.back = refillStartOf(site.piece) + REFILL_SPAN * invSmooth5(1 - site.meltPoint) + (site.jitter - 0.5) * 0.012;
-    site.flyBack = 0.07 + 0.035 * site.jitter;
     site.ret = null;
   }
 
-  // Targets claim sites in urgency order: whatever exits view soonest picks
-  // its flight first, so nothing visible during the burst is left flightless.
-  for (const site of outSites) site.arrive = site.emit + site.flyOut;
+  // Every flight runs with the orbit: rightward out, homeward from the
+  // left. Flight length is the free variable; a chip waits in the air until
+  // its target has swept to the right of its site (or, going home, launches
+  // while the target is still left of it). Each target carries a sampled
+  // position timeline, and targets claim sites in urgency order. A target no
+  // site can meet this way rotates in behind the limb instead of flying
+  // against the flow.
+  const TSTEP = 0.015;
+  const MIN_FLY = 0.055;
+  const MAX_FLY = 0.3;
+  const timelineOf = (target, from, to) => {
+    const steps = [];
+    for (let t = from; t <= to; t += TSTEP) steps.push({ t, ...targetAt(target, t) });
+    return steps;
+  };
+
   const freeOut = new Set(outSites);
   const outOrdered = needOut
-    .map((target) => ({ target, exit: exitTimeOf(target) }))
+    .map((target) => ({ target, exit: exitTimeOf(target), line: timelineOf(target, MELT0 + MIN_FLY, 0.6) }))
     .sort((a, b) => a.exit - b.exit);
-  for (const { target, exit } of outOrdered) {
+  for (const slack of [6, -60]) for (const { target, exit, line } of outOrdered) {
+    if (target.arrivedAt != null) continue;
     let best = null;
     let bestScore = Infinity;
-    let bestPos = null;
+    let bestStep = null;
     for (const site of freeOut) {
-      if (site.arrive > exit - 0.015) continue;
-      const pos = targetAt(target, site.arrive);
-      if (pos.z < 0.02) continue;
-      const score = (pos.x - site.x) ** 2 + (pos.y - site.y) ** 2 - pos.z * 350000;
-      if (score < bestScore) {
-        bestScore = score;
-        best = site;
-        bestPos = pos;
+      const lo = site.emit + MIN_FLY;
+      const hi = Math.min(site.emit + MAX_FLY, exit - 0.015);
+      for (const step of line) {
+        if (step.t < lo) continue;
+        if (step.t > hi) break;
+        if (step.z < 0.02 || step.x < site.x + slack) continue;
+        const score = (step.x - site.x) ** 2 + (step.y - site.y) ** 2 - step.z * 350000 + (step.t - lo) * 2e6;
+        if (score < bestScore) {
+          bestScore = score;
+          best = site;
+          bestStep = step;
+        }
+        break;
       }
     }
-    if (!best) {
-      for (const site of freeOut) if (!best || site.arrive < best.arrive) best = site;
-      if (!best) continue;
-      bestPos = targetAt(target, best.arrive);
-    }
+    if (!best) continue;
     freeOut.delete(best);
+    best.arrive = bestStep.t;
+    best.flyOut = bestStep.t - best.emit;
     target.arrivedAt = best.arrive;
     const outDir = orbitDirAt(target, best.arrive);
-    const outReach = (0.35 + 0.2 * best.jitter) * Math.hypot(bestPos.x - best.x, bestPos.y - best.y);
+    const outReach = (0.35 + 0.2 * best.jitter) * Math.hypot(bestStep.x - best.x, bestStep.y - best.y);
     best.out = {
       target,
       arrive: best.arrive,
-      ctrl: [bestPos.x - outDir[0] * outReach, bestPos.y - outDir[1] * outReach],
+      ctrl: [bestStep.x - outDir[0] * outReach, bestStep.y - outDir[1] * outReach],
     };
   }
-  for (const site of backSites) site.launch = site.back - site.flyBack;
   const freeBack = new Set(backSites);
   const backOrdered = needBack
-    .map((target) => ({ target, entry: entryTimeOf(target) }))
+    .map((target) => ({ target, entry: entryTimeOf(target), line: timelineOf(target, 0.55, REFILL_END) }))
     .sort((a, b) => b.entry - a.entry);
-  for (const { target, entry } of backOrdered) {
-    if (entry === Infinity) continue;
+  for (const slack of [6, -60]) for (const { target, entry, line } of backOrdered) {
+    if (entry === Infinity || target.leaveAt != null) continue;
     let best = null;
     let bestScore = Infinity;
-    let bestPos = null;
+    let bestStep = null;
     for (const site of freeBack) {
-      if (site.launch < entry + 0.015) continue;
-      const pos = targetAt(target, site.launch);
-      if (pos.z < 0.02) continue;
-      const score = (pos.x - site.x) ** 2 + (pos.y - site.y) ** 2 - pos.z * 350000;
-      if (score < bestScore) {
-        bestScore = score;
-        best = site;
-        bestPos = pos;
+      const lo = Math.max(site.back - MAX_FLY, entry + 0.015);
+      const hi = site.back - MIN_FLY;
+      for (let i = line.length - 1; i >= 0; i -= 1) {
+        const step = line[i];
+        if (step.t > hi) continue;
+        if (step.t < lo) break;
+        if (step.z < 0.02 || step.x > site.x - slack) continue;
+        const score = (step.x - site.x) ** 2 + (step.y - site.y) ** 2 - step.z * 350000 + (hi - step.t) * 2e6;
+        if (score < bestScore) {
+          bestScore = score;
+          best = site;
+          bestStep = step;
+        }
+        break;
       }
     }
-    if (!best) {
-      for (const site of freeBack) if (!best || site.launch > best.launch) best = site;
-      if (!best) continue;
-      bestPos = targetAt(target, best.launch);
-    }
+    if (!best) continue;
     freeBack.delete(best);
+    best.launch = bestStep.t;
+    best.flyBack = best.back - bestStep.t;
     target.leaveAt = best.launch;
     const backDir = orbitDirAt(target, best.launch);
-    const backReach = (0.35 + 0.2 * best.jitter) * Math.hypot(best.x - bestPos.x, best.y - bestPos.y);
+    const backReach = (0.35 + 0.2 * best.jitter) * Math.hypot(best.x - bestStep.x, best.y - bestStep.y);
     best.ret = {
       target,
       launch: best.launch,
-      fromX: bestPos.x,
-      fromY: bestPos.y,
-      fromZ: bestPos.z,
-      ctrl: [bestPos.x + backDir[0] * backReach, bestPos.y + backDir[1] * backReach],
+      fromX: bestStep.x,
+      fromY: bestStep.y,
+      fromZ: bestStep.z,
+      ctrl: [bestStep.x + backDir[0] * backReach, bestStep.y + backDir[1] * backReach],
     };
   }
 
