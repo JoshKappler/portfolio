@@ -9,7 +9,9 @@
    eye's inner curve also clips the monogram, so the swash tails end tucked
    beneath the lids. The whole face sits a degree and a half off true, with
    fine grain roughening the stroke edges and specks around the rim, the way
-   a hand-pressed stamp lands. */
+   a hand-pressed stamp lands. It takes its color from the page (--seal,
+   sealing-wax crimson on screen); the faint pad behind the impression is
+   the wax the die pressed into, kept flat so it sits with the line art. */
 export function CrestMark({ className }: { className?: string }) {
   return (
     <svg
@@ -76,6 +78,12 @@ export function CrestMark({ className }: { className?: string }) {
         </filter>
       </defs>
       <g filter="url(#crest-age)" transform="rotate(-1.6 50 65)">
+        <path
+          fill="currentColor"
+          stroke="none"
+          opacity="0.09"
+          d="M 50.00 2.70 C 57.88 2.97 66.25 7.55 73.15 12.78 C 80.05 18.01 87.60 25.40 91.40 34.10 C 95.19 42.80 95.87 54.68 95.90 65.00 C 95.93 75.32 95.17 86.96 91.57 96.00 C 87.97 105.04 81.23 114.30 74.30 119.21 C 67.37 124.13 58.02 125.63 50.00 125.50 C 41.98 125.37 32.79 123.52 26.15 118.43 C 19.51 113.35 14.20 103.91 10.16 95.00 C 6.12 86.09 2.00 75.06 1.90 65.00 C 1.80 54.94 5.56 43.63 9.56 34.65 C 13.56 25.67 19.16 16.46 25.90 11.13 C 32.64 5.81 42.12 2.43 50.00 2.70 Z"
+        />
         <ellipse cx="50" cy="65" rx="45" ry="59" strokeWidth="3.6" />
         <ellipse cx="50" cy="65" rx="39.5" ry="53.5" strokeWidth="1.6" />
         <g mask="url(#crest-wreath)" fill="none">
