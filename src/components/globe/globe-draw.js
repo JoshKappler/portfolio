@@ -34,13 +34,16 @@ function makeGlyphBuckets() {
     flush(context) {
       context.textAlign = 'center';
       context.textBaseline = 'middle';
+      context.fillStyle = `rgb(${INK})`;
+      const baseAlpha = context.globalAlpha;
       for (const [size, entries] of buckets) {
         context.font = `${size}px "Courier New", Courier, monospace`;
         for (const [alpha, glyph, x, y] of entries) {
-          context.fillStyle = `rgba(${INK}, ${alpha.toFixed(3)})`;
+          context.globalAlpha = baseAlpha * alpha;
           context.fillText(glyph, x, y);
         }
       }
+      context.globalAlpha = baseAlpha;
       buckets.clear();
     },
   };

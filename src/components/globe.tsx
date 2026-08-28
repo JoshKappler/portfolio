@@ -41,8 +41,15 @@ export function Globe() {
     };
     markImage.src = "/jk-mark.png";
 
+    // Reading layout inside the frame loop forces a reflow per frame; track
+    // the box from resize events instead.
+    let box = canvas.getBoundingClientRect();
+    const sizer = new ResizeObserver(() => {
+      box = canvas.getBoundingClientRect();
+    });
+    sizer.observe(canvas);
+
     const draw = (elapsed: number) => {
-      const box = canvas.getBoundingClientRect();
       if (box.width < 2 || box.height < 2) return;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const pixelWidth = Math.round(box.width * dpr);
@@ -83,7 +90,10 @@ export function Globe() {
       draw(now - startedAt);
     };
     frame = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(frame);
+      sizer.disconnect();
+    };
   }, []);
 
   return (

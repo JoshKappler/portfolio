@@ -267,27 +267,13 @@ export function createGlobe(config = {}) {
   let delta = (((startLon - resolveLon(options.end)) % 360) + 360) % 360;
   if (delta < 60) delta += 360;
   const lead = 0.15 * delta;
-  const knots = [
-    { tau: 0, lon: startLon + lead, slope: -lead },
-    { tau: 0.34, lon: startLon, slope: -1.3 * delta },
-    { tau: 0.72, lon: startLon - delta, slope: -1.3 * delta },
-    { tau: 1, lon: startLon - delta - lead, slope: -lead },
-  ];
+  // Constant spin: same start and end facing (mod 360) with one extra full
+  // revolution, so the whole cycle runs at what used to be the mid-cycle
+  // peak speed instead of easing between slow ends and a fast middle.
+  const spin = delta + 2 * lead + 360;
 
   function facingLon(tau) {
-    const t = clamp(tau);
-    let seg = 0;
-    while (seg < knots.length - 2 && t > knots[seg + 1].tau) seg += 1;
-    const k0 = knots[seg];
-    const k1 = knots[seg + 1];
-    const h = k1.tau - k0.tau;
-    const u = (t - k0.tau) / h;
-    const u2 = u * u;
-    const u3 = u2 * u;
-    return (2 * u3 - 3 * u2 + 1) * k0.lon
-      + (u3 - 2 * u2 + u) * h * k0.slope
-      + (-2 * u3 + 3 * u2) * k1.lon
-      + (u3 - u2) * h * k1.slope;
+    return startLon + lead - spin * clamp(tau);
   }
 
   const targets = GLOBE_DATA.land.map(([lon, lat, scriptIndex], index) => ({
