@@ -127,7 +127,7 @@ export default function Home() {
   return (
     <main
       data-paper
-      className="mx-auto max-w-[37rem] border-x-[0.0625rem] border-border px-6 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
+      className="mx-auto max-w-[42rem] border-x-[0.0625rem] border-border px-16 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
     >
       {/* Referenced by globals.css. Wobble the edge, blur, then only partly
           re-firm the alpha, so stroke cores stay solid black while the rim

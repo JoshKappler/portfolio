@@ -31,7 +31,7 @@ body {
    --paper. Josh's Unsplash scan (kiwihug qv05FvdE26k), desaturated, warmed
    and lifted to mean 251/255 so the multiply blend keeps the column within
    2% of --paper. Mirrored vertically in the file so the repeat is seamless;
-   the tile is 1200px wide so retina shows it at native resolution. */
+   the tile is 1350px wide so retina shows it at native resolution. */
 main[data-paper] {
   position: relative;
   isolation: isolate;
@@ -51,7 +51,7 @@ main[data-paper]::after {
   z-index: 1;
   pointer-events: none;
   background: url("/parchment.jpg") repeat;
-  background-size: 37rem 98.7rem;
+  background-size: 42rem 112rem;
   mix-blend-mode: multiply;
 }
 main[data-paper] h1,
@@ -63,10 +63,10 @@ main[data-paper] :is(p, li, button):not(.font-mono):not(.font-mono *) {
 }
 
 /* One fixed composition at every width, like a sheet of paper: below the
-   full 37rem column the root font scales with the viewport, and every
+   full 42rem column the root font scales with the viewport, and every
    length on the page is rem or em, so lines wrap identically at any size. */
 html:has(main[data-paper]) {
-  font-size: min(16px, calc(100vw / 37));
+  font-size: min(16px, calc(100vw / 42));
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
