@@ -134,11 +134,11 @@ export default function Home() {
         <filter id="ink-bleed" x="-3%" y="-8%" width="106%" height="116%">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.4"
+            baseFrequency="0.35"
             numOctaves="2"
             seed="7"
           />
-          <feDisplacementMap in="SourceGraphic" scale="1.5" />
+          <feDisplacementMap in="SourceGraphic" scale="2.2" />
         </filter>
       </svg>
       <SquareParagraphs />

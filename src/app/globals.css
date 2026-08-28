@@ -33,27 +33,27 @@ body {
    2% of --paper. Mirrored vertically in the file so the repeat is seamless;
    the tile is 1200px wide so retina shows it at native resolution. */
 main[data-paper] {
-  background: url("/parchment.jpg") repeat var(--paper);
-  background-size: 37rem 98.7rem;
-  background-blend-mode: multiply;
+  position: relative;
   isolation: isolate;
+  background: var(--paper);
+  color: color-mix(in srgb, var(--ink) 82%, transparent);
 }
 
-/* Everything in the column multiplies into the sheet, and the ink itself
-   is slightly transparent, so the paper grain shows through every stroke
-   the way ink soaks into fiber instead of sitting on top. The globe canvas
-   is exempt: blending a repainting canvas flickers in Firefox. The small
-   mono labels and the name also pass through a faint turbulence
-   displacement (the #ink-bleed SVG filter on the page) that roughens
-   their edges like press gain. */
-main[data-paper] > * {
+/* The grain rides in one static overlay that multiplies over the whole
+   column at once, so it shows through every stroke, the globe's included,
+   the way ink soaks into fiber. One blend group total: giving each child
+   its own mix-blend-mode made Firefox's compositor flicker. The slightly
+   transparent ink above and the #ink-bleed displacement on the name and
+   mono labels finish the printed look. */
+main[data-paper]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: url("/parchment.jpg") repeat;
+  background-size: 37rem 98.7rem;
   mix-blend-mode: multiply;
-}
-main[data-paper] {
-  color: color-mix(in srgb, var(--ink) 88%, transparent);
-}
-main[data-paper] > :has(> canvas) {
-  mix-blend-mode: normal;
 }
 main[data-paper] h1,
 main[data-paper] .font-mono {
@@ -106,12 +106,10 @@ a {
   main[data-paper] {
     border: none;
     background: none;
-  }
-  main[data-paper] > * {
-    mix-blend-mode: normal;
-  }
-  main[data-paper] {
     color: var(--ink);
+  }
+  main[data-paper]::after {
+    content: none;
   }
   main[data-paper] h1,
   main[data-paper] .font-mono {
