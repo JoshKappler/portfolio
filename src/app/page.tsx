@@ -129,9 +129,10 @@ export default function Home() {
       data-paper
       className="mx-auto max-w-[37rem] border-x-[0.0625rem] border-border px-6 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
     >
-      {/* Referenced by globals.css: wobble the edge, then blur and pull the
-          alpha back up, so glyphs swell and feather like ink wicking into
-          fiber instead of showing sharp displaced notches. */}
+      {/* Referenced by globals.css. Wobble the edge, blur, then only partly
+          re-firm the alpha, so stroke cores stay solid black while the rim
+          fades; a second low-frequency noise thins coverage in patches, the
+          way a press never lays ink perfectly even. */}
       <svg aria-hidden="true" width="0" height="0" className="absolute">
         <filter id="ink-bleed" x="-4%" y="-12%" width="108%" height="124%">
           <feTurbulence
@@ -139,15 +140,23 @@ export default function Home() {
             baseFrequency="0.22"
             numOctaves="2"
             seed="7"
+            result="warp"
           />
-          <feDisplacementMap in="SourceGraphic" scale="1.8" />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.8" />
           <feGaussianBlur stdDeviation="0.5" />
-          <feComponentTransfer>
-            <feFuncA type="linear" slope="7" intercept="-1.9" />
+          <feComponentTransfer result="inked">
+            <feFuncA type="linear" slope="3" intercept="-0.45" />
           </feComponentTransfer>
-          <feComponentTransfer>
-            <feFuncA type="linear" slope="0.9" />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.09"
+            numOctaves="3"
+            seed="21"
+          />
+          <feComponentTransfer result="press">
+            <feFuncA type="linear" slope="0.5" intercept="0.62" />
           </feComponentTransfer>
+          <feComposite in="inked" in2="press" operator="in" />
         </filter>
         <filter id="ink-page" x="-4%" y="-12%" width="108%" height="124%">
           <feTurbulence
@@ -155,15 +164,23 @@ export default function Home() {
             baseFrequency="0.3"
             numOctaves="1"
             seed="11"
+            result="warp"
           />
-          <feDisplacementMap in="SourceGraphic" scale="1" />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1" />
           <feGaussianBlur stdDeviation="0.35" />
-          <feComponentTransfer>
-            <feFuncA type="linear" slope="7" intercept="-1.8" />
+          <feComponentTransfer result="inked">
+            <feFuncA type="linear" slope="3.5" intercept="-0.5" />
           </feComponentTransfer>
-          <feComponentTransfer>
-            <feFuncA type="linear" slope="0.92" />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.12"
+            numOctaves="3"
+            seed="29"
+          />
+          <feComponentTransfer result="press">
+            <feFuncA type="linear" slope="0.35" intercept="0.72" />
           </feComponentTransfer>
+          <feComposite in="inked" in2="press" operator="in" />
         </filter>
       </svg>
       <SquareParagraphs />

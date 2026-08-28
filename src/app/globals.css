@@ -36,15 +36,14 @@ main[data-paper] {
   position: relative;
   isolation: isolate;
   background: var(--paper);
-  color: color-mix(in srgb, var(--ink) 82%, transparent);
 }
 
 /* The grain rides in one static overlay that multiplies over the whole
    column at once, so it shows through every stroke, the globe's included,
    the way ink soaks into fiber. One blend group total: giving each child
-   its own mix-blend-mode made Firefox's compositor flicker. The slightly
-   transparent ink above and the #ink-bleed displacement on the name and
-   mono labels finish the printed look. */
+   its own mix-blend-mode made Firefox's compositor flicker. The ink
+   filters below keep stroke cores solid and lighten only edges and
+   patches, so type stays black instead of tinting toward the paper. */
 main[data-paper]::after {
   content: "";
   position: absolute;
@@ -109,7 +108,6 @@ a {
   main[data-paper] {
     border: none;
     background: none;
-    color: var(--ink);
   }
   main[data-paper]::after {
     content: none;
