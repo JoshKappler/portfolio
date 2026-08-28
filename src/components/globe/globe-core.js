@@ -239,22 +239,6 @@ function buildSites(count) {
   return sites;
 }
 
-function bendControl(fromX, fromY, toX, toY, jitter) {
-  const midX = (fromX + toX) / 2;
-  const midY = (fromY + toY) / 2;
-  const dx = toX - fromX;
-  const dy = toY - fromY;
-  const length = Math.hypot(dx, dy) || 1;
-  let px = -dy / length;
-  let py = dx / length;
-  if (px * (midX - mcx) + py * (midY - mcy) < 0) {
-    px = -px;
-    py = -py;
-  }
-  const bend = (0.2 + 0.2 * jitter) * length;
-  return [midX + px * bend, midY + py * bend];
-}
-
 const limbRamp = (z) => smooth5(z / 0.16);
 
 export function createGlobe(config = {}) {
@@ -309,6 +293,17 @@ export function createGlobe(config = {}) {
   }
 
   const targetAt = (target, tau) => projectPoint(target, facingLon(tau) * RAD);
+
+  // Screen-space direction a target is orbiting at time tau; flight curves
+  // aim along it so fragments join and leave the spin tangentially.
+  const orbitDirAt = (target, tau) => {
+    const ahead = targetAt(target, tau);
+    const behind = targetAt(target, tau - 0.008);
+    const dx = ahead.x - behind.x;
+    const dy = ahead.y - behind.y;
+    const m = Math.hypot(dx, dy) || 1;
+    return [dx / m, dy / m];
+  };
 
   const visibleDuring = (target, from, to) => {
     for (let t = from; t <= to; t += 0.01) {
@@ -382,7 +377,13 @@ export function createGlobe(config = {}) {
     }
     freeOut.delete(best);
     target.arrivedAt = best.arrive;
-    best.out = { target, arrive: best.arrive, ctrl: bendControl(best.x, best.y, bestPos.x, bestPos.y, best.jitter) };
+    const outDir = orbitDirAt(target, best.arrive);
+    const outReach = (0.35 + 0.2 * best.jitter) * Math.hypot(bestPos.x - best.x, bestPos.y - best.y);
+    best.out = {
+      target,
+      arrive: best.arrive,
+      ctrl: [bestPos.x - outDir[0] * outReach, bestPos.y - outDir[1] * outReach],
+    };
   }
   for (const site of backSites) site.launch = site.back - site.flyBack;
   const freeBack = new Set(backSites);
@@ -412,7 +413,16 @@ export function createGlobe(config = {}) {
     }
     freeBack.delete(best);
     target.leaveAt = best.launch;
-    best.ret = { target, launch: best.launch, fromX: bestPos.x, fromY: bestPos.y, fromZ: bestPos.z, ctrl: bendControl(bestPos.x, bestPos.y, best.x, best.y, best.jitter) };
+    const backDir = orbitDirAt(target, best.launch);
+    const backReach = (0.35 + 0.2 * best.jitter) * Math.hypot(best.x - bestPos.x, best.y - bestPos.y);
+    best.ret = {
+      target,
+      launch: best.launch,
+      fromX: bestPos.x,
+      fromY: bestPos.y,
+      fromZ: bestPos.z,
+      ctrl: [bestPos.x + backDir[0] * backReach, bestPos.y + backDir[1] * backReach],
+    };
   }
 
   function charOf(target, clockMs) {

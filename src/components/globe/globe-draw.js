@@ -7,7 +7,33 @@ import { MARK_GEOMETRY } from './mark-geometry.js';
 
 let INK = '250, 250, 250';
 export function setInk(rgb) {
+  if (rgb !== INK) glyphCache.clear();
   INK = rgb;
+}
+
+// Canvas text shaping is the frame budget's biggest cost, so each glyph is
+// rasterized once per (char, size, pixel ratio) and stamped with drawImage.
+const glyphCache = new Map();
+function glyphStamp(glyph, size, dpr) {
+  const key = `${dpr}|${size}|${glyph}`;
+  let stamp = glyphCache.get(key);
+  if (!stamp) {
+    if (glyphCache.size > 6000) glyphCache.clear();
+    const cssSize = Math.ceil(size * 1.8);
+    const sprite = document.createElement('canvas');
+    sprite.width = Math.max(1, Math.ceil(cssSize * dpr));
+    sprite.height = sprite.width;
+    const g = sprite.getContext('2d');
+    g.scale(dpr, dpr);
+    g.font = `${size}px "Courier New", Courier, monospace`;
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillStyle = `rgb(${INK})`;
+    g.fillText(glyph, cssSize / 2, cssSize / 2);
+    stamp = { sprite, cssSize };
+    glyphCache.set(key, stamp);
+  }
+  return stamp;
 }
 // The mark ink is the caller's rendered glyph image, never a reconstruction:
 // each frame draws it whole and erodes the melted spans out of it, so the
@@ -32,15 +58,13 @@ function makeGlyphBuckets() {
       buckets.get(size).push([alpha, glyph, x, y]);
     },
     flush(context) {
-      context.textAlign = 'center';
-      context.textBaseline = 'middle';
-      context.fillStyle = `rgb(${INK})`;
+      const dpr = context.getTransform().a || 1;
       const baseAlpha = context.globalAlpha;
       for (const [size, entries] of buckets) {
-        context.font = `${size}px "Courier New", Courier, monospace`;
         for (const [alpha, glyph, x, y] of entries) {
+          const { sprite, cssSize } = glyphStamp(glyph, size, dpr);
           context.globalAlpha = baseAlpha * alpha;
-          context.fillText(glyph, x, y);
+          context.drawImage(sprite, x - cssSize / 2, y - cssSize / 2, cssSize, cssSize);
         }
       }
       context.globalAlpha = baseAlpha;
@@ -147,11 +171,13 @@ function drawMarkInk(context, view, globe, tau) {
 
 export function drawGlobeScene(context, view, globe, tau, clockMs, inkAlpha = 1) {
   const buckets = makeGlyphBuckets();
+  const baseAlpha = context.globalAlpha;
+  context.fillStyle = `rgb(${INK})`;
   for (const sprite of globe.glyphSprites(tau, clockMs)) {
     const canvasPos = view.toCanvas([sprite.x, sprite.y]);
     if (sprite.kind === 'dot') {
       const radius = sprite.r * view.scale;
-      context.fillStyle = `rgba(${INK}, ${sprite.alpha.toFixed(3)})`;
+      context.globalAlpha = baseAlpha * sprite.alpha;
       context.fillRect(canvasPos[0] - radius, canvasPos[1] - radius, radius * 2, radius * 2);
       continue;
     }
@@ -163,12 +189,13 @@ export function drawGlobeScene(context, view, globe, tau, clockMs, inkAlpha = 1)
       context.save();
       context.translate(canvasPos[0], canvasPos[1]);
       context.rotate(sprite.rot);
-      context.fillStyle = `rgba(${INK}, ${chunkAlpha.toFixed(3)})`;
+      context.globalAlpha = baseAlpha * chunkAlpha;
       context.fillRect(-w / 2, -h / 2, w, h);
       context.restore();
     }
     buckets.add(sprite.size * view.scale, birth * sprite.alpha, sprite.char, canvasPos[0], canvasPos[1]);
   }
+  context.globalAlpha = baseAlpha;
   buckets.flush(context);
   if (inkAlpha > 0.01) {
     context.save();
