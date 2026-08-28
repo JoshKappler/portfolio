@@ -127,12 +127,12 @@ export default function Home() {
   return (
     <main
       data-paper
-      className="mx-auto max-w-[37rem] border-x-[0.0625rem] border-border px-6 py-14 text-[1.0625rem] leading-relaxed"
+      className="mx-auto max-w-[37rem] border-x-[0.0625rem] border-border px-6 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
     >
       <SquareParagraphs />
       <Globe />
 
-      <header className="mt-6 text-center">
+      <header className="mt-2 text-center">
         <h1 className="text-3xl">Josh Kappler</h1>
         <p className="mt-1 font-mono text-[0.8125rem] text-text-muted">
           Software Engineer · San Francisco
