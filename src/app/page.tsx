@@ -138,7 +138,7 @@ export default function Home() {
             numOctaves="2"
             seed="7"
           />
-          <feDisplacementMap in="SourceGraphic" scale="0.9" />
+          <feDisplacementMap in="SourceGraphic" scale="1.5" />
         </filter>
       </svg>
       <SquareParagraphs />

@@ -331,7 +331,7 @@ export function createGlobe(config = {}) {
 
   // Everything conspicuously visible during the burst arrives by flight, and
   // everything conspicuously visible during the gather flies home. The rest
-  // simply exists and rotates in and out behind the limb.
+  // condenses in and thins out in place, each on its own staggered window.
   const needOut = targets.filter((target) => visibleDuring(target, 0.04, 0.36));
   const needBack = targets.filter((target) => visibleDuring(target, 0.7, 0.97));
 
@@ -351,8 +351,8 @@ export function createGlobe(config = {}) {
   // its target has swept to the right of its site (or, going home, launches
   // while the target is still left of it). Each target carries a sampled
   // position timeline, and targets claim sites in urgency order. A target no
-  // site can meet this way rotates in behind the limb instead of flying
-  // against the flow.
+  // site can meet this way condenses in place on its own staggered window
+  // instead of flying against the flow.
   const TSTEP = 0.015;
   const MIN_FLY = 0.055;
   const MAX_FLY = 0.3;
@@ -544,8 +544,6 @@ export function createGlobe(config = {}) {
     return shapes;
   }
 
-  const stragglerFade = (tau) => 1 - fadeIn(tau, 0.93, 0.965);
-
   function glyphSprites(tau, clockMs) {
     const sprites = [];
     const facingRad = facingLon(tau) * RAD;
@@ -553,8 +551,14 @@ export function createGlobe(config = {}) {
       let exist = 1;
       if (target.arrivedAt != null && tau < target.arrivedAt) exist = 0;
       if (target.leaveAt != null && tau >= target.leaveAt) exist = 0;
-      if (target.arrivedAt == null) exist *= fadeIn(tau, 0.04, 0.075);
-      if (target.leaveAt == null) exist *= stragglerFade(tau);
+      if (target.arrivedAt == null) {
+        const at = 0.05 + 0.24 * target.jitter;
+        exist *= fadeIn(tau, at, at + 0.07);
+      }
+      if (target.leaveAt == null) {
+        const gone = 0.72 + 0.16 * target.jitter;
+        exist *= 1 - fadeIn(tau, gone, gone + 0.06);
+      }
       if (exist <= 0.01) continue;
       const pos = projectPoint(target, facingRad);
       if (pos.z <= 0.03) continue;

@@ -39,13 +39,21 @@ main[data-paper] {
   isolation: isolate;
 }
 
-/* Everything in the column multiplies into the sheet, so the paper grain
-   shows through every stroke the way ink soaks into fiber instead of
-   sitting on top. The small mono labels and the name also pass through a
-   faint turbulence displacement (the #ink-bleed SVG filter on the page)
-   that roughens their edges like press gain. */
+/* Everything in the column multiplies into the sheet, and the ink itself
+   is slightly transparent, so the paper grain shows through every stroke
+   the way ink soaks into fiber instead of sitting on top. The globe canvas
+   is exempt: blending a repainting canvas flickers in Firefox. The small
+   mono labels and the name also pass through a faint turbulence
+   displacement (the #ink-bleed SVG filter on the page) that roughens
+   their edges like press gain. */
 main[data-paper] > * {
   mix-blend-mode: multiply;
+}
+main[data-paper] {
+  color: color-mix(in srgb, var(--ink) 88%, transparent);
+}
+main[data-paper] > :has(> canvas) {
+  mix-blend-mode: normal;
 }
 main[data-paper] h1,
 main[data-paper] .font-mono {
@@ -101,6 +109,9 @@ a {
   }
   main[data-paper] > * {
     mix-blend-mode: normal;
+  }
+  main[data-paper] {
+    color: var(--ink);
   }
   main[data-paper] h1,
   main[data-paper] .font-mono {
