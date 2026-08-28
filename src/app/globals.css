@@ -25,12 +25,13 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-/* Paper grain on the text column only; the page around it stays flat
-   --paper. The image is ambientCG Paper002 (CC0), brightened toward white
-   so the multiply blend reads as fiber and speckle, not shading. */
+/* Paper tooth on the text column only; the page around it stays flat
+   --paper. The image is ambientCG Paper001's relief map (CC0), mirror-tiled
+   seamless and lifted to mean 252/255 so the multiply blend keeps the
+   column within 2% of --paper and reads as surface grain, not shading. */
 main[data-paper] {
   background: url("/parchment.jpg") repeat var(--paper);
-  background-size: 37.2rem 48rem;
+  background-size: 36.7rem 23.3rem;
   background-blend-mode: multiply;
 }
 
