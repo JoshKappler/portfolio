@@ -24,6 +24,11 @@ export function CrestMark({ className }: { className?: string }) {
       strokeLinecap="round"
     >
       <defs>
+        <radialGradient id="crest-shine" cx="0.36" cy="0.3" r="0.8">
+          <stop offset="0" stopColor="#fff" stopOpacity="0.5" />
+          <stop offset="0.4" stopColor="#fff" stopOpacity="0.16" />
+          <stop offset="1" stopColor="#fff" stopOpacity="0" />
+        </radialGradient>
         <clipPath id="crest-eye">
           <path d="M 22 96 C 31 76.5 69 76.5 78 96 C 69 115.5 31 115.5 22 96 Z" />
         </clipPath>
@@ -380,6 +385,18 @@ export function CrestMark({ className }: { className?: string }) {
             />
           </g>
         </g>
+        {/* Light glancing off the wax: a soft specular from the upper left
+            that only lifts the impression it crosses, screen-only. */}
+        <ellipse
+          cx="50"
+          cy="65"
+          rx="45"
+          ry="59"
+          fill="url(#crest-shine)"
+          stroke="none"
+          className="print:hidden"
+          style={{ mixBlendMode: "soft-light" }}
+        />
       </g>
     </svg>
   );

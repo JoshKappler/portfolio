@@ -30,11 +30,26 @@ body {
 /* Paper grain on the text column only; the page around it stays flat
    --paper. Josh's Unsplash scan (kiwihug qv05FvdE26k), desaturated, warmed
    and lifted to mean 251/255 so the multiply blend keeps the column within
-   2% of --paper. Mirrored vertically in the file so the repeat is seamless. */
+   2% of --paper. Mirrored vertically in the file so the repeat is seamless;
+   the tile is 1200px wide so retina shows it at native resolution. */
 main[data-paper] {
   background: url("/parchment.jpg") repeat var(--paper);
   background-size: 37rem 98.7rem;
   background-blend-mode: multiply;
+  isolation: isolate;
+}
+
+/* Everything in the column multiplies into the sheet, so the paper grain
+   shows through every stroke the way ink soaks into fiber instead of
+   sitting on top. The small mono labels and the name also pass through a
+   faint turbulence displacement (the #ink-bleed SVG filter on the page)
+   that roughens their edges like press gain. */
+main[data-paper] > * {
+  mix-blend-mode: multiply;
+}
+main[data-paper] h1,
+main[data-paper] .font-mono {
+  filter: url(#ink-bleed);
 }
 
 /* One fixed composition at every width, like a sheet of paper: below the
@@ -83,5 +98,12 @@ a {
   main[data-paper] {
     border: none;
     background: none;
+  }
+  main[data-paper] > * {
+    mix-blend-mode: normal;
+  }
+  main[data-paper] h1,
+  main[data-paper] .font-mono {
+    filter: none;
   }
 }

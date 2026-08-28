@@ -129,6 +129,18 @@ export default function Home() {
       data-paper
       className="mx-auto max-w-[37rem] border-x-[0.0625rem] border-border px-6 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
     >
+      {/* Referenced by globals.css: nudges glyph edges like ink on fiber. */}
+      <svg aria-hidden="true" width="0" height="0" className="absolute">
+        <filter id="ink-bleed" x="-3%" y="-8%" width="106%" height="116%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.4"
+            numOctaves="2"
+            seed="7"
+          />
+          <feDisplacementMap in="SourceGraphic" scale="0.9" />
+        </filter>
+      </svg>
       <SquareParagraphs />
       <Globe />
 
