@@ -25,6 +25,16 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
+/* Paper grain on the text column only; the page around it stays flat
+   --paper. Josh's Unsplash scan (kiwihug qv05FvdE26k), desaturated, warmed
+   and lifted to mean 251/255 so the multiply blend keeps the column within
+   2% of --paper. Mirrored vertically in the file so the repeat is seamless. */
+main[data-paper] {
+  background: url("/parchment.jpg") repeat var(--paper);
+  background-size: 37rem 98.7rem;
+  background-blend-mode: multiply;
+}
+
 /* One fixed composition at every width, like a sheet of paper: below the
    full 37rem column the root font scales with the viewport, and every
    length on the page is rem or em, so lines wrap identically at any size. */
@@ -69,5 +79,6 @@ a {
   }
   main[data-paper] {
     border: none;
+    background: none;
   }
 }
