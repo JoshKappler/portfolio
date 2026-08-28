@@ -25,19 +25,13 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-/* Parchment grain, three sepia-alpha turbulence layers so it only ever
-   warms the paper: a broad sheet undulation, horizontal fiber streaks
-   multiplied by a second large-scale noise so their density clusters in
-   patches instead of repeating evenly, and a fine tooth. 880px tile,
-   inline data URI, stitchTiles keeps the repeat seamless. Homepage only. */
-body:has(main[data-paper])::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='880' height='880'%3E%3Cfilter id='m' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.006,0.009' numOctaves='2' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.58 0 0 0 0 0.42 0 0 0 0 0.14 0.1 0 0 0 0'/%3E%3C/filter%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012,0.11' numOctaves='4' seed='5' stitchTiles='stitch' result='fib'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004,0.006' numOctaves='2' seed='9' stitchTiles='stitch' result='mask'/%3E%3CfeComposite in='fib' in2='mask' operator='arithmetic' k1='1.7' k2='0' k3='0' k4='0'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.55 0 0 0 0 0.4 0 0 0 0 0.16 0.45 0 0 0 0'/%3E%3C/filter%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.58 0 0 0 0 0.42 0 0 0 0 0.14 0.07 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") repeat;
-  background-size: 880px 880px;
-  pointer-events: none;
+/* Paper grain on the text column only; the page around it stays flat
+   --paper. The image is ambientCG Paper002 (CC0), brightened toward white
+   so the multiply blend reads as fiber and speckle, not shading. */
+main[data-paper] {
+  background: url("/parchment.jpg") repeat var(--paper);
+  background-size: 37.2rem 48rem;
+  background-blend-mode: multiply;
 }
 
 /* One fixed composition at every width, like a sheet of paper: below the
@@ -84,8 +78,6 @@ a {
   }
   main[data-paper] {
     border: none;
-  }
-  body::before {
-    display: none;
+    background: none;
   }
 }
