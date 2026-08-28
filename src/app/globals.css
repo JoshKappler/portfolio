@@ -25,16 +25,6 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-/* Paper tooth on the text column only; the page around it stays flat
-   --paper. The image is ambientCG Paper001's relief map (CC0), mirror-tiled
-   seamless and lifted to mean 252/255 so the multiply blend keeps the
-   column within 2% of --paper and reads as surface grain, not shading. */
-main[data-paper] {
-  background: url("/parchment.jpg") repeat var(--paper);
-  background-size: 36.7rem 23.3rem;
-  background-blend-mode: multiply;
-}
-
 /* One fixed composition at every width, like a sheet of paper: below the
    full 37rem column the root font scales with the viewport, and every
    length on the page is rem or em, so lines wrap identically at any size. */
@@ -79,6 +69,5 @@ a {
   }
   main[data-paper] {
     border: none;
-    background: none;
   }
 }
