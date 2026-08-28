@@ -129,16 +129,41 @@ export default function Home() {
       data-paper
       className="mx-auto max-w-[37rem] border-x-[0.0625rem] border-border px-6 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
     >
-      {/* Referenced by globals.css: nudges glyph edges like ink on fiber. */}
+      {/* Referenced by globals.css: wobble the edge, then blur and pull the
+          alpha back up, so glyphs swell and feather like ink wicking into
+          fiber instead of showing sharp displaced notches. */}
       <svg aria-hidden="true" width="0" height="0" className="absolute">
-        <filter id="ink-bleed" x="-3%" y="-8%" width="106%" height="116%">
+        <filter id="ink-bleed" x="-4%" y="-12%" width="108%" height="124%">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.35"
+            baseFrequency="0.22"
             numOctaves="2"
             seed="7"
           />
-          <feDisplacementMap in="SourceGraphic" scale="2.2" />
+          <feDisplacementMap in="SourceGraphic" scale="1.8" />
+          <feGaussianBlur stdDeviation="0.5" />
+          <feComponentTransfer>
+            <feFuncA type="linear" slope="7" intercept="-1.9" />
+          </feComponentTransfer>
+          <feComponentTransfer>
+            <feFuncA type="linear" slope="0.9" />
+          </feComponentTransfer>
+        </filter>
+        <filter id="ink-page" x="-4%" y="-12%" width="108%" height="124%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.3"
+            numOctaves="1"
+            seed="11"
+          />
+          <feDisplacementMap in="SourceGraphic" scale="1" />
+          <feGaussianBlur stdDeviation="0.35" />
+          <feComponentTransfer>
+            <feFuncA type="linear" slope="7" intercept="-1.8" />
+          </feComponentTransfer>
+          <feComponentTransfer>
+            <feFuncA type="linear" slope="0.92" />
+          </feComponentTransfer>
         </filter>
       </svg>
       <SquareParagraphs />

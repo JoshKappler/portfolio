@@ -59,6 +59,9 @@ main[data-paper] h1,
 main[data-paper] .font-mono {
   filter: url(#ink-bleed);
 }
+main[data-paper] :is(p, li, button):not(.font-mono):not(.font-mono *) {
+  filter: url(#ink-page);
+}
 
 /* One fixed composition at every width, like a sheet of paper: below the
    full 37rem column the root font scales with the viewport, and every
@@ -112,7 +115,8 @@ a {
     content: none;
   }
   main[data-paper] h1,
-  main[data-paper] .font-mono {
+  main[data-paper] .font-mono,
+  main[data-paper] :is(p, li, button) {
     filter: none;
   }
 }
