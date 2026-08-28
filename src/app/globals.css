@@ -32,10 +32,15 @@ body {
    and lifted to mean 251/255 so the multiply blend keeps the column within
    2% of --paper. Mirrored vertically in the file so the repeat is seamless;
    the tile is 1350px wide so retina shows it at native resolution. */
+/* No outline: a sheet's edge is the shadow it casts. A tight warm pass
+   reads as the paper's edge, a wide faint one as ambient lift. */
 main[data-paper] {
   position: relative;
   isolation: isolate;
   background: var(--paper);
+  box-shadow:
+    0 0 0.4rem color-mix(in srgb, var(--ink) 16%, transparent),
+    0 0 2.5rem color-mix(in srgb, var(--ink) 9%, transparent);
 }
 
 /* The grain rides in one static overlay that multiplies over the whole
@@ -106,8 +111,8 @@ a {
     --seal: #000;
   }
   main[data-paper] {
-    border: none;
     background: none;
+    box-shadow: none;
   }
   main[data-paper]::after {
     content: none;
