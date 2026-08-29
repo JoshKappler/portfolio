@@ -44,11 +44,13 @@ export function CrestMark({ className }: { className?: string }) {
             fill="black"
           />
         </mask>
-        {/* The same press register as the page ink, in viewBox units so it
-            scales with the seal: a heavier wobble than the original fine
-            grain, an uneven-pressure pass that thins the impression in
-            patches, and the speck holes. Alphas are multiplied, never
-            thresholded, so the faint wax pad survives. */}
+        {/* A touch of press wear, in viewBox units so it scales with the
+            seal: the original grain wobble slightly deepened, a broad
+            uneven-pressure pass that thins the impression softly in
+            patches, and sparse feathered specks that only land inside
+            those light-pressure clusters, the way wax actually skips.
+            Alphas are multiplied, never thresholded, so the faint wax
+            pad survives. */}
         <filter id="crest-age" x="-10%" y="-10%" width="120%" height="120%">
           <feTurbulence
             type="turbulence"
@@ -60,7 +62,7 @@ export function CrestMark({ className }: { className?: string }) {
           <feDisplacementMap
             in="SourceGraphic"
             in2="warp"
-            scale="1.6"
+            scale="1.1"
             result="wob"
           />
           <feTurbulence
@@ -70,20 +72,20 @@ export function CrestMark({ className }: { className?: string }) {
             seed="9"
             result="fine"
           />
-          <feDisplacementMap in="wob" in2="fine" scale="0.8" result="wob2" />
+          <feDisplacementMap in="wob" in2="fine" scale="0.6" result="wob2" />
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.06"
+            baseFrequency="0.035"
             numOctaves="3"
             seed="17"
           />
           <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.55" intercept="0.6" />
+            <feFuncA type="linear" slope="0.4" intercept="0.72" />
           </feComponentTransfer>
           <feComposite in="wob2" in2="press" operator="in" result="pressed" />
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.85"
+            baseFrequency="0.5"
             numOctaves="2"
             seed="7"
             result="spk"
@@ -91,9 +93,19 @@ export function CrestMark({ className }: { className?: string }) {
           <feColorMatrix
             in="spk"
             type="matrix"
-            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 25 -19.2"
-            result="holes"
+            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 12 -9.3"
+            result="specks"
           />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.045"
+            numOctaves="2"
+            seed="31"
+          />
+          <feComponentTransfer result="cluster">
+            <feFuncA type="linear" slope="2.4" intercept="-1" />
+          </feComponentTransfer>
+          <feComposite in="specks" in2="cluster" operator="in" result="holes" />
           <feComposite in="pressed" in2="holes" operator="out" />
         </filter>
       </defs>
