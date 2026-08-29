@@ -109,9 +109,11 @@ export function Globe() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Source for the JK globe animation on GitHub"
-      className="mx-auto block h-[12.5rem] w-[12.5rem] print:hidden"
+      className="relative z-[2] mx-auto block h-[12.5rem] w-[12.5rem] print:hidden"
     >
-      {/* Own compositor layer: repaints stay off the rest of the page. */}
+      {/* Above the grain overlay (z-1): a repainting canvas under a blend
+          layer forces a re-blend every frame, which stutters in Firefox.
+          The mark's ink texture is baked into its sprite instead. */}
       <canvas ref={ref} className="block h-full w-full will-change-transform" aria-hidden="true" />
     </a>
   );

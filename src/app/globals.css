@@ -44,11 +44,12 @@ main[data-paper] {
 }
 
 /* The grain rides in one static overlay that multiplies over the whole
-   column at once, so it shows through every stroke, the globe's included,
-   the way ink soaks into fiber. One blend group total: giving each child
-   its own mix-blend-mode made Firefox's compositor flicker. The ink
-   filters below keep stroke cores solid and lighten only edges and
-   patches, so type stays black instead of tinting toward the paper. */
+   column at once, so it shows through every stroke the way ink soaks
+   into fiber. One blend group total: giving each child its own
+   mix-blend-mode made Firefox's compositor flicker, and the globe canvas
+   sits above the overlay because repainting under it re-blends every
+   frame. The ink filters below keep stroke cores solid and lighten only
+   edges and patches, so type stays black instead of tinting to paper. */
 main[data-paper]::after {
   content: "";
   position: absolute;
