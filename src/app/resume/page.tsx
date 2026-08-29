@@ -1,8 +1,13 @@
+import type { Viewport } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = {
   title: "Resume · Josh Kappler",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
 };
 
 const chip =

@@ -7,23 +7,52 @@ import { drawGlobeScene, setInk, setMark } from "./globe/globe-draw.js";
 
 const INK = "22, 18, 12";
 
-// Bakes the page's ink distortion into the mark once at load, so the JK
-// has always been printed; browsers without canvas url() filters just
-// keep the clean mark.
-function tintedMark(image: HTMLImageElement, color: string) {
+// Tints an already-rendered mark (the clean image, or the inked bake)
+// solid ink through its own alpha.
+function tintedMark(
+  source: HTMLImageElement | HTMLCanvasElement,
+  color: string,
+) {
   const off = document.createElement("canvas");
-  off.width = image.naturalWidth;
-  off.height = image.naturalHeight;
+  off.width =
+    source instanceof HTMLImageElement ? source.naturalWidth : source.width;
+  off.height =
+    source instanceof HTMLImageElement ? source.naturalHeight : source.height;
   const ctx = off.getContext("2d");
   if (ctx) {
-    ctx.filter = "url(#ink-mark)";
-    ctx.drawImage(image, 0, 0);
-    ctx.filter = "none";
+    ctx.drawImage(source, 0, 0);
     ctx.globalCompositeOperation = "source-in";
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, off.width, off.height);
   }
   return off;
+}
+
+// Bakes the page's ink distortion into the mark once at load, so the JK
+// has always been printed. The filter runs inside a self-contained SVG
+// image rather than through ctx.filter, which WebKit never implemented:
+// filters inside an SVG document rasterize on every engine. The caller
+// keeps the clean mark until the bake lands, or forever if it fails.
+async function inkedMark(image: HTMLImageElement) {
+  const filter = document.getElementById("ink-mark");
+  if (!filter) return null;
+  const raster = document.createElement("canvas");
+  raster.width = image.naturalWidth;
+  raster.height = image.naturalHeight;
+  raster.getContext("2d")?.drawImage(image, 0, 0);
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${raster.width}" height="${raster.height}">` +
+    `<defs>${filter.outerHTML}</defs>` +
+    `<image width="${raster.width}" height="${raster.height}" filter="url(#ink-mark)" href="${raster.toDataURL("image/png")}"/>` +
+    `</svg>`;
+  const printed = new Image();
+  printed.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  await printed.decode();
+  const out = document.createElement("canvas");
+  out.width = raster.width;
+  out.height = raster.height;
+  out.getContext("2d")?.drawImage(printed, 0, 0);
+  return out;
 }
 
 export function Globe() {
@@ -43,14 +72,25 @@ export function Globe() {
     markImage.onload = () => {
       setMark(tintedMark(markImage, `rgb(${INK})`));
       if (stillQuery.matches) draw(0);
+      inkedMark(markImage)
+        .then((printed) => {
+          if (!printed) return;
+          setMark(tintedMark(printed, `rgb(${INK})`));
+          if (stillQuery.matches) draw(0);
+        })
+        .catch(() => {
+          /* the clean mark is already set */
+        });
     };
     markImage.src = "/jk-mark.png";
 
     // Reading layout inside the frame loop forces a reflow per frame; track
-    // the box from resize events instead.
+    // the box from resize events instead. When the page holds still, resize
+    // is also the only thing that triggers a repaint.
     let box = canvas.getBoundingClientRect();
     const sizer = new ResizeObserver(() => {
       box = canvas.getBoundingClientRect();
+      if (stillQuery.matches) draw(0);
     });
     sizer.observe(canvas);
 
@@ -86,19 +126,27 @@ export function Globe() {
       drawGlobeScene(context, view, globe, tau, tau * moveMs);
     };
 
-    if (stillQuery.matches) {
-      draw(0);
-      return;
-    }
-
     const loop = (now: number) => {
       frame = requestAnimationFrame(loop);
       if (startedAt == null) startedAt = now;
       draw(now - startedAt);
     };
-    frame = requestAnimationFrame(loop);
+    // Follow the motion preference live, not just at mount: hold on the
+    // full mark when it flips to reduce, restart the cycle when it lifts.
+    const setMotion = () => {
+      cancelAnimationFrame(frame);
+      if (stillQuery.matches) {
+        startedAt = null;
+        draw(0);
+      } else {
+        frame = requestAnimationFrame(loop);
+      }
+    };
+    setMotion();
+    stillQuery.addEventListener("change", setMotion);
     return () => {
       cancelAnimationFrame(frame);
+      stillQuery.removeEventListener("change", setMotion);
       sizer.disconnect();
     };
   }, []);

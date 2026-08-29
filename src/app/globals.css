@@ -5,7 +5,9 @@
   color-scheme: light;
   --paper: #f2e8d5;
   --ink: #16120c;
-  --ink-muted: #7a6f5a;
+  /* Darkened from #7a6f5a: this shade holds 4.5:1 (WCAG AA) on --paper,
+     which the labels and nav need at their small mono sizes. */
+  --ink-muted: #6f654f;
   --line: #d8cbae;
   --seal: #8e2b23;
 }

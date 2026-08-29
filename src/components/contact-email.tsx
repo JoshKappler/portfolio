@@ -8,6 +8,12 @@ export function ContactEmail() {
   const [copied, setCopied] = useState(false);
   const timer = useRef(0);
   const copy = () => {
+    // navigator.clipboard is absent outside secure contexts and in some
+    // embedded webviews; fall through to mail instead of throwing.
+    if (!navigator.clipboard) {
+      window.location.href = `mailto:${EMAIL}`;
+      return;
+    }
     navigator.clipboard.writeText(EMAIL).then(
       () => {
         setCopied(true);
