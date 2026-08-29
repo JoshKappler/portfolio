@@ -74,13 +74,28 @@ main[data-paper] > div:not(:has(svg)) {
 /* One fixed composition at every width, like a sheet of paper: below the
    full 42rem column the root font scales with the viewport, and every
    length on the page is rem or em, so lines wrap identically at any size.
-   Phones never hit this branch: the page pins its layout viewport to
-   672px (page.tsx viewport export), so 100vw/42 is 16px there and the
-   OS scales the whole render. This rule covers narrow desktop windows. */
+   Touch devices never hit this branch (their rule is below); this one
+   covers narrow desktop windows. */
 html:has(main[data-paper]) {
   font-size: min(16px, calc(100vw / 42));
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+}
+
+/* Touch devices carry the sheet at double density: the layout viewport
+   is pinned to 1280 (page.tsx viewport export), 100vw/42 puts the root
+   at ~30.5px, and the OS scales the finished render to the screen. The
+   composition is identical; the point is that WebKit rasterizes the ink
+   filters at layout resolution, so oversizing the type by the same
+   factor the screen scales it down leaves roughly one CSS pixel per
+   device pixel and the print stays sharp. ink-scale.tsx scales the
+   filter internals up to match the larger letterforms. The 32px cap
+   only matters on rare touch-primary desktops that ignore the pinned
+   viewport; it stops the sheet growing past 2x there. */
+@media (hover: none) and (pointer: coarse) {
+  html:has(main[data-paper]) {
+    font-size: min(32px, calc(100vw / 42));
+  }
 }
 
 /* Paragraphs and list entries are squares: justified, last line stretched
@@ -104,7 +119,8 @@ main {
 }
 
 a {
-  text-underline-offset: 3px;
+  /* em, not px: underline gaps must ride with the double-density sheet. */
+  text-underline-offset: 0.18em;
 }
 
 /* Printed, the page becomes plain ink on white: same composition, no side

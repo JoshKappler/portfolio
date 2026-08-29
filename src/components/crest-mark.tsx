@@ -44,6 +44,11 @@ export function CrestMark({ className }: { className?: string }) {
             fill="black"
           />
         </mask>
+        {/* The same press register as the page ink, in viewBox units so it
+            scales with the seal: a heavier wobble than the original fine
+            grain, an uneven-pressure pass that thins the impression in
+            patches, and the speck holes. Alphas are multiplied, never
+            thresholded, so the faint wax pad survives. */}
         <filter id="crest-age" x="-10%" y="-10%" width="120%" height="120%">
           <feTurbulence
             type="turbulence"
@@ -55,7 +60,7 @@ export function CrestMark({ className }: { className?: string }) {
           <feDisplacementMap
             in="SourceGraphic"
             in2="warp"
-            scale="0.8"
+            scale="1.6"
             result="wob"
           />
           <feTurbulence
@@ -65,7 +70,17 @@ export function CrestMark({ className }: { className?: string }) {
             seed="9"
             result="fine"
           />
-          <feDisplacementMap in="wob" in2="fine" scale="0.55" result="wob2" />
+          <feDisplacementMap in="wob" in2="fine" scale="0.8" result="wob2" />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.06"
+            numOctaves="3"
+            seed="17"
+          />
+          <feComponentTransfer result="press">
+            <feFuncA type="linear" slope="0.55" intercept="0.6" />
+          </feComponentTransfer>
+          <feComposite in="wob2" in2="press" operator="in" result="pressed" />
           <feTurbulence
             type="fractalNoise"
             baseFrequency="0.85"
@@ -79,7 +94,7 @@ export function CrestMark({ className }: { className?: string }) {
             values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 25 -19.2"
             result="holes"
           />
-          <feComposite in="wob2" in2="holes" operator="out" />
+          <feComposite in="pressed" in2="holes" operator="out" />
         </filter>
       </defs>
       <g filter="url(#crest-age)" transform="rotate(-1.6 50 65)">
