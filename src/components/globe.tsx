@@ -5,15 +5,20 @@ import { STAGE_HALF, createGlobe } from "./globe/globe-core.js";
 import { MARK_GEOMETRY } from "./globe/mark-geometry.js";
 import { drawGlobeScene, setInk, setMark } from "./globe/globe-draw.js";
 
-const INK = "42, 35, 24";
+const INK = "22, 18, 12";
 
+// Bakes the page's ink distortion into the mark once at load, so the JK
+// has always been printed; browsers without canvas url() filters just
+// keep the clean mark.
 function tintedMark(image: HTMLImageElement, color: string) {
   const off = document.createElement("canvas");
   off.width = image.naturalWidth;
   off.height = image.naturalHeight;
   const ctx = off.getContext("2d");
   if (ctx) {
+    ctx.filter = "url(#ink-mark)";
     ctx.drawImage(image, 0, 0);
+    ctx.filter = "none";
     ctx.globalCompositeOperation = "source-in";
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, off.width, off.height);

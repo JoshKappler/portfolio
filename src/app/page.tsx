@@ -166,10 +166,10 @@ export default function Home() {
             seed="11"
             result="warp"
           />
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1" />
-          <feGaussianBlur stdDeviation="0.35" />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.6" />
+          <feGaussianBlur stdDeviation="0.45" />
           <feComponentTransfer result="inked">
-            <feFuncA type="linear" slope="3.5" intercept="-0.5" />
+            <feFuncA type="linear" slope="2.6" intercept="-0.38" />
           </feComponentTransfer>
           <feTurbulence
             type="fractalNoise"
@@ -178,7 +178,33 @@ export default function Home() {
             seed="29"
           />
           <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.35" intercept="0.72" />
+            <feFuncA type="linear" slope="0.5" intercept="0.62" />
+          </feComponentTransfer>
+          <feComposite in="inked" in2="press" operator="in" />
+        </filter>
+        {/* The #ink-bleed recipe scaled 3x: the JK mark bakes it in at its
+            1200px source size before drawing at roughly a third of that. */}
+        <filter id="ink-mark" x="-4%" y="-4%" width="108%" height="108%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.073"
+            numOctaves="2"
+            seed="7"
+            result="warp"
+          />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="5.4" />
+          <feGaussianBlur stdDeviation="1.5" />
+          <feComponentTransfer result="inked">
+            <feFuncA type="linear" slope="3" intercept="-0.45" />
+          </feComponentTransfer>
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.03"
+            numOctaves="3"
+            seed="21"
+          />
+          <feComponentTransfer result="press">
+            <feFuncA type="linear" slope="0.5" intercept="0.62" />
           </feComponentTransfer>
           <feComposite in="inked" in2="press" operator="in" />
         </filter>

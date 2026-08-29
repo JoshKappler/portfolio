@@ -4,7 +4,7 @@
 :root {
   color-scheme: light;
   --paper: #f2e8d5;
-  --ink: #2a2318;
+  --ink: #16120c;
   --ink-muted: #7a6f5a;
   --line: #d8cbae;
   --seal: #8e2b23;
@@ -30,8 +30,8 @@ body {
 /* Paper grain on the text column only; the page around it stays flat
    --paper. Josh's Unsplash scan (kiwihug qv05FvdE26k), desaturated, warmed
    and lifted to mean 251/255 so the multiply blend keeps the column within
-   2% of --paper. Mirrored vertically in the file so the repeat is seamless;
-   the tile is 1350px wide so retina shows it at native resolution. */
+   2% of --paper. The tile is mirrored both ways in the file so the repeat
+   is seamless, and covers 21rem at 1350px so it stays sharp zoomed in. */
 /* No outline: a sheet's edge is the shadow it casts. A tight warm pass
    reads as the paper's edge, a wide faint one as ambient lift. */
 main[data-paper] {
@@ -56,14 +56,15 @@ main[data-paper]::after {
   z-index: 1;
   pointer-events: none;
   background: url("/parchment.jpg") repeat;
-  background-size: 42rem 112rem;
+  background-size: 21rem 56rem;
   mix-blend-mode: multiply;
 }
 main[data-paper] h1,
 main[data-paper] .font-mono {
   filter: url(#ink-bleed);
 }
-main[data-paper] :is(p, li, button):not(.font-mono):not(.font-mono *) {
+main[data-paper] :is(p, li, button):not(.font-mono):not(.font-mono *),
+main[data-paper] > div:not(:has(svg)) {
   filter: url(#ink-page);
 }
 
@@ -119,7 +120,8 @@ a {
   }
   main[data-paper] h1,
   main[data-paper] .font-mono,
-  main[data-paper] :is(p, li, button) {
+  main[data-paper] :is(p, li, button),
+  main[data-paper] > div {
     filter: none;
   }
 }
