@@ -4,7 +4,9 @@
 import { MARK_GEOMETRY } from './mark-geometry.js';
 import { GLOBE_DATA } from './globe-data.js';
 
-export const GLOBE_TIMING = { moveMs: 5200, holdMs: 500 };
+// moveMs rides the spin arc (828 degrees for usa-to-usa) at the same
+// degrees-per-second the 5200ms china-to-usa cycle ran.
+export const GLOBE_TIMING = { moveMs: 6900, holdMs: 500 };
 
 export const COUNTRIES = {
   china: { label: 'China', lon: 105 },
@@ -35,7 +37,7 @@ export const COUNTRIES = {
 };
 
 export const GLOBE_DEFAULTS = {
-  start: 'china',
+  start: 'usa',
   end: 'usa',
   moveMs: GLOBE_TIMING.moveMs,
   holdMs: GLOBE_TIMING.holdMs,
