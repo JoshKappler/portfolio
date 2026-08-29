@@ -44,13 +44,13 @@ export function CrestMark({ className }: { className?: string }) {
             fill="black"
           />
         </mask>
-        {/* A touch of press wear, in viewBox units so it scales with the
-            seal: the original grain wobble slightly deepened, a broad
-            uneven-pressure pass that thins the impression softly in
-            patches, and sparse feathered specks that only land inside
-            those light-pressure clusters, the way wax actually skips.
-            Alphas are multiplied, never thresholded, so the faint wax
-            pad survives. */}
+        {/* Every way a hand stamp actually fails, each at whisper level on
+            top of the original grain, in viewBox units so it scales with
+            the seal. In paint order: hairline cracks (thin discrete veins
+            partially lift the ink), a faint directional dry pull, sparse
+            spatter thrown just past the edges, ink wicking into the fiber
+            as a soft irregular ring, and, carrying the look, a fainter
+            second impression a hair up-left: the die landed twice. */}
         <filter id="crest-age" x="-10%" y="-10%" width="120%" height="120%">
           <feTurbulence
             type="turbulence"
@@ -62,7 +62,7 @@ export function CrestMark({ className }: { className?: string }) {
           <feDisplacementMap
             in="SourceGraphic"
             in2="warp"
-            scale="1.1"
+            scale="0.8"
             result="wob"
           />
           <feTurbulence
@@ -72,20 +72,10 @@ export function CrestMark({ className }: { className?: string }) {
             seed="9"
             result="fine"
           />
-          <feDisplacementMap in="wob" in2="fine" scale="0.6" result="wob2" />
+          <feDisplacementMap in="wob" in2="fine" scale="0.55" result="wob2" />
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.035"
-            numOctaves="3"
-            seed="17"
-          />
-          <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.4" intercept="0.72" />
-          </feComponentTransfer>
-          <feComposite in="wob2" in2="press" operator="in" result="pressed" />
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.5"
+            baseFrequency="0.85"
             numOctaves="2"
             seed="7"
             result="spk"
@@ -93,20 +83,111 @@ export function CrestMark({ className }: { className?: string }) {
           <feColorMatrix
             in="spk"
             type="matrix"
-            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 12 -9.3"
-            result="specks"
+            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 25 -19.2"
+            result="holes"
+          />
+          <feComposite in="wob2" in2="holes" operator="out" result="base" />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.09"
+            numOctaves="2"
+            seed="13"
+            result="vn"
+          />
+          <feComponentTransfer in="vn" result="veins">
+            <feFuncA
+              type="discrete"
+              tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.22 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+            />
+          </feComponentTransfer>
+          <feComposite in="base" in2="veins" operator="out" result="cracked" />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.012 0.18"
+            numOctaves="2"
+            seed="23"
+          />
+          <feComponentTransfer result="streak">
+            <feFuncA type="linear" slope="0.22" intercept="0.85" />
+          </feComponentTransfer>
+          <feComposite in="cracked" in2="streak" operator="in" result="pulled" />
+          <feMorphology
+            in="pulled"
+            operator="dilate"
+            radius="2.4"
+            result="halo"
           />
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.045"
-            numOctaves="2"
-            seed="31"
+            baseFrequency="0.55"
+            numOctaves="1"
+            seed="5"
+            result="sp"
           />
-          <feComponentTransfer result="cluster">
-            <feFuncA type="linear" slope="2.4" intercept="-1" />
+          <feColorMatrix
+            in="sp"
+            type="matrix"
+            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 28 -23.6"
+            result="fineDots"
+          />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.22"
+            numOctaves="1"
+            seed="41"
+            result="sp2"
+          />
+          <feColorMatrix
+            in="sp2"
+            type="matrix"
+            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 40 -35.4"
+            result="bigDrops"
+          />
+          <feMerge result="dotsAll">
+            <feMergeNode in="fineDots" />
+            <feMergeNode in="bigDrops" />
+          </feMerge>
+          <feComposite
+            in="halo"
+            in2="dotsAll"
+            operator="in"
+            result="splatFull"
+          />
+          <feComponentTransfer in="splatFull" result="splat">
+            <feFuncA type="linear" slope="0.75" intercept="0" />
           </feComponentTransfer>
-          <feComposite in="specks" in2="cluster" operator="in" result="holes" />
-          <feComposite in="pressed" in2="holes" operator="out" />
+          <feGaussianBlur in="pulled" stdDeviation="0.65" result="soak" />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.35"
+            numOctaves="3"
+            seed="8"
+            result="fiber"
+          />
+          <feDisplacementMap
+            in="soak"
+            in2="fiber"
+            scale="1.8"
+            result="wick"
+          />
+          <feComponentTransfer in="wick" result="ring">
+            <feFuncA type="linear" slope="0.10" intercept="-0.02" />
+          </feComponentTransfer>
+          <feOffset in="pulled" dx="-1.6" dy="-1.2" result="ghostpos" />
+          <feGaussianBlur
+            in="ghostpos"
+            stdDeviation="0.2"
+            result="ghostsoft"
+          />
+          <feComponentTransfer in="ghostsoft" result="ghost">
+            <feFuncA type="linear" slope="0.3" intercept="0" />
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode in="ring" />
+            <feMergeNode in="ghost" />
+            <feMergeNode in="splat" />
+            <feMergeNode in="pulled" />
+          </feMerge>
         </filter>
       </defs>
       <g filter="url(#crest-age)" transform="rotate(-1.6 50 65)">
