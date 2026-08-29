@@ -52,7 +52,10 @@ function makeGlyphBuckets() {
   const buckets = new Map();
   return {
     add(sizePx, alpha, glyph, x, y) {
-      if (alpha < 0.02 || sizePx < 3) return;
+      // On phones the sheet scales the globe box to ~116px, which puts
+      // resting continent glyphs near 2px; a 3px floor culls all of them
+      // and leaves only the ocean dots. Cull only invisible specks.
+      if (alpha < 0.02 || sizePx < 1.25) return;
       const size = Math.round(sizePx);
       if (!buckets.has(size)) buckets.set(size, []);
       buckets.get(size).push([alpha, glyph, x, y]);

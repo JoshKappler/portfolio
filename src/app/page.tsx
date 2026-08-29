@@ -1,6 +1,7 @@
 import { ContactEmail } from "@/components/contact-email";
 import { CrestMark } from "@/components/crest-mark";
 import { Globe } from "@/components/globe";
+import { InkScale } from "@/components/ink-scale";
 import { SquareParagraphs } from "@/components/square-paragraphs";
 import { DEMO_URL } from "@/lib/site";
 
@@ -231,6 +232,7 @@ export default function Home() {
         </filter>
       </svg>
       <SquareParagraphs />
+      <InkScale />
       <Globe />
 
       <header className="mt-2 text-center">

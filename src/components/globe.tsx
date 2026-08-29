@@ -56,7 +56,9 @@ export function Globe() {
 
     const draw = (elapsed: number) => {
       if (box.width < 2 || box.height < 2) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // Cap 3, not 2: on DPR-3 phones the scaled-down sheet draws
+      // continent glyphs near 2 CSS px, and they need every device pixel.
+      const dpr = Math.min(window.devicePixelRatio || 1, 3);
       const pixelWidth = Math.round(box.width * dpr);
       const pixelHeight = Math.round(box.height * dpr);
       if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {

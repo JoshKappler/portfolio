@@ -11,9 +11,12 @@ understated register: one narrow text column, no hero effects, no webfonts.
   mode, no theme toggle, no theme-provider. Paper has no dark mode.
 - All homepage content lives inline in `src/app/page.tsx` as `projects`,
   `playground`, and `headerLinks` arrays: one line of copy per item.
-- Three client components only. `square-paragraphs.tsx` centers a block's
+- Four client components only. `square-paragraphs.tsx` centers a block's
   last line when a non-Georgia font wraps it short of 85%. `contact-email.tsx`
-  copies the address on click. `src/components/globe.tsx` is the main visual
+  copies the address on click. `ink-scale.tsx` rescales the ink filters'
+  pixel-space primitives to the live root font size, so the typewriter
+  strike stays proportional when the sheet scales down on phones.
+  `src/components/globe.tsx` is the main visual
   effect: a canvas-2D JK mark that shatters into a spinning glyph globe,
   vendored from gt-logo-loader-studio into `src/components/globe/`. It links
   to that repo and holds still under `prefers-reduced-motion`.
