@@ -129,10 +129,10 @@ export default function Home() {
       data-paper
       className="mx-auto max-w-[42rem] px-16 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
     >
-      {/* Referenced by globals.css. Wobble the edge, blur, then only partly
-          re-firm the alpha, so stroke cores stay solid black while the rim
-          fades; a second low-frequency noise thins coverage in patches, the
-          way a press never lays ink perfectly even. */}
+      {/* Referenced by globals.css. Wobble the edge, blur, then rebuild two
+          layers from the soft alpha: a worn rim that noise chews at, and a
+          solid core merged on top, so stroke centers are always full ink
+          and all the wear lives at the edges, like a typewriter strike. */}
       <svg aria-hidden="true" width="0" height="0" className="absolute">
         <filter id="ink-bleed" x="-4%" y="-12%" width="108%" height="124%">
           <feTurbulence
@@ -143,8 +143,8 @@ export default function Home() {
             result="warp"
           />
           <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.8" />
-          <feGaussianBlur stdDeviation="0.5" />
-          <feComponentTransfer result="inked">
+          <feGaussianBlur stdDeviation="0.5" result="soft" />
+          <feComponentTransfer in="soft" result="inked">
             <feFuncA type="linear" slope="3" intercept="-0.45" />
           </feComponentTransfer>
           <feTurbulence
@@ -156,7 +156,14 @@ export default function Home() {
           <feComponentTransfer result="press">
             <feFuncA type="linear" slope="0.5" intercept="0.62" />
           </feComponentTransfer>
-          <feComposite in="inked" in2="press" operator="in" />
+          <feComposite in="inked" in2="press" operator="in" result="worn" />
+          <feComponentTransfer in="soft" result="core">
+            <feFuncA type="linear" slope="8" intercept="-5" />
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode in="worn" />
+            <feMergeNode in="core" />
+          </feMerge>
         </filter>
         <filter id="ink-page" x="-4%" y="-12%" width="108%" height="124%">
           <feTurbulence
@@ -167,8 +174,8 @@ export default function Home() {
             result="warp"
           />
           <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.6" />
-          <feGaussianBlur stdDeviation="0.45" />
-          <feComponentTransfer result="inked">
+          <feGaussianBlur stdDeviation="0.45" result="soft" />
+          <feComponentTransfer in="soft" result="inked">
             <feFuncA type="linear" slope="2.6" intercept="-0.38" />
           </feComponentTransfer>
           <feTurbulence
@@ -180,12 +187,17 @@ export default function Home() {
           <feComponentTransfer result="press">
             <feFuncA type="linear" slope="0.5" intercept="0.62" />
           </feComponentTransfer>
-          <feComposite in="inked" in2="press" operator="in" />
+          <feComposite in="inked" in2="press" operator="in" result="worn" />
+          <feComponentTransfer in="soft" result="core">
+            <feFuncA type="linear" slope="8" intercept="-5" />
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode in="worn" />
+            <feMergeNode in="core" />
+          </feMerge>
         </filter>
-        {/* The ink recipe for the JK mark, baked into its 1200px sprite at
-            load. Features scale with the letterform, not the pixel: chunky
-            edge wobble, wide press patches, soft edges, or a mark this
-            large reads as clean vector with faint mold. */}
+        {/* The same recipe for the JK mark, baked into its 1200px sprite at
+            load, with features scaled to the letterform. */}
         <filter id="ink-mark" x="-4%" y="-4%" width="108%" height="108%">
           <feTurbulence
             type="fractalNoise"
@@ -195,8 +207,8 @@ export default function Home() {
             result="warp"
           />
           <feDisplacementMap in="SourceGraphic" in2="warp" scale="14" />
-          <feGaussianBlur stdDeviation="3" />
-          <feComponentTransfer result="inked">
+          <feGaussianBlur stdDeviation="3" result="soft" />
+          <feComponentTransfer in="soft" result="inked">
             <feFuncA type="linear" slope="3" intercept="-0.45" />
           </feComponentTransfer>
           <feTurbulence
@@ -208,7 +220,14 @@ export default function Home() {
           <feComponentTransfer result="press">
             <feFuncA type="linear" slope="0.55" intercept="0.55" />
           </feComponentTransfer>
-          <feComposite in="inked" in2="press" operator="in" />
+          <feComposite in="inked" in2="press" operator="in" result="worn" />
+          <feComponentTransfer in="soft" result="core">
+            <feFuncA type="linear" slope="8" intercept="-5" />
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode in="worn" />
+            <feMergeNode in="core" />
+          </feMerge>
         </filter>
       </svg>
       <SquareParagraphs />
