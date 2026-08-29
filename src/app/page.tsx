@@ -6,17 +6,13 @@ import { InkScale } from "@/components/ink-scale";
 import { SquareParagraphs } from "@/components/square-paragraphs";
 import { DEMO_URL } from "@/lib/site";
 
-/* Phones get the sheet at double density and scale the whole render to
-   fit, instead of shrinking the root font. WebKit rasterizes CSS url()
-   SVG filters at layout resolution (1x CSS pixels), so the pinned width
-   is sized to put roughly one CSS pixel per device pixel once the sheet
-   is scaled onto a phone screen: at 1280, a 390pt iPhone shows the page
-   at 0.3047x, or ~0.91 CSS px per device px, and the inked type rasters
-   at or above device resolution. The type scales up to match via the
-   coarse-pointer font rule in globals.css. 1280 also keeps the smallest
-   iPhones (320pt) exactly at iOS's 0.25 minimum page scale. */
+/* Phones get the sheet at its full 672px layout width and scale the whole
+   render to fit, instead of shrinking the root font. WebKit rasterizes
+   CSS url() SVG filters at layout resolution, so small CSS pixels turn
+   the ink into upscaled mush on iPhones; at 672 the type and its strike
+   rasterize at full detail and the OS scales the finished print. */
 export const viewport: Viewport = {
-  width: 1280,
+  width: 672,
   // The key must be present: Next merges per present key over its default
   // initial-scale=1, which would load phones zoomed into the sheet's left
   // half. Left unset, browsers compute the fit scale themselves.
