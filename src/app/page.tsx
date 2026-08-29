@@ -1,9 +1,23 @@
+import type { Viewport } from "next";
 import { ContactEmail } from "@/components/contact-email";
 import { CrestMark } from "@/components/crest-mark";
 import { Globe } from "@/components/globe";
 import { InkScale } from "@/components/ink-scale";
 import { SquareParagraphs } from "@/components/square-paragraphs";
 import { DEMO_URL } from "@/lib/site";
+
+/* Phones get the sheet at its full 672px layout width and scale the whole
+   render to fit, instead of shrinking the root font. WebKit rasterizes
+   CSS url() SVG filters at layout resolution, so small CSS pixels turn
+   the ink into upscaled mush on iPhones; at 672 the type and its strike
+   rasterize at full detail and the OS scales the finished print. */
+export const viewport: Viewport = {
+  width: 672,
+  // The key must be present: Next merges per present key over its default
+  // initial-scale=1, which would load phones zoomed into the sheet's left
+  // half. Left unset, browsers compute the fit scale themselves.
+  initialScale: undefined,
+};
 
 type ItemLink = { label: string; href: string };
 type Item = { name: string; href?: string; line: string };

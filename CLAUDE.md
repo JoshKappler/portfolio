@@ -32,6 +32,12 @@ understated register: one narrow text column, no hero effects, no webfonts.
   those defined in globals.css when changing colors.
 - Copy style: first person, short declarative sentences, real numbers only,
   no em dashes.
+- The homepage pins its layout viewport to 672px (`viewport` export in
+  `page.tsx`): phones scale the whole rendered sheet instead of the root
+  font. WebKit rasterizes CSS url() SVG filters at layout resolution, so
+  shrinking CSS pixels dissolves the ink into upscaled mush on iPhones.
+  The `100vw / 42` root-font rule in globals.css now only serves narrow
+  desktop windows.
 - Every paragraph and list entry renders as a square: justified with the
   last line stretched. New or edited copy must be word-tuned until its last
   line naturally fills 91-99% of the column (measure in the browser with

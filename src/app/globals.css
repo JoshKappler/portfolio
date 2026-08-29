@@ -71,7 +71,10 @@ main[data-paper] > div:not(:has(svg)) {
 
 /* One fixed composition at every width, like a sheet of paper: below the
    full 42rem column the root font scales with the viewport, and every
-   length on the page is rem or em, so lines wrap identically at any size. */
+   length on the page is rem or em, so lines wrap identically at any size.
+   Phones never hit this branch: the page pins its layout viewport to
+   672px (page.tsx viewport export), so 100vw/42 is 16px there and the
+   OS scales the whole render. This rule covers narrow desktop windows. */
 html:has(main[data-paper]) {
   font-size: min(16px, calc(100vw / 42));
   -webkit-text-size-adjust: 100%;
