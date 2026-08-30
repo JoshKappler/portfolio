@@ -2,9 +2,9 @@
 
 import { useEffect } from "react";
 
-/* The page ink filters (#ink-bleed, #ink-page) are authored in raw pixels
-   against the full 16px root font. Below 42rem the root font shrinks with
-   the viewport so the sheet keeps one composition, but SVG filter lengths
+/* The page ink filter (#ink-page) is authored in raw pixels against the
+   full 16px root font. Below 42rem the root font shrinks with the
+   viewport so the sheet keeps one composition, but SVG filter lengths
    never follow the font: the same absolute wobble, blur, and noise land on
    half-size letterforms and smear them illegible on phones. This rescales
    every spatial primitive to the live root size, so the strike looks the
@@ -19,7 +19,7 @@ const SPATIAL: readonly (readonly [attr: string, inverse: boolean])[] = [
 export function InkScale() {
   useEffect(() => {
     const primitives: [Element, string, number, boolean][] = [];
-    for (const filter of document.querySelectorAll("#ink-bleed, #ink-page")) {
+    for (const filter of document.querySelectorAll("#ink-page")) {
       for (const node of filter.children) {
         for (const [attr, inverse] of SPATIAL) {
           const value = node.getAttribute(attr);

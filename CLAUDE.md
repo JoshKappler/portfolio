@@ -6,14 +6,15 @@ Plain single-page personal site. Redesigned 2026-08-26 into a deliberately
 understated register: one narrow text column, no hero effects, no webfonts.
 
 - Next.js 16 App Router, React 19, Tailwind 4 (`@theme inline` in globals.css).
-- Fonts are system-only: Georgia for body, Courier New for mono labels.
+- Fonts are system-only. The letter is Georgia alone, every element, with
+  size as the only variation; Courier New appears only in the /resume
+  viewer chrome and the globe's canvas glyphs.
 - One color scheme only: warm parchment, `color-scheme: light`, no dark
   mode, no theme toggle, no theme-provider. Paper has no dark mode. The
   browser-chrome `themeColor` in `layout.tsx` (and the black override in
-  `resume/page.tsx`) must track `--paper` when colors change. All mono type
-  shares one voice: `--ink-soft`, regular case, no added tracking, so the
-  page shows exactly two kinds of type. `--ink-muted` only tints the
-  decorative divider; both tokens must hold 4.5:1 AA on `--paper`.
+  `resume/page.tsx`) must track `--paper` when colors change. All letter
+  text is `--ink`; `--ink-muted` only tints the decorative divider and
+  must hold 4.5:1 AA on `--paper` if it ever carries text again.
 - All homepage content lives inline in `src/app/page.tsx` as `projects`,
   `playground`, and `headerLinks` arrays: one line of copy per item.
 - Four client components only. `square-paragraphs.tsx` centers a block's

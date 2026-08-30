@@ -36,7 +36,7 @@ export function ContactEmail() {
       </button>
       <span
         aria-live="polite"
-        className={`absolute left-full top-1/2 ml-3 -translate-y-1/2 whitespace-nowrap font-mono text-xs text-text-soft transition-opacity duration-300 ${
+        className={`absolute left-full top-1/2 ml-3 -translate-y-1/2 whitespace-nowrap text-xs transition-opacity duration-300 ${
           copied ? "opacity-100" : "opacity-0"
         }`}
       >

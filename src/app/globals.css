@@ -5,12 +5,9 @@
   color-scheme: light;
   --paper: #f2e8d5;
   --ink: #000;
-  /* Only tints the decorative divider now; holds 4.5:1 (WCAG AA) on
-     --paper if it ever carries text again. */
+  /* Only tints the decorative divider; holds 4.5:1 (WCAG AA) on --paper
+     if it ever carries text again. */
   --ink-muted: #6f654f;
-  /* Every mono element on the page: one voice, near-black, so the site
-     shows exactly two kinds of type, Georgia ink and this strike. */
-  --ink-soft: #40382a;
   --line: #d8cbae;
   --seal: #8e2b23;
 }
@@ -20,7 +17,6 @@
   --color-bg: var(--paper);
   --color-text: var(--ink);
   --color-text-muted: var(--ink-muted);
-  --color-text-soft: var(--ink-soft);
   --color-border: var(--line);
   --color-accent: var(--ink);
   --color-seal: var(--seal);
@@ -70,16 +66,10 @@ main[data-paper]::after {
   background-size: 21rem 56rem;
   mix-blend-mode: multiply;
 }
-/* Mono takes the typewriter strike; the h1 rides with body text so the
-   large Georgia never swells the way the small strike does. */
-main[data-paper] .font-mono {
-  filter: url(#ink-bleed);
-}
 /* The filter stays per paragraph and per li: each application allocates
    intermediate buffers at element size, and one filtered block spanning a
    whole list is a big enough allocation to crash a phone compositor. */
-main[data-paper] h1,
-main[data-paper] :is(p, li, button):not(.font-mono):not(.font-mono *),
+main[data-paper] :is(h1, h2, nav, p, li, button),
 main[data-paper] > div:not(:has(svg)) {
   filter: url(#ink-page);
 }
@@ -127,7 +117,6 @@ a {
     --paper: #fff;
     --ink: #000;
     --ink-muted: #555;
-    --ink-soft: #333;
     --line: #bbb;
     --seal: #000;
   }
@@ -138,9 +127,7 @@ a {
   main[data-paper]::after {
     content: none;
   }
-  main[data-paper] h1,
-  main[data-paper] .font-mono,
-  main[data-paper] :is(p, li, button),
+  main[data-paper] :is(h1, h2, nav, p, li, button),
   main[data-paper] > div {
     filter: none;
   }

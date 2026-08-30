@@ -112,7 +112,7 @@ const headerLinks: ItemLink[] = [
 function ItemList({ title, items }: { title: string; items: Item[] }) {
   return (
     <section className="mt-12">
-      <h2 className="text-center font-mono text-xs text-text-soft">
+      <h2 className="text-center text-xs">
         {title}
       </h2>
       <ul className="mt-4 space-y-5">
@@ -144,28 +144,12 @@ export default function Home() {
       data-paper
       className="mx-auto max-w-[42rem] px-16 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
     >
-      {/* Referenced by globals.css. Ink is always solid: stroke interiors
-          never lighten, and every alpha ends snapped to full or nothing.
-          The mono strike (#ink-bleed) swells slightly and rounds, like a
-          typewriter key pressing ink into fiber. Serif text (#ink-page)
-          keeps its weight; letters lean a hair on the baseline, then the
-          edge is re-cut by two scales of grain noise, the way a dried
-          impression takes on the texture of the sheet under it. */}
+      {/* Referenced by globals.css. One ink treatment for every piece of
+          type on the sheet: strokes stay solid black end to end, letters
+          lean a hair on the baseline, then the edge is re-cut by two
+          scales of grain noise, the way a dried impression takes on the
+          texture of the sheet under it. */}
       <svg aria-hidden="true" width="0" height="0" className="absolute">
-        <filter id="ink-bleed" x="-4%" y="-12%" width="108%" height="124%">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.5"
-            numOctaves="1"
-            seed="8"
-            result="warp"
-          />
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="0.5" />
-          <feGaussianBlur stdDeviation="0.5" />
-          <feComponentTransfer>
-            <feFuncA type="linear" slope="26" intercept="-4.2" />
-          </feComponentTransfer>
-        </filter>
         <filter id="ink-page" x="-4%" y="-12%" width="108%" height="124%">
           <feTurbulence
             type="fractalNoise"
@@ -258,10 +242,10 @@ export default function Home() {
 
       <header className="mt-2 text-center">
         <h1 className="text-3xl">Josh Kappler</h1>
-        <p className="mt-1 font-mono text-[0.8125rem] text-text-soft">
+        <p className="mt-1 text-[0.8125rem]">
           Software Engineer · San Francisco
         </p>
-        <nav className="mt-4 font-mono text-[0.8125rem] text-text-soft print:hidden">
+        <nav className="mt-4 text-[0.8125rem] print:hidden">
           {headerLinks.map((link) => (
             <a
               key={link.label}
@@ -317,12 +301,12 @@ export default function Home() {
       <ItemList title="playground" items={playground} />
 
       <section className="mt-12">
-        <h2 className="text-center font-mono text-xs text-text-soft">
+        <h2 className="text-center text-xs">
           contact
         </h2>
         <div className="relative mt-4 text-center">
           <ContactEmail />
-          <p className="mt-2 font-mono text-xs text-text-soft">
+          <p className="mt-2 text-xs">
             I read everything.
           </p>
         </div>
@@ -332,7 +316,7 @@ export default function Home() {
         <CrestMark className="inline-block h-[8rem] text-seal" />
       </div>
 
-      <footer className="mt-12 border-t border-border pt-4 text-center font-mono text-xs text-text-soft">
+      <footer className="mt-12 border-t border-border pt-4 text-center text-xs">
         <p>Josh Kappler · President, Boffy LLC · 2026</p>
         <p className="mt-1">
           Founding Developer Experience Engineer, General Translation, Inc.
