@@ -5,11 +5,11 @@
   color-scheme: light;
   --paper: #f2e8d5;
   --ink: #000;
-  /* Darkened from #7a6f5a: this shade holds 4.5:1 (WCAG AA) on --paper,
-     which the labels and nav need at their small mono sizes. */
+  /* Only tints the decorative divider now; holds 4.5:1 (WCAG AA) on
+     --paper if it ever carries text again. */
   --ink-muted: #6f654f;
-  /* Footer colophon: quieter than --ink but far darker than --ink-muted,
-     so the smallest type on the page stays legible through its wear. */
+  /* Every mono element on the page: one voice, near-black, so the site
+     shows exactly two kinds of type, Georgia ink and this strike. */
   --ink-soft: #40382a;
   --line: #d8cbae;
   --seal: #8e2b23;

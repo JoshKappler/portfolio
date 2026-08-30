@@ -10,8 +10,10 @@ understated register: one narrow text column, no hero effects, no webfonts.
 - One color scheme only: warm parchment, `color-scheme: light`, no dark
   mode, no theme toggle, no theme-provider. Paper has no dark mode. The
   browser-chrome `themeColor` in `layout.tsx` (and the black override in
-  `resume/page.tsx`) must track `--paper` when colors change. `--ink-muted`
-  is tuned to hold 4.5:1 AA contrast on `--paper`; keep that when retuning.
+  `resume/page.tsx`) must track `--paper` when colors change. All mono type
+  shares one voice: `--ink-soft`, regular case, no added tracking, so the
+  page shows exactly two kinds of type. `--ink-muted` only tints the
+  decorative divider; both tokens must hold 4.5:1 AA on `--paper`.
 - All homepage content lives inline in `src/app/page.tsx` as `projects`,
   `playground`, and `headerLinks` arrays: one line of copy per item.
 - Four client components only. `square-paragraphs.tsx` centers a block's

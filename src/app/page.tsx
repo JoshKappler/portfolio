@@ -112,7 +112,7 @@ const headerLinks: ItemLink[] = [
 function ItemList({ title, items }: { title: string; items: Item[] }) {
   return (
     <section className="mt-12">
-      <h2 className="text-center font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+      <h2 className="text-center font-mono text-xs text-text-soft">
         {title}
       </h2>
       <ul className="mt-4 space-y-5">
@@ -258,10 +258,10 @@ export default function Home() {
 
       <header className="mt-2 text-center">
         <h1 className="text-3xl">Josh Kappler</h1>
-        <p className="mt-1 font-mono text-[0.8125rem] text-text-muted">
+        <p className="mt-1 font-mono text-[0.8125rem] text-text-soft">
           Software Engineer · San Francisco
         </p>
-        <nav className="mt-4 font-mono text-[0.8125rem] print:hidden">
+        <nav className="mt-4 font-mono text-[0.8125rem] text-text-soft print:hidden">
           {headerLinks.map((link) => (
             <a
               key={link.label}
@@ -317,12 +317,12 @@ export default function Home() {
       <ItemList title="playground" items={playground} />
 
       <section className="mt-12">
-        <h2 className="text-center font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+        <h2 className="text-center font-mono text-xs text-text-soft">
           contact
         </h2>
         <div className="relative mt-4 text-center">
           <ContactEmail />
-          <p className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-text-muted">
+          <p className="mt-2 font-mono text-xs text-text-soft">
             I read everything.
           </p>
         </div>
