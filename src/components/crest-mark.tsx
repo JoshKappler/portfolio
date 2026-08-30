@@ -79,7 +79,21 @@ export function CrestMark({ className }: { className?: string }) {
             values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 25 -19.2"
             result="holes"
           />
-          <feComposite in="wob2" in2="holes" operator="out" />
+          <feComposite in="wob2" in2="holes" operator="out" result="aged" />
+          {/* Uneven pressure: the same press bite the page ink carries,
+              at this die's scale, thinning patches where the wax took
+              the stamp lightly. */}
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.1"
+            numOctaves="2"
+            seed="13"
+            result="pressN"
+          />
+          <feComponentTransfer in="pressN" result="pressMask">
+            <feFuncA type="linear" slope="1.15" intercept="-0.48" />
+          </feComponentTransfer>
+          <feComposite in="aged" in2="pressMask" operator="out" />
         </filter>
       </defs>
       <g filter="url(#crest-age)" transform="rotate(-1.6 50 65)">

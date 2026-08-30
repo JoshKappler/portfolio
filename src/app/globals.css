@@ -4,10 +4,13 @@
 :root {
   color-scheme: light;
   --paper: #f2e8d5;
-  --ink: #16120c;
+  --ink: #000;
   /* Darkened from #7a6f5a: this shade holds 4.5:1 (WCAG AA) on --paper,
      which the labels and nav need at their small mono sizes. */
   --ink-muted: #6f654f;
+  /* Footer colophon: quieter than --ink but far darker than --ink-muted,
+     so the smallest type on the page stays legible through its wear. */
+  --ink-soft: #40382a;
   --line: #d8cbae;
   --seal: #8e2b23;
 }
@@ -17,6 +20,7 @@
   --color-bg: var(--paper);
   --color-text: var(--ink);
   --color-text-muted: var(--ink-muted);
+  --color-text-soft: var(--ink-soft);
   --color-border: var(--line);
   --color-accent: var(--ink);
   --color-seal: var(--seal);
@@ -34,15 +38,19 @@ body {
    and lifted to mean 251/255 so the multiply blend keeps the column within
    2% of --paper. The tile is mirrored both ways in the file so the repeat
    is seamless, and covers 21rem at 1350px so it stays sharp zoomed in. */
-/* No outline: a sheet's edge is the shadow it casts. A tight warm pass
-   reads as the paper's edge, a wide faint one as ambient lift. */
+/* No outline: a sheet's edge is the shadow it casts. Four passes at
+   stepped radii sum to a steep-then-long falloff, closer to how light
+   dies around real paper than any single gaussian; the small downward
+   offsets put the light faintly overhead. */
 main[data-paper] {
   position: relative;
   isolation: isolate;
   background: var(--paper);
   box-shadow:
-    0 0 0.4rem color-mix(in srgb, var(--ink) 16%, transparent),
-    0 0 2.5rem color-mix(in srgb, var(--ink) 9%, transparent);
+    0 0.05rem 0.3rem color-mix(in srgb, var(--ink) 13%, transparent),
+    0 0.25rem 1rem color-mix(in srgb, var(--ink) 9%, transparent),
+    0 0.5rem 2.2rem color-mix(in srgb, var(--ink) 8%, transparent),
+    0 0.9rem 5rem color-mix(in srgb, var(--ink) 7%, transparent);
 }
 
 /* The grain rides in one static overlay that multiplies over the whole
@@ -50,8 +58,8 @@ main[data-paper] {
    into fiber. One blend group total: giving each child its own
    mix-blend-mode made Firefox's compositor flicker, and the globe canvas
    sits above the overlay because repainting under it re-blends every
-   frame. The ink filters below keep stroke cores solid and lighten only
-   edges and patches, so type stays black instead of tinting to paper. */
+   frame. The ink filters below keep every stroke solid black and spend
+   all their character on the edges, so type never tints toward paper. */
 main[data-paper]::after {
   content: "";
   position: absolute;
@@ -62,10 +70,15 @@ main[data-paper]::after {
   background-size: 21rem 56rem;
   mix-blend-mode: multiply;
 }
-main[data-paper] h1,
+/* Mono takes the typewriter strike; the h1 rides with body text so the
+   large Georgia never swells the way the small strike does. */
 main[data-paper] .font-mono {
   filter: url(#ink-bleed);
 }
+/* The filter stays per paragraph and per li: each application allocates
+   intermediate buffers at element size, and one filtered block spanning a
+   whole list is a big enough allocation to crash a phone compositor. */
+main[data-paper] h1,
 main[data-paper] :is(p, li, button):not(.font-mono):not(.font-mono *),
 main[data-paper] > div:not(:has(svg)) {
   filter: url(#ink-page);
@@ -114,6 +127,7 @@ a {
     --paper: #fff;
     --ink: #000;
     --ink-muted: #555;
+    --ink-soft: #333;
     --line: #bbb;
     --seal: #000;
   }

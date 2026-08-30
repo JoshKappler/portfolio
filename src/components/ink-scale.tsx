@@ -39,7 +39,14 @@ export function InkScale() {
     };
     apply();
     window.addEventListener("resize", apply);
-    return () => window.removeEventListener("resize", apply);
+    // Re-touch the filters once after first paint: the invalidation makes
+    // the browser rasterize the whole sheet's ink during load idle time,
+    // instead of buffering visibly at the first scroll into the lower half.
+    const nudge = window.setTimeout(apply, 250);
+    return () => {
+      window.clearTimeout(nudge);
+      window.removeEventListener("resize", apply);
+    };
   }, []);
   return null;
 }

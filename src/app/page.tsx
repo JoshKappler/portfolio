@@ -144,72 +144,79 @@ export default function Home() {
       data-paper
       className="mx-auto max-w-[42rem] px-16 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
     >
-      {/* Referenced by globals.css. Wobble the edge, blur, then rebuild two
-          layers from the soft alpha: a worn rim that noise chews at, and a
-          solid core merged on top, so stroke centers are always full ink
-          and all the wear lives at the edges, like a typewriter strike. */}
+      {/* Referenced by globals.css. Ink is always solid: stroke interiors
+          never lighten, and every alpha ends snapped to full or nothing.
+          The mono strike (#ink-bleed) swells slightly and rounds, like a
+          typewriter key pressing ink into fiber. Serif text (#ink-page)
+          keeps its weight; letters lean a hair on the baseline, then the
+          edge is re-cut by two scales of grain noise, the way a dried
+          impression takes on the texture of the sheet under it. */}
       <svg aria-hidden="true" width="0" height="0" className="absolute">
         <filter id="ink-bleed" x="-4%" y="-12%" width="108%" height="124%">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.22"
-            numOctaves="2"
-            seed="7"
+            baseFrequency="0.5"
+            numOctaves="1"
+            seed="8"
             result="warp"
           />
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.8" />
-          <feGaussianBlur stdDeviation="0.5" result="soft" />
-          <feComponentTransfer in="soft" result="inked">
-            <feFuncA type="linear" slope="3" intercept="-0.45" />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="0.5" />
+          <feGaussianBlur stdDeviation="0.5" />
+          <feComponentTransfer>
+            <feFuncA type="linear" slope="26" intercept="-4.2" />
           </feComponentTransfer>
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.09"
-            numOctaves="3"
-            seed="21"
-          />
-          <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.5" intercept="0.62" />
-          </feComponentTransfer>
-          <feComposite in="inked" in2="press" operator="in" result="worn" />
-          <feComponentTransfer in="soft" result="core">
-            <feFuncA type="linear" slope="8" intercept="-5" />
-          </feComponentTransfer>
-          <feMerge>
-            <feMergeNode in="worn" />
-            <feMergeNode in="core" />
-          </feMerge>
         </filter>
         <filter id="ink-page" x="-4%" y="-12%" width="108%" height="124%">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.3"
+            baseFrequency="0.06"
             numOctaves="1"
-            seed="11"
-            result="warp"
+            seed="23"
+            result="wlow"
           />
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.6" />
-          <feGaussianBlur stdDeviation="0.45" result="soft" />
-          <feComponentTransfer in="soft" result="inked">
-            <feFuncA type="linear" slope="2.6" intercept="-0.38" />
-          </feComponentTransfer>
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="wlow"
+            scale="1.2"
+            result="lean"
+          />
+          <feGaussianBlur in="lean" stdDeviation="0.4" result="soft" />
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.12"
-            numOctaves="3"
-            seed="29"
+            baseFrequency="0.13"
+            numOctaves="2"
+            seed="41"
+            result="grain"
           />
-          <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.5" intercept="0.62" />
+          <feComposite
+            in="soft"
+            in2="grain"
+            operator="arithmetic"
+            k1="0"
+            k2="1"
+            k3="0.18"
+            k4="-0.09"
+            result="coarse"
+          />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.65"
+            numOctaves="2"
+            seed="42"
+            result="fiber"
+          />
+          <feComposite
+            in="coarse"
+            in2="fiber"
+            operator="arithmetic"
+            k1="0"
+            k2="1"
+            k3="0.3"
+            k4="-0.15"
+          />
+          <feComponentTransfer>
+            <feFuncA type="linear" slope="24" intercept="-12" />
           </feComponentTransfer>
-          <feComposite in="inked" in2="press" operator="in" result="worn" />
-          <feComponentTransfer in="soft" result="core">
-            <feFuncA type="linear" slope="8" intercept="-5" />
-          </feComponentTransfer>
-          <feMerge>
-            <feMergeNode in="worn" />
-            <feMergeNode in="core" />
-          </feMerge>
         </filter>
         {/* The same recipe for the JK mark, baked into its 1200px sprite at
             load, with features scaled to the letterform. */}
@@ -322,10 +329,10 @@ export default function Home() {
       </section>
 
       <div aria-hidden className="mt-14 text-center leading-none">
-        <CrestMark className="inline-block h-[5.33rem] text-seal" />
+        <CrestMark className="inline-block h-[8rem] text-seal" />
       </div>
 
-      <footer className="mt-12 border-t border-border pt-4 text-center font-mono text-xs text-text-muted">
+      <footer className="mt-12 border-t border-border pt-4 text-center font-mono text-xs text-text-soft">
         <p>Josh Kappler · President, Boffy LLC · 2026</p>
         <p className="mt-1">
           Founding Developer Experience Engineer, General Translation, Inc.
