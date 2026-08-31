@@ -82,12 +82,12 @@ const playground: Item[] = [
   {
     name: "chadGPT",
     href: "https://chadgpt.joshuakappler.com",
-    line: 'A hostile chatbot on a green CRT. He answers your question correctly, and then insults you for asking. He gets grumpier with every message you send. Dial 666-CHAD on the rotary phone. He picks up.',
+    line: 'A hostile chatbot on a green CRT. He answers your question correctly, and then he insults you for asking it. He gets grumpier with every message you send. Dial him on the rotary phone. He picks up.',
   },
   {
     name: "chud",
     href: "https://chud.joshuakappler.com",
-    line: 'A goblin voice assistant with a jiggly skin riding real spring physics. Say "hey chud" and he talks back out loud. Beat him up: 20 damage stages, 16 recorded screams. He stays grumpy until he heals.',
+    line: 'A goblin voice assistant, his skin a mass hung on a base-excited spring. Say "hey chud" and he talks back out loud. Beat him up: 20 damage stages, 16 recorded screams. He stays grumpy until he heals.',
   },
   {
     name: "deskfly",
