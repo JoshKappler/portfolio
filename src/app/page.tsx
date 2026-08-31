@@ -77,27 +77,27 @@ const playground: Item[] = [
   {
     name: "lasso",
     href: "https://github.com/JoshKappler/herdr-layout",
-    line: "The terminal cockpit I live in: a forked agent multiplexer whose UI I rebuilt to herd nine Claude Code sessions. It has a boxed-tab sidebar, a live action line for every session, and a native detail panel.",
+    line: "The terminal cockpit I live in: a forked multiplexer herding more Claude Code sessions than I can watch. Live AI summaries on every tab, a subagent viewer panel, and morse that beeps which pane wants me.",
   },
   {
     name: "chadGPT",
     href: "https://chadgpt.joshuakappler.com",
-    line: "A hostile chatbot on a green CRT. He answers your question correctly, and then insults you for asking. He has a real phone number.",
+    line: 'A hostile chatbot on a green CRT. He answers your question correctly, and then insults you for asking. He gets grumpier with every message you send. Dial 666-CHAD on the rotary phone. He picks up.',
   },
   {
     name: "chud",
     href: "https://chud.joshuakappler.com",
-    line: "A goblin voice assistant with a jiggly skin. He talks back to you. You can beat him up if you want; he just stays grumpy until he heals.",
+    line: 'A goblin voice assistant with a jiggly skin riding real spring physics. Say "hey chud" and he talks back out loud. Beat him up: 20 damage stages, 16 recorded screams. He stays grumpy until he heals.',
   },
   {
     name: "deskfly",
     href: "https://deskfly.joshuakappler.com",
-    line: "A fruit fly's real connectome, living as a fly on my desktop.",
+    line: "A fruit fly's real connectome, living as a fly on my desktop. All 139,255 neurons and 3.87M connections run in a live spiking network. It sees the screen through its real eye map and lands on window edges.",
   },
   {
     name: "scuttle",
     href: "https://scuttle.joshuakappler.com",
-    line: "A voxel pirate roguelite in the browser. Cannonballs remove real voxels, compartments flood, and the ships list, capsize, and sink.",
+    line: "A voxel pirate roguelite in the browser. Cannonballs knock out real hull voxels, breaches flood watertight compartments, and the ships list, capsize, and sink for real. 500 unit tests cover the simulation core.",
   },
 ];
 
