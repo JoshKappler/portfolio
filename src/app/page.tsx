@@ -144,119 +144,77 @@ export default function Home() {
       data-paper
       className="mx-auto max-w-[42rem] px-16 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
     >
-      {/* Referenced by globals.css. One ink treatment for every piece of
-          type on the sheet: strokes stay solid black end to end, letters
-          lean a hair on the baseline, then the edge is re-cut by two
-          scales of grain noise, the way a dried impression takes on the
-          texture of the sheet under it. #ink-small is the same recipe
-          with every spatial length at 0.72x, matching the 12 and 13px
-          type, so the wear shrinks with the glyphs instead of gouging
-          them. Wander amplitude rides the blur, so the k3/k4 pairs stay
-          the same in both. */}
+      {/* Referenced by globals.css. Wobble the edge, blur, then rebuild
+          two layers from the soft alpha: a worn rim that noise chews at,
+          and a solid core merged on top, so stroke centers are always full
+          ink and all the wear lives at the edges, like a typewriter
+          strike. Wear is only ever an alpha mask over the clean glyph:
+          arithmetic noise composites bleed the noise's own RGB into the
+          ink and gray it. #ink-small is the same recipe with every
+          spatial length at 0.72x, matching the 12 and 13px type, so the
+          wear shrinks with the glyphs instead of gouging them. */}
       <svg aria-hidden="true" width="0" height="0" className="absolute">
         <filter id="ink-page" x="-4%" y="-12%" width="108%" height="124%">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.06"
+            baseFrequency="0.3"
             numOctaves="1"
-            seed="23"
-            result="wlow"
+            seed="11"
+            result="warp"
           />
-          <feDisplacementMap
-            in="SourceGraphic"
-            in2="wlow"
-            scale="1.2"
-            result="lean"
-          />
-          <feGaussianBlur in="lean" stdDeviation="0.4" result="soft" />
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.13"
-            numOctaves="2"
-            seed="41"
-            result="grain"
-          />
-          <feComposite
-            in="soft"
-            in2="grain"
-            operator="arithmetic"
-            k1="0"
-            k2="1"
-            k3="0.09"
-            k4="-0.045"
-            result="coarse"
-          />
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.65"
-            numOctaves="2"
-            seed="42"
-            result="fiber"
-          />
-          <feComposite
-            in="coarse"
-            in2="fiber"
-            operator="arithmetic"
-            k1="0"
-            k2="1"
-            k3="0.15"
-            k4="-0.075"
-          />
-          <feComponentTransfer>
-            <feFuncA type="linear" slope="24" intercept="-12" />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.6" />
+          <feGaussianBlur stdDeviation="0.45" result="soft" />
+          <feComponentTransfer in="soft" result="inked">
+            <feFuncA type="linear" slope="2.6" intercept="-0.38" />
           </feComponentTransfer>
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.12"
+            numOctaves="3"
+            seed="29"
+          />
+          <feComponentTransfer result="press">
+            <feFuncA type="linear" slope="0.5" intercept="0.62" />
+          </feComponentTransfer>
+          <feComposite in="inked" in2="press" operator="in" result="worn" />
+          <feComponentTransfer in="soft" result="core">
+            <feFuncA type="linear" slope="8" intercept="-5" />
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode in="worn" />
+            <feMergeNode in="core" />
+          </feMerge>
         </filter>
         <filter id="ink-small" x="-4%" y="-12%" width="108%" height="124%">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.083"
+            baseFrequency="0.42"
             numOctaves="1"
-            seed="23"
-            result="wlow"
+            seed="11"
+            result="warp"
           />
-          <feDisplacementMap
-            in="SourceGraphic"
-            in2="wlow"
-            scale="0.86"
-            result="lean"
-          />
-          <feGaussianBlur in="lean" stdDeviation="0.29" result="soft" />
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.18"
-            numOctaves="2"
-            seed="41"
-            result="grain"
-          />
-          <feComposite
-            in="soft"
-            in2="grain"
-            operator="arithmetic"
-            k1="0"
-            k2="1"
-            k3="0.09"
-            k4="-0.045"
-            result="coarse"
-          />
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.9"
-            numOctaves="2"
-            seed="42"
-            result="fiber"
-          />
-          <feComposite
-            in="coarse"
-            in2="fiber"
-            operator="arithmetic"
-            k1="0"
-            k2="1"
-            k3="0.15"
-            k4="-0.075"
-          />
-          <feComponentTransfer>
-            <feFuncA type="linear" slope="24" intercept="-12" />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.15" />
+          <feGaussianBlur stdDeviation="0.32" result="soft" />
+          <feComponentTransfer in="soft" result="inked">
+            <feFuncA type="linear" slope="2.6" intercept="-0.38" />
           </feComponentTransfer>
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.17"
+            numOctaves="3"
+            seed="29"
+          />
+          <feComponentTransfer result="press">
+            <feFuncA type="linear" slope="0.5" intercept="0.62" />
+          </feComponentTransfer>
+          <feComposite in="inked" in2="press" operator="in" result="worn" />
+          <feComponentTransfer in="soft" result="core">
+            <feFuncA type="linear" slope="8" intercept="-5" />
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode in="worn" />
+            <feMergeNode in="core" />
+          </feMerge>
         </filter>
       </svg>
       <SquareParagraphs />
