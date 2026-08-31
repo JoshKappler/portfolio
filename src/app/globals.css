@@ -1,5 +1,26 @@
 @import "tailwindcss";
 
+/* Press Roman is our own worn cut of Gelasio (SIL OFL, license in
+   public/fonts/OFL.txt), baked by scripts/generate-press-roman.py: the
+   warble and edge wear live in the letter outlines, so every engine
+   prints the same character. Live SVG filters could not do this;
+   Firefox rasterizes turbulence and displacement far fainter than
+   WebKit. Gelasio shares Georgia's advance widths, so the justified
+   squares tuned in Georgia wrap identically, and Georgia is the
+   metric-identical fallback while the files load. */
+@font-face {
+  font-family: "Press Roman";
+  src: url("/fonts/press-roman-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Press Roman";
+  src: url("/fonts/press-roman-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
 /* One scheme only: the page is parchment in every browser, like paper. */
 :root {
   color-scheme: light;
@@ -26,7 +47,7 @@
 body {
   background: var(--paper);
   color: var(--ink);
-  font-family: Georgia, "Times New Roman", Times, serif;
+  font-family: "Press Roman", Georgia, "Times New Roman", Times, serif;
 }
 
 /* Paper grain on the text column only; the page around it stays flat
@@ -65,27 +86,6 @@ main[data-paper]::after {
   background-size: 21rem 56rem;
   mix-blend-mode: multiply;
 }
-/* Ink wear is a baked raster mask (public/ink-wear.png, from
-   scripts/generate-ink-wear.html), never a live SVG filter: engines
-   rasterize filter chains differently (Firefox prints them faint, WebKit
-   heavy), and a static alpha tile composites identically everywhere.
-   The mask only ever cuts flecks and hairlines out of the glyphs, so
-   ink stays true black. The 12 and 13px runs take the tile at 0.72x,
-   so the wear scales with the glyphs. */
-main[data-paper] :is(h1, p, li, button),
-main[data-paper] > div:not(:has(svg)) {
-  -webkit-mask-image: url("/ink-wear.png");
-  mask-image: url("/ink-wear.png");
-  -webkit-mask-size: 32rem;
-  mask-size: 32rem;
-}
-main[data-paper] :is(h2, nav, header p, footer p, .text-xs) {
-  -webkit-mask-image: url("/ink-wear.png");
-  mask-image: url("/ink-wear.png");
-  -webkit-mask-size: 23rem;
-  mask-size: 23rem;
-}
-
 /* One fixed composition at every width, like a sheet of paper: below the
    full 42rem column the root font scales with the viewport, and every
    length on the page is rem or em, so lines wrap identically at any size.
@@ -138,10 +138,5 @@ a {
   }
   main[data-paper]::after {
     content: none;
-  }
-  main[data-paper] :is(h1, h2, nav, p, li, button, .text-xs),
-  main[data-paper] > div {
-    -webkit-mask-image: none;
-    mask-image: none;
   }
 }

@@ -226,7 +226,10 @@ export default function Home() {
         <p className="mt-1">
           Founding Developer Experience Engineer, General Translation, Inc.
         </p>
-        <p className="mt-1">Set in Georgia. System fonts only, no trackers.</p>
+        <p className="mt-1">
+          Set in Press Roman, a worn cut of Gelasio. Fonts self-hosted, no
+          trackers.
+        </p>
       </footer>
     </main>
   );
