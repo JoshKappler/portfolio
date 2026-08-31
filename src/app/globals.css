@@ -54,8 +54,7 @@ main[data-paper] {
    into fiber. One blend group total: giving each child its own
    mix-blend-mode made Firefox's compositor flicker, and the globe canvas
    sits above the overlay because repainting under it re-blends every
-   frame. The ink filters below keep every stroke solid black and spend
-   all their character on the edges, so type never tints toward paper. */
+   frame. */
 main[data-paper]::after {
   content: "";
   position: absolute;
@@ -66,17 +65,25 @@ main[data-paper]::after {
   background-size: 21rem 56rem;
   mix-blend-mode: multiply;
 }
-/* The filter stays per paragraph and per li: each application allocates
-   intermediate buffers at element size, and one filtered block spanning a
-   whole list is a big enough allocation to crash a phone compositor.
-   The 12 and 13px runs take #ink-small, the same recipe at 0.72x, so
-   the wear scales with the glyphs. */
+/* Ink wear is a baked raster mask (public/ink-wear.png, from
+   scripts/generate-ink-wear.html), never a live SVG filter: engines
+   rasterize filter chains differently (Firefox prints them faint, WebKit
+   heavy), and a static alpha tile composites identically everywhere.
+   The mask only ever cuts flecks and hairlines out of the glyphs, so
+   ink stays true black. The 12 and 13px runs take the tile at 0.72x,
+   so the wear scales with the glyphs. */
 main[data-paper] :is(h1, p, li, button),
 main[data-paper] > div:not(:has(svg)) {
-  filter: url(#ink-page);
+  -webkit-mask-image: url("/ink-wear.png");
+  mask-image: url("/ink-wear.png");
+  -webkit-mask-size: 32rem;
+  mask-size: 32rem;
 }
 main[data-paper] :is(h2, nav, header p, footer p, .text-xs) {
-  filter: url(#ink-small);
+  -webkit-mask-image: url("/ink-wear.png");
+  mask-image: url("/ink-wear.png");
+  -webkit-mask-size: 23rem;
+  mask-size: 23rem;
 }
 
 /* One fixed composition at every width, like a sheet of paper: below the
@@ -134,6 +141,7 @@ a {
   }
   main[data-paper] :is(h1, h2, nav, p, li, button, .text-xs),
   main[data-paper] > div {
-    filter: none;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 }

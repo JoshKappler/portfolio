@@ -1,0 +1,89 @@
+<!doctype html>
+<meta charset="utf-8" />
+<canvas id="c" width="512" height="512"></canvas>
+<script>
+  // Bakes public/ink-wear.png: a seamless alpha tile that CSS masks over
+  // every piece of type, eating pinholes, fiber scratches, and light press
+  // patches out of the ink. Baked because live SVG filters print
+  // differently per engine; a raster mask composites identically
+  // everywhere. Seeded, so a re-run reproduces the committed tile.
+  // Harvest window.__RESULT as a data URL; save via oxipng.
+  const SIZE = 512;
+  const STRENGTH = 1.0;
+
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // Wrapping value noise: a seeded lattice sampled with smooth bilinear
+  // interpolation, modulo the lattice size, so the tile has no seams.
+  function lattice(cells, seed) {
+    const rnd = mulberry32(seed);
+    const g = Array.from({ length: cells * cells }, () => rnd());
+    const smooth = (t) => t * t * (3 - 2 * t);
+    return (x, y) => {
+      const fx = (x / SIZE) * cells, fy = (y / SIZE) * cells;
+      const x0 = Math.floor(fx) % cells, y0 = Math.floor(fy) % cells;
+      const x1 = (x0 + 1) % cells, y1 = (y0 + 1) % cells;
+      const tx = smooth(fx - Math.floor(fx)), ty = smooth(fy - Math.floor(fy));
+      const a = g[y0 * cells + x0], b = g[y0 * cells + x1];
+      const c = g[y1 * cells + x0], d = g[y1 * cells + x1];
+      return a + (b - a) * tx + (c - a) * ty + (a - b - c + d) * tx * ty;
+    };
+  }
+
+  const press = lattice(7, 101);
+  const clump = lattice(48, 202);
+  const hash = mulberry32(303);
+  const alpha = new Float32Array(SIZE * SIZE).fill(1);
+
+  for (let y = 0; y < SIZE; y++) {
+    for (let x = 0; x < SIZE; x++) {
+      let a = 1;
+      const p = press(x, y);
+      if (p > 0.65) a -= ((p - 0.65) / 0.35) * 0.08 * STRENGTH;
+      const cl = clump(x, y);
+      const h = hash();
+      // Pinholes only land inside fibrous clumps, so wear arrives in
+      // drifts the way a dry roller misses, not as uniform static.
+      if (cl > 0.5 && h > 0.86) {
+        a -= (h - 0.86) * 7.1 * (0.55 + 0.45 * (cl - 0.5) / 0.5) * STRENGTH;
+      }
+      alpha[y * SIZE + x] = a;
+    }
+  }
+
+  // Sparse short scratches, wrapped at the edges: hairline misses where
+  // a fiber sat on the sheet during the press.
+  const srnd = mulberry32(404);
+  for (let s = 0; s < 72; s++) {
+    let x = srnd() * SIZE, y = srnd() * SIZE;
+    let ang = srnd() * Math.PI * 2;
+    const len = 5 + srnd() * 14;
+    const depth = (0.3 + srnd() * 0.3) * STRENGTH;
+    for (let i = 0; i < len; i++) {
+      ang += (srnd() - 0.5) * 0.6;
+      x = (x + Math.cos(ang) + SIZE) % SIZE;
+      y = (y + Math.sin(ang) + SIZE) % SIZE;
+      const idx = (y | 0) * SIZE + (x | 0);
+      alpha[idx] = Math.max(0.25, alpha[idx] - depth);
+    }
+  }
+
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const img = ctx.createImageData(SIZE, SIZE);
+  for (let i = 0; i < SIZE * SIZE; i++) {
+    img.data[i * 4] = 0;
+    img.data[i * 4 + 1] = 0;
+    img.data[i * 4 + 2] = 0;
+    img.data[i * 4 + 3] = Math.round(Math.max(0.25, Math.min(1, alpha[i])) * 255);
+  }
+  ctx.putImageData(img, 0, 0);
+  window.__RESULT = JSON.stringify({ png: canvas.toDataURL('image/png') });
+</script>

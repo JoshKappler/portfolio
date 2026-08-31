@@ -2,15 +2,13 @@ import type { Viewport } from "next";
 import { ContactEmail } from "@/components/contact-email";
 import { CrestMark } from "@/components/crest-mark";
 import { Globe } from "@/components/globe";
-import { InkScale } from "@/components/ink-scale";
 import { SquareParagraphs } from "@/components/square-paragraphs";
 import { DEMO_URL } from "@/lib/site";
 
 /* Phones get the sheet at its full 672px layout width and scale the whole
-   render to fit, instead of shrinking the root font. WebKit rasterizes
-   CSS url() SVG filters at layout resolution, so small CSS pixels turn
-   the ink into upscaled mush on iPhones; at 672 the type and its strike
-   rasterize at full detail and the OS scales the finished print. */
+   render to fit, instead of shrinking the root font: one composition at
+   every size, and the type, wear mask, and textures rasterize at full
+   detail before the OS scales the finished print. */
 export const viewport: Viewport = {
   width: 672,
   // The key must be present: Next merges per present key over its default
@@ -144,81 +142,7 @@ export default function Home() {
       data-paper
       className="mx-auto max-w-[42rem] px-16 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
     >
-      {/* Referenced by globals.css. Wobble the edge, blur, then rebuild
-          two layers from the soft alpha: a worn rim that noise chews at,
-          and a solid core merged on top, so stroke centers are always full
-          ink and all the wear lives at the edges, like a typewriter
-          strike. Wear is only ever an alpha mask over the clean glyph:
-          arithmetic noise composites bleed the noise's own RGB into the
-          ink and gray it. #ink-small is the same recipe with every
-          spatial length at 0.72x, matching the 12 and 13px type, so the
-          wear shrinks with the glyphs instead of gouging them. */}
-      <svg aria-hidden="true" width="0" height="0" className="absolute">
-        <filter id="ink-page" x="-4%" y="-12%" width="108%" height="124%">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.3"
-            numOctaves="1"
-            seed="11"
-            result="warp"
-          />
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.6" />
-          <feGaussianBlur stdDeviation="0.45" result="soft" />
-          <feComponentTransfer in="soft" result="inked">
-            <feFuncA type="linear" slope="2.6" intercept="-0.38" />
-          </feComponentTransfer>
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.12"
-            numOctaves="3"
-            seed="29"
-          />
-          <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.5" intercept="0.62" />
-          </feComponentTransfer>
-          <feComposite in="inked" in2="press" operator="in" result="worn" />
-          <feComponentTransfer in="soft" result="core">
-            <feFuncA type="linear" slope="8" intercept="-5" />
-          </feComponentTransfer>
-          <feMerge>
-            <feMergeNode in="worn" />
-            <feMergeNode in="core" />
-          </feMerge>
-        </filter>
-        <filter id="ink-small" x="-4%" y="-12%" width="108%" height="124%">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.42"
-            numOctaves="1"
-            seed="11"
-            result="warp"
-          />
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.15" />
-          <feGaussianBlur stdDeviation="0.32" result="soft" />
-          <feComponentTransfer in="soft" result="inked">
-            <feFuncA type="linear" slope="2.6" intercept="-0.38" />
-          </feComponentTransfer>
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.17"
-            numOctaves="3"
-            seed="29"
-          />
-          <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.5" intercept="0.62" />
-          </feComponentTransfer>
-          <feComposite in="inked" in2="press" operator="in" result="worn" />
-          <feComponentTransfer in="soft" result="core">
-            <feFuncA type="linear" slope="8" intercept="-5" />
-          </feComponentTransfer>
-          <feMerge>
-            <feMergeNode in="worn" />
-            <feMergeNode in="core" />
-          </feMerge>
-        </filter>
-      </svg>
       <SquareParagraphs />
-      <InkScale />
       <Globe />
 
       <header className="mt-2 text-center">
