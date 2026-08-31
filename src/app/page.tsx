@@ -182,8 +182,8 @@ export default function Home() {
             operator="arithmetic"
             k1="0"
             k2="1"
-            k3="0.234"
-            k4="-0.117"
+            k3="0.09"
+            k4="-0.045"
             result="coarse"
           />
           <feTurbulence
@@ -199,8 +199,8 @@ export default function Home() {
             operator="arithmetic"
             k1="0"
             k2="1"
-            k3="0.39"
-            k4="-0.195"
+            k3="0.15"
+            k4="-0.075"
           />
           <feComponentTransfer>
             <feFuncA type="linear" slope="24" intercept="-12" />
@@ -234,8 +234,8 @@ export default function Home() {
             operator="arithmetic"
             k1="0"
             k2="1"
-            k3="0.234"
-            k4="-0.117"
+            k3="0.09"
+            k4="-0.045"
             result="coarse"
           />
           <feTurbulence
@@ -251,8 +251,8 @@ export default function Home() {
             operator="arithmetic"
             k1="0"
             k2="1"
-            k3="0.39"
-            k4="-0.195"
+            k3="0.15"
+            k4="-0.075"
           />
           <feComponentTransfer>
             <feFuncA type="linear" slope="24" intercept="-12" />
