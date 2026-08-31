@@ -68,10 +68,15 @@ main[data-paper]::after {
 }
 /* The filter stays per paragraph and per li: each application allocates
    intermediate buffers at element size, and one filtered block spanning a
-   whole list is a big enough allocation to crash a phone compositor. */
-main[data-paper] :is(h1, h2, nav, p, li, button),
+   whole list is a big enough allocation to crash a phone compositor.
+   The 12 and 13px runs take #ink-small, the same recipe at 0.72x, so
+   the wear scales with the glyphs. */
+main[data-paper] :is(h1, p, li, button),
 main[data-paper] > div:not(:has(svg)) {
   filter: url(#ink-page);
+}
+main[data-paper] :is(h2, nav, header p, footer p, .text-xs) {
+  filter: url(#ink-small);
 }
 
 /* One fixed composition at every width, like a sheet of paper: below the
@@ -127,7 +132,7 @@ a {
   main[data-paper]::after {
     content: none;
   }
-  main[data-paper] :is(h1, h2, nav, p, li, button),
+  main[data-paper] :is(h1, h2, nav, p, li, button, .text-xs),
   main[data-paper] > div {
     filter: none;
   }
