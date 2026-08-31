@@ -258,39 +258,6 @@ export default function Home() {
             <feFuncA type="linear" slope="24" intercept="-12" />
           </feComponentTransfer>
         </filter>
-        {/* The same recipe for the JK mark, baked into its 1200px sprite at
-            load, with features scaled to the letterform. */}
-        <filter id="ink-mark" x="-4%" y="-4%" width="108%" height="108%">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.025"
-            numOctaves="2"
-            seed="7"
-            result="warp"
-          />
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="14" />
-          <feGaussianBlur stdDeviation="3" result="soft" />
-          <feComponentTransfer in="soft" result="inked">
-            <feFuncA type="linear" slope="3" intercept="-0.45" />
-          </feComponentTransfer>
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.014"
-            numOctaves="3"
-            seed="21"
-          />
-          <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.55" intercept="0.55" />
-          </feComponentTransfer>
-          <feComposite in="inked" in2="press" operator="in" result="worn" />
-          <feComponentTransfer in="soft" result="core">
-            <feFuncA type="linear" slope="8" intercept="-5" />
-          </feComponentTransfer>
-          <feMerge>
-            <feMergeNode in="worn" />
-            <feMergeNode in="core" />
-          </feMerge>
-        </filter>
       </svg>
       <SquareParagraphs />
       <InkScale />

@@ -156,6 +156,9 @@ function drawMarkInk(context, view, globe, tau) {
   layer.setTransform(1, 0, 0, 1, 0, 0);
   layer.clearRect(0, 0, erosionLayer.width, erosionLayer.height);
   layer.setTransform(context.getTransform());
+  // Match the browser's own <img> downscaling, so the canvas's first frame
+  // is pixel-close to the still image it replaces.
+  layer.imageSmoothingQuality = 'high';
   const origin = view.toCanvas([0, 0]);
   const size = MARK_GEOMETRY.mark.imgW * view.scale;
   layer.drawImage(markSprite, origin[0], origin[1], size, size);

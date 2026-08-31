@@ -1,0 +1,63 @@
+<!doctype html>
+<meta charset="utf-8" />
+<canvas id="c" width="1200" height="1200"></canvas>
+<svg width="0" height="0">
+  <!-- The page's ink recipe for the JK mark, applied here once at build
+       time so the browser never pays for the bake. Feature sizes are
+       tuned to the 1200px sprite. -->
+  <filter id="ink-mark" x="-4%" y="-4%" width="108%" height="108%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="2" seed="7" result="warp" />
+    <feDisplacementMap in="SourceGraphic" in2="warp" scale="14" />
+    <feGaussianBlur stdDeviation="3" result="soft" />
+    <feComponentTransfer in="soft" result="inked">
+      <feFuncA type="linear" slope="3" intercept="-0.45" />
+    </feComponentTransfer>
+    <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="3" seed="21" />
+    <feComponentTransfer result="press">
+      <feFuncA type="linear" slope="0.55" intercept="0.55" />
+    </feComponentTransfer>
+    <feComposite in="inked" in2="press" operator="in" result="worn" />
+    <feComponentTransfer in="soft" result="core">
+      <feFuncA type="linear" slope="8" intercept="-5" />
+    </feComponentTransfer>
+    <feMerge>
+      <feMergeNode in="worn" />
+      <feMergeNode in="core" />
+    </feMerge>
+  </filter>
+</svg>
+<script>
+  // Prints ../public/jk-mark.png through #ink-mark, tints it solid ink,
+  // and lands the finished sprite on window.__RESULT as a data URL.
+  // Run with --allow-file-access-from-files; save as public/jk-mark-inked.png.
+  const SIZE = 1200;
+  const INK = 'rgb(22, 18, 12)';
+
+  async function run() {
+    const source = new Image();
+    source.src = '../public/jk-mark.png';
+    await source.decode();
+
+    const raster = document.createElement('canvas');
+    raster.width = SIZE;
+    raster.height = SIZE;
+    raster.getContext('2d').drawImage(source, 0, 0);
+    const svg =
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${SIZE}" height="${SIZE}">` +
+      `<defs>${document.getElementById('ink-mark').outerHTML}</defs>` +
+      `<image width="${SIZE}" height="${SIZE}" filter="url(#ink-mark)" href="${raster.toDataURL('image/png')}"/>` +
+      `</svg>`;
+    const printed = new Image();
+    printed.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+    await printed.decode();
+
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(printed, 0, 0);
+    ctx.globalCompositeOperation = 'source-in';
+    ctx.fillStyle = INK;
+    ctx.fillRect(0, 0, SIZE, SIZE);
+    window.__RESULT = JSON.stringify({ png: canvas.toDataURL('image/png') });
+  }
+  run().catch((err) => { window.__RESULT = JSON.stringify({ error: String(err) }); });
+</script>

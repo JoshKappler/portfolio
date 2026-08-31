@@ -7,56 +7,21 @@ import { drawGlobeScene, setInk, setMark } from "./globe/globe-draw.js";
 
 const INK = "22, 18, 12";
 
-// Tints an already-rendered mark (the clean image, or the inked bake)
-// solid ink through its own alpha.
-function tintedMark(
-  source: HTMLImageElement | HTMLCanvasElement,
-  color: string,
-) {
-  const off = document.createElement("canvas");
-  off.width =
-    source instanceof HTMLImageElement ? source.naturalWidth : source.width;
-  off.height =
-    source instanceof HTMLImageElement ? source.naturalHeight : source.height;
-  const ctx = off.getContext("2d");
-  if (ctx) {
-    ctx.drawImage(source, 0, 0);
-    ctx.globalCompositeOperation = "source-in";
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, off.width, off.height);
-  }
-  return off;
-}
-
-// Bakes the page's ink distortion into the mark once at load, so the JK
-// has always been printed. The filter runs inside a self-contained SVG
-// image rather than through ctx.filter, which WebKit never implemented:
-// filters inside an SVG document rasterize on every engine. The caller
-// keeps the clean mark until the bake lands, or forever if it fails.
-async function inkedMark(image: HTMLImageElement) {
-  const filter = document.getElementById("ink-mark");
-  if (!filter) return null;
-  const raster = document.createElement("canvas");
-  raster.width = image.naturalWidth;
-  raster.height = image.naturalHeight;
-  raster.getContext("2d")?.drawImage(image, 0, 0);
-  const svg =
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${raster.width}" height="${raster.height}">` +
-    `<defs>${filter.outerHTML}</defs>` +
-    `<image width="${raster.width}" height="${raster.height}" filter="url(#ink-mark)" href="${raster.toDataURL("image/png")}"/>` +
-    `</svg>`;
-  const printed = new Image();
-  printed.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-  await printed.decode();
-  const out = document.createElement("canvas");
-  out.width = raster.width;
-  out.height = raster.height;
-  out.getContext("2d")?.drawImage(printed, 0, 0);
-  return out;
-}
+// The sprite ships pre-inked and pre-tinted (scripts/generate-inked-mark.html
+// bakes the #ink-mark recipe at build time), so the browser never runs the
+// SVG filter. The still <img> below is placed exactly where drawMarkInk puts
+// the intact mark: origin toCanvas([0,0]) and width imgW * scale, as
+// fractions of the square globe box.
+const STAGE = STAGE_HALF * 2;
+const STILL = {
+  left: `${((50 - (100 * MARK_GEOMETRY.mark.mcx) / STAGE)).toFixed(3)}%`,
+  top: `${((50 - (100 * MARK_GEOMETRY.mark.mcy) / STAGE)).toFixed(3)}%`,
+  width: `${((100 * MARK_GEOMETRY.mark.imgW) / STAGE).toFixed(3)}%`,
+};
 
 export function Globe() {
   const ref = useRef<HTMLCanvasElement>(null);
+  const stillRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const canvas = ref.current;
@@ -67,22 +32,18 @@ export function Globe() {
     const { holdMs, moveMs } = globe.timing;
     let frame = 0;
     let startedAt: number | null = null;
+    let markReady = false;
+    let holdDrawn = false;
+    let needsRedraw = false;
 
     const markImage = new Image();
     markImage.onload = () => {
-      setMark(tintedMark(markImage, `rgb(${INK})`));
+      setMark(markImage);
+      markReady = true;
+      needsRedraw = true;
       if (stillQuery.matches) draw(0);
-      inkedMark(markImage)
-        .then((printed) => {
-          if (!printed) return;
-          setMark(tintedMark(printed, `rgb(${INK})`));
-          if (stillQuery.matches) draw(0);
-        })
-        .catch(() => {
-          /* the clean mark is already set */
-        });
     };
-    markImage.src = "/jk-mark.png";
+    markImage.src = "/jk-mark-inked.png";
 
     // Reading layout inside the frame loop forces a reflow per frame; track
     // the box from resize events instead. When the page holds still, resize
@@ -90,6 +51,7 @@ export function Globe() {
     let box = canvas.getBoundingClientRect();
     const sizer = new ResizeObserver(() => {
       box = canvas.getBoundingClientRect();
+      needsRedraw = true;
       if (stillQuery.matches) draw(0);
     });
     sizer.observe(canvas);
@@ -101,7 +63,14 @@ export function Globe() {
       const dpr = Math.min(window.devicePixelRatio || 1, 3);
       const pixelWidth = Math.round(box.width * dpr);
       const pixelHeight = Math.round(box.height * dpr);
-      if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+      const resized =
+        canvas.width !== pixelWidth || canvas.height !== pixelHeight;
+      const t = elapsed % (holdMs + moveMs);
+      const hold = t < holdMs;
+      // The hold is a still frame; drawing it once per cycle instead of
+      // every vsync is most of the loop's CPU.
+      if (hold && holdDrawn && !resized && !needsRedraw) return;
+      if (resized) {
         canvas.width = pixelWidth;
         canvas.height = pixelHeight;
       }
@@ -118,12 +87,15 @@ export function Globe() {
           (point[1] - MARK_GEOMETRY.mark.mcy) * scale + box.height / 2,
         ],
       };
-      const t = elapsed % (holdMs + moveMs);
-      const hold = t < holdMs;
       const tau = hold ? 0 : (t - holdMs) / moveMs;
       // One layer, no handoff: the scene's own ink is the rendered mark image,
       // eroded by the melt, so the intact letters are the true font pixels.
       drawGlobeScene(context, view, globe, tau, tau * moveMs);
+      holdDrawn = hold;
+      needsRedraw = false;
+      if (markReady && stillRef.current) {
+        stillRef.current.style.visibility = "hidden";
+      }
     };
 
     const loop = (now: number) => {
@@ -135,6 +107,7 @@ export function Globe() {
     // full mark when it flips to reduce, restart the cycle when it lifts.
     const setMotion = () => {
       cancelAnimationFrame(frame);
+      needsRedraw = true;
       if (stillQuery.matches) {
         startedAt = null;
         draw(0);
@@ -159,10 +132,24 @@ export function Globe() {
       aria-label="Source for the JK globe animation on GitHub"
       className="relative z-[2] mx-auto block h-[12.5rem] w-[12.5rem] print:hidden"
     >
+      {/* The mark is on the sheet at first paint, before any script runs;
+          the first canvas frame that has the sprite hides it. If scripts
+          never run, the still IS the mark. A plain img, not next/image:
+          the canvas draws these exact sprite bytes, so nothing may
+          re-encode or resize them. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        ref={stillRef}
+        src="/jk-mark-inked.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute"
+        style={STILL}
+      />
       {/* Above the grain overlay (z-1): a repainting canvas under a blend
           layer forces a re-blend every frame, which stutters in Firefox.
           The mark's ink texture is baked into its sprite instead. */}
-      <canvas ref={ref} className="block h-full w-full will-change-transform" aria-hidden="true" />
+      <canvas ref={ref} className="relative block h-full w-full will-change-transform" aria-hidden="true" />
     </a>
   );
 }

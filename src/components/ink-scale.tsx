@@ -8,8 +8,8 @@ import { useEffect } from "react";
    never follow the font: the same absolute wobble, blur, and noise land on
    half-size letterforms and smear them illegible on phones. This rescales
    every spatial primitive to the live root size, so the strike looks the
-   same at every width. #ink-mark is left alone: it runs once in the mark
-   sprite's own 1200px pixel space, which never changes with the page. */
+   same at every width. The mark's ink is baked into its sprite at build
+   time and needs no scaling. */
 const SPATIAL: readonly (readonly [attr: string, inverse: boolean])[] = [
   ["baseFrequency", true], // cycles per px: grows as the page shrinks
   ["scale", false], // feDisplacementMap offset in px
