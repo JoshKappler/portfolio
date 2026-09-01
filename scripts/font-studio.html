@@ -86,6 +86,8 @@
   .ink-big { filter: url(#studio); }
   .ink-sm { filter: url(#studio-small); }
   .sheet.nofilter .ink-big, .sheet.nofilter .ink-sm { filter: none; }
+  .sheet.printmode .ink-big { filter: url(#print); }
+  .sheet.printmode .ink-sm { filter: url(#print-small); }
 
   .sheet h1 { font-size: 1.7647em; font-weight: 700; margin: 0.5rem 0 0; line-height: 1.2; }
   .s13 { font-size: 0.7647em; margin: 0.25rem 0 0; }
@@ -117,6 +119,7 @@
 
   <div class="presets">
     <button id="p-live">Live site</button>
+    <button id="p-print">Print</button>
     <button id="p-off">No wear</button>
   </div>
 
@@ -149,6 +152,29 @@
         <input type="range" id="fr-opsz" data-path="fr.opsz" min="9" max="144" step="1" value="11">
         <div class="row"><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" data-path="fr.wonk" checked> WONK</label></div>
       </div>
+    </div>
+  </section>
+
+  <section class="group off" data-layer="print">
+    <div class="ghead"><label><input type="checkbox" data-path="print.on"> PRINT MODE</label></div>
+    <div class="layerbody">
+      <p class="hint">Scan-of-a-print edge: noise decides where the boundary lands, then a hard threshold snaps every pixel to solid ink or bare paper. No gradients anywhere. Replaces the layers below while on.</p>
+      <div class="row"><span>Warble</span><span class="val" id="v-print-warble"></span></div>
+      <input type="range" id="print-warble" data-path="print.warble" min="0" max="3" step="0.05" value="1.1">
+      <div class="row"><span>Warble grain</span><span class="val" id="v-print-grain"></span></div>
+      <input type="range" id="print-grain" data-path="print.grain" min="0.05" max="0.6" step="0.01" value="0.25">
+      <div class="row"><span>Bleed reach</span><span class="val" id="v-print-bleed"></span></div>
+      <input type="range" id="print-bleed" data-path="print.bleed" min="0.1" max="0.8" step="0.01" value="0.32">
+      <div class="row"><span>Fiber size</span><span class="val" id="v-print-fiberSize"></span></div>
+      <input type="range" id="print-fiberSize" data-path="print.fiberSize" min="0.03" max="0.3" step="0.005" value="0.12">
+      <div class="row"><span>Fiber stretch (horizontal grain)</span><span class="val" id="v-print-fiberStretch"></span></div>
+      <input type="range" id="print-fiberStretch" data-path="print.fiberStretch" min="1" max="8" step="0.5" value="4">
+      <div class="row"><span>Tendril gain</span><span class="val" id="v-print-tendril"></span></div>
+      <input type="range" id="print-tendril" data-path="print.tendril" min="0" max="1.2" step="0.05" value="0.55">
+      <div class="row"><span>Edge sharpness</span><span class="val" id="v-print-sharp"></span></div>
+      <input type="range" id="print-sharp" data-path="print.sharp" min="6" max="60" step="1" value="22">
+      <div class="row"><span>Threshold (lower is bolder)</span><span class="val" id="v-print-weight"></span></div>
+      <input type="range" id="print-weight" data-path="print.weight" min="0.25" max="0.7" step="0.01" value="0.45">
     </div>
   </section>
 
@@ -259,9 +285,30 @@ function filterMarkup(id) {
     <feMerge><feMergeNode in="worn"/><feMergeNode in="core"/></feMerge>
   </filter>`;
 }
-document.getElementById("filterhost").innerHTML = filterMarkup("studio") + filterMarkup("studio-small");
+/* Print mode: displace and blur set where the boundary can land, fiber
+   noise (rgb zeroed, alpha only) perturbs it, a steep feFuncA snaps alpha
+   to ink-or-paper, and a black flood re-colors the result, so partial
+   opacity and tinted ink are impossible by construction. */
+function printFilterMarkup(id) {
+  return `<filter id="${id}" x="-6%" y="-14%" width="112%" height="128%">
+    <feTurbulence class="p-warpN" type="fractalNoise" baseFrequency="0.25" numOctaves="1" seed="11" result="warp"/>
+    <feDisplacementMap class="p-disp" in="SourceGraphic" in2="warp" scale="1.1" result="warped"/>
+    <feGaussianBlur class="p-blur" in="warped" stdDeviation="0.32" result="soft"/>
+    <feTurbulence class="p-fiberN" type="fractalNoise" baseFrequency="0.12 0.48" numOctaves="2" seed="7" result="fiber"/>
+    <feColorMatrix in="fiber" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="fiberA"/>
+    <feComposite class="p-mix" in="soft" in2="fiberA" operator="arithmetic" k1="0" k2="1" k3="0.55" k4="-0.275" result="noised"/>
+    <feComponentTransfer in="noised" result="stepped"><feFuncA class="p-step" type="linear" slope="22" intercept="-9.4"/></feComponentTransfer>
+    <feFlood flood-color="#000000" result="blackfill"/>
+    <feComposite in="blackfill" in2="stepped" operator="in"/>
+  </filter>`;
+}
+document.getElementById("filterhost").innerHTML =
+  filterMarkup("studio") + filterMarkup("studio-small") +
+  printFilterMarkup("print") + printFilterMarkup("print-small");
 const bigFilter = document.getElementById("studio");
 const smallFilter = document.getElementById("studio-small");
+const printBig = document.getElementById("print");
+const printSmall = document.getElementById("print-small");
 
 const FONTS = {
   georgia:        { clean: "Georgia",             stack: `Georgia, 'Times New Roman', serif`, realBold: true },
@@ -281,9 +328,10 @@ const FONTS = {
 const LIVE = {
   font: "georgia", size: 17,
   fr: { soft: 50, wonk: true, opsz: 11 },
-  warble: { on: true, strength: 1.6, grain: 0.3 },
-  ink: { on: true, soft: 0.45, contrast: 2.6, cut: -0.38, core: true },
-  press: { on: true, freq: 0.12, vari: 0.5, floor: 0.62 },
+  print: { on: true, warble: 1.1, grain: 0.25, bleed: 0.32, fiberSize: 0.12, fiberStretch: 4, tendril: 0.55, sharp: 22, weight: 0.45 },
+  warble: { on: false, strength: 1.6, grain: 0.3 },
+  ink: { on: false, soft: 0.45, contrast: 2.6, cut: -0.38, core: true },
+  press: { on: false, freq: 0.12, vari: 0.5, floor: 0.62 },
   speck: { on: false, freq: 0.35, vari: 0.9, floor: 0.55 },
 };
 let state = structuredClone(LIVE);
@@ -319,12 +367,28 @@ function updateFilter(root, k) {
   core.setAttribute("intercept", coreOn ? -5 : 0);
 }
 
+function updatePrintFilter(root, k) {
+  const q = c => root.querySelector("." + c);
+  const p = state.print;
+  q("p-warpN").setAttribute("baseFrequency", r3(p.grain / k));
+  q("p-disp").setAttribute("scale", r3(p.warble * k));
+  q("p-blur").setAttribute("stdDeviation", r3(p.bleed * k));
+  q("p-fiberN").setAttribute("baseFrequency", `${r3(p.fiberSize / k)} ${r3(p.fiberSize * p.fiberStretch / k)}`);
+  const mix = q("p-mix");
+  mix.setAttribute("k3", p.tendril);
+  mix.setAttribute("k4", r3(-p.tendril / 2));
+  const step = q("p-step");
+  step.setAttribute("slope", p.sharp);
+  step.setAttribute("intercept", r3(0.5 - p.sharp * p.weight));
+}
+
 function recipeObj() {
   return {
     font: FONTS[state.font].clean,
     sizePx: state.size,
     fraunces: state.font === "fraunces"
       ? { soft: state.fr.soft, wonk: state.fr.wonk ? 1 : 0, opsz: state.fr.opsz } : undefined,
+    printMode: { ...state.print },
     warble: { ...state.warble },
     inkSpread: { ...state.ink },
     pressUnevenness: { ...state.press },
@@ -368,8 +432,11 @@ function render() {
 
   updateFilter(bigFilter, 1);
   updateFilter(smallFilter, 0.72);
-  const anyOn = state.warble.on || state.ink.on || state.press.on || state.speck.on;
+  updatePrintFilter(printBig, 1);
+  updatePrintFilter(printSmall, 0.72);
+  const anyOn = state.print.on || state.warble.on || state.ink.on || state.press.on || state.speck.on;
   sheet.classList.toggle("nofilter", !anyOn);
+  sheet.classList.toggle("printmode", state.print.on);
 
   document.querySelectorAll(".group[data-layer]").forEach(g => {
     g.classList.toggle("off", !state[g.dataset.layer].on);
@@ -414,7 +481,12 @@ document.getElementById("p-live").addEventListener("click", () => {
   syncUI(); render();
 });
 document.getElementById("p-off").addEventListener("click", () => {
+  state.print.on = state.warble.on = state.ink.on = state.press.on = state.speck.on = false;
+  syncUI(); render();
+});
+document.getElementById("p-print").addEventListener("click", () => {
   state.warble.on = state.ink.on = state.press.on = state.speck.on = false;
+  state.print.on = true;
   syncUI(); render();
 });
 document.getElementById("copybtn").addEventListener("click", async () => {
@@ -432,7 +504,11 @@ document.getElementById("copybtn").addEventListener("click", async () => {
 const qp = new URLSearchParams(location.search);
 if (qp.get("font") && FONTS[qp.get("font")]) state.font = qp.get("font");
 if (qp.get("wear") === "off") {
+  state.print.on = state.warble.on = state.ink.on = state.press.on = state.speck.on = false;
+}
+if (qp.get("mode") === "print") {
   state.warble.on = state.ink.on = state.press.on = state.speck.on = false;
+  state.print.on = true;
 }
 
 syncUI();
