@@ -30,12 +30,12 @@ const projects: Item[] = [
   },
   {
     name: "GTM dashboard",
-    line: "General Translation's internal growth dashboard. Agent pipelines find the leads, research and score them, and then draft the outreach; a separate reviewer model gates every outgoing draft.",
+    line: "General Translation's internal growth dashboard. Agent pipelines find the leads, research and score them, and then draft the outreach; every draft is read and confirmed by a person before it sends.",
   },
   {
     name: "autovid",
     href: "https://autovid.joshuakappler.com",
-    line: "A pipeline built at General Translation that turns docs pages into finished demo videos, 22 of them live so far: it writes the scene script, scaffolds a real working app, drives a real browser and a real code editor, records the whole run, and then cuts together the finished video.",
+    line: "A pipeline built at General Translation that turns docs pages into finished demo videos, 25 of them live so far: it writes the scene script, scaffolds a real working app, drives a real browser and a real code editor, records the whole run, and then cuts together the finished video.",
   },
   {
     name: "memo engine",
