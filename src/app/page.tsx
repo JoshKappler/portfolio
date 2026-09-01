@@ -30,7 +30,7 @@ const projects: Item[] = [
   },
   {
     name: "GTM dashboard",
-    line: "General Translation's internal growth dashboard. Agent pipelines find the leads, research and score them, and then draft the outreach; every draft is read and confirmed by a person before it sends.",
+    line: "General Translation's internal growth dashboard. Agent pipelines find the leads, research and score them, and then draft the outreach; a person reads and confirms every draft before it sends.",
   },
   {
     name: "autodemo",
