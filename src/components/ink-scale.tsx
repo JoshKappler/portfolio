@@ -18,19 +18,13 @@ const SPATIAL: readonly (readonly [attr: string, inverse: boolean])[] = [
 
 export function InkScale() {
   useEffect(() => {
-    // baseFrequency may carry two components (anisotropic fiber noise).
-    const primitives: [Element, string, number[], boolean][] = [];
+    const primitives: [Element, string, number, boolean][] = [];
     for (const filter of document.querySelectorAll("#ink-page, #ink-small")) {
       for (const node of filter.children) {
         for (const [attr, inverse] of SPATIAL) {
           const value = node.getAttribute(attr);
           if (value !== null) {
-            primitives.push([
-              node,
-              attr,
-              value.trim().split(/\s+/).map(parseFloat),
-              inverse,
-            ]);
+            primitives.push([node, attr, parseFloat(value), inverse]);
           }
         }
       }
@@ -40,10 +34,7 @@ export function InkScale() {
         parseFloat(getComputedStyle(document.documentElement).fontSize) / 16;
       if (!Number.isFinite(k) || k <= 0) return;
       for (const [node, attr, base, inverse] of primitives) {
-        node.setAttribute(
-          attr,
-          base.map((v) => String(inverse ? v / k : v * k)).join(" "),
-        );
+        node.setAttribute(attr, String(inverse ? base / k : base * k));
       }
     };
     apply();
