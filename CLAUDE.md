@@ -21,7 +21,8 @@ understated register: one narrow text column, no hero effects, no webfonts.
   last line when a non-Georgia font wraps it short of 85%. `contact-email.tsx`
   copies the address on click. `ink-scale.tsx` rescales the ink filters'
   pixel-space primitives to the live root font size, so the typewriter
-  strike stays proportional when the sheet scales down on phones.
+  strike stays proportional at every width, and pins the `[data-sheet]`
+  wrapper's height to the scaled sheet.
   `src/components/globe.tsx` is the main visual
   effect: a canvas-2D JK mark that shatters into a spinning glyph globe,
   vendored from gt-logo-loader-studio into `src/components/globe/`. It links
@@ -48,9 +49,11 @@ understated register: one narrow text column, no hero effects, no webfonts.
   no em dashes.
 - The homepage pins its layout viewport to 672px (`viewport` export in
   `page.tsx`): phones scale the whole rendered sheet instead of the root
-  font. WebKit rasterizes CSS url() SVG filters at layout resolution, so
-  shrinking CSS pixels dissolves the ink into upscaled mush on iPhones.
-  The `100vw / 42` root-font rule in globals.css now only serves narrow
+  font. WebKit rasterizes CSS url() SVG filters at layout resolution, and
+  that resolution is never finer than the layout grid, so the sheet lays
+  out at 2x (32px root font) and `[data-sheet]` in globals.css shows it at
+  half scale; the ink then prints sharp on Retina glass in every engine.
+  The `100vw / 21` root-font rule in globals.css only serves narrow
   desktop windows.
 - Every paragraph and list entry renders as a square: justified with the
   last line stretched. New or edited copy must be word-tuned until its last

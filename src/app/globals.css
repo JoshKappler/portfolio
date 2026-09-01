@@ -79,16 +79,33 @@ main[data-paper] :is(h2, nav, header p, footer p, .text-xs) {
   filter: url(#ink-small);
 }
 
-/* One fixed composition at every width, like a sheet of paper: below the
-   full 42rem column the root font scales with the viewport, and every
-   length on the page is rem or em, so lines wrap identically at any size.
-   Phones never hit this branch: the page pins its layout viewport to
-   672px (page.tsx viewport export), so 100vw/42 is 16px there and the
-   OS scales the whole render. This rule covers narrow desktop windows. */
-html:has(main[data-paper]) {
-  font-size: min(16px, calc(100vw / 42));
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
+/* One fixed composition at every width, like a sheet of paper: every
+   length on the page is rem, the root font sets the sheet's scale, and
+   below the full column width the font follows the viewport so lines
+   wrap identically at any size. The root font is 32px, twice the type's
+   visual size, and [data-sheet] shows the doubled sheet at half scale:
+   WebKit rasterizes url() filters at layout resolution, so the ink only
+   prints sharp when the layout grid is at least as fine as the glass.
+   ink-scale.tsx keeps the wrapper's height equal to the scaled sheet.
+   Phones never hit the min() branch: the layout viewport is pinned to
+   672px (page.tsx viewport export), so 100vw/21 is 32px there and the
+   OS scales the whole render. min() covers narrow desktop windows. */
+@media screen {
+  html:has(main[data-paper]) {
+    font-size: min(32px, calc(100vw / 21));
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  [data-sheet] {
+    width: 21rem;
+    margin-inline: auto;
+  }
+  [data-sheet] main[data-paper] {
+    width: 42rem;
+    max-width: none;
+    transform: scale(0.5);
+    transform-origin: top left;
+  }
 }
 
 /* Paragraphs and list entries are squares: justified, last line stretched
@@ -112,7 +129,7 @@ main {
 }
 
 a {
-  text-underline-offset: 3px;
+  text-underline-offset: 0.1875rem;
 }
 
 /* Printed, the page becomes plain ink on white: same composition, no side
@@ -125,9 +142,16 @@ a {
     --line: #bbb;
     --seal: #000;
   }
+  [data-sheet] {
+    width: auto !important;
+    height: auto !important;
+  }
   main[data-paper] {
     background: none;
     box-shadow: none;
+    transform: none;
+    width: auto;
+    max-width: 42rem;
   }
   main[data-paper]::after {
     content: none;

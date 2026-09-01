@@ -140,6 +140,7 @@ function ItemList({ title, items }: { title: string; items: Item[] }) {
 
 export default function Home() {
   return (
+    <div data-sheet>
     <main
       data-paper
       className="mx-auto max-w-[42rem] px-16 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
@@ -162,10 +163,10 @@ export default function Home() {
             seed="11"
             result="warp"
           />
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.6" />
-          <feGaussianBlur stdDeviation="0.45" result="soft" />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="0.8" />
+          <feGaussianBlur stdDeviation="0.22" result="soft" />
           <feComponentTransfer in="soft" result="inked">
-            <feFuncA type="linear" slope="2.6" intercept="-0.38" />
+            <feFuncA type="linear" slope="2.6" intercept="-0.58" />
           </feComponentTransfer>
           <feTurbulence
             type="fractalNoise"
@@ -174,7 +175,7 @@ export default function Home() {
             seed="29"
           />
           <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.5" intercept="0.62" />
+            <feFuncA type="linear" slope="0.2" intercept="0.85" />
           </feComponentTransfer>
           <feComposite in="inked" in2="press" operator="in" result="worn" />
           <feComponentTransfer in="soft" result="core">
@@ -193,10 +194,10 @@ export default function Home() {
             seed="11"
             result="warp"
           />
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.15" />
-          <feGaussianBlur stdDeviation="0.32" result="soft" />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="0.58" />
+          <feGaussianBlur stdDeviation="0.16" result="soft" />
           <feComponentTransfer in="soft" result="inked">
-            <feFuncA type="linear" slope="2.6" intercept="-0.38" />
+            <feFuncA type="linear" slope="2.6" intercept="-0.58" />
           </feComponentTransfer>
           <feTurbulence
             type="fractalNoise"
@@ -205,7 +206,7 @@ export default function Home() {
             seed="29"
           />
           <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.5" intercept="0.62" />
+            <feFuncA type="linear" slope="0.2" intercept="0.85" />
           </feComponentTransfer>
           <feComposite in="inked" in2="press" operator="in" result="worn" />
           <feComponentTransfer in="soft" result="core">
@@ -297,7 +298,7 @@ export default function Home() {
         <CrestMark className="inline-block h-[8rem] text-seal" />
       </div>
 
-      <footer className="mt-12 border-t border-border pt-4 text-center text-xs">
+      <footer className="mt-12 border-t-2 border-border pt-4 text-center text-xs print:border-t">
         <p>Josh Kappler · President, Boffy LLC · 2026</p>
         <p className="mt-1">
           Founding Developer Experience Engineer, General Translation, Inc.
@@ -305,5 +306,6 @@ export default function Home() {
         <p className="mt-1">Set in Georgia. System fonts only, no trackers.</p>
       </footer>
     </main>
+    </div>
   );
 }
