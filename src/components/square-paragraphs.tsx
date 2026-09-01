@@ -27,7 +27,7 @@ export function SquareParagraphs() {
       const span =
         Math.max(...last.map((r) => r.right)) -
         Math.min(...last.map((r) => r.left));
-      return span < el.clientWidth * NEARLY_FULL;
+      return span < el.getBoundingClientRect().width * NEARLY_FULL;
     });
     blocks.forEach((el, i) => {
       el.style.textAlignLast = "";
