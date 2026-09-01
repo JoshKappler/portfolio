@@ -144,77 +144,93 @@ export default function Home() {
       data-paper
       className="mx-auto max-w-[42rem] px-16 pt-6 pb-14 text-[1.0625rem] leading-relaxed"
     >
-      {/* Referenced by globals.css. Wobble the edge, blur, then rebuild
-          two layers from the soft alpha: a worn rim that noise chews at,
-          and a solid core merged on top, so stroke centers are always full
-          ink and all the wear lives at the edges, like a typewriter
-          strike. Wear is only ever an alpha mask over the clean glyph:
-          arithmetic noise composites bleed the noise's own RGB into the
-          ink and gray it. #ink-small is the same recipe with every
-          spatial length at 0.72x, matching the 12 and 13px type, so the
-          wear shrinks with the glyphs instead of gouging them. */}
+      {/* Referenced by globals.css. Scan-of-a-print edge: a small warble
+          displaces the glyph, a tiny blur sets how far ink can reach,
+          fiber-grain noise (rgb zeroed, alpha only) perturbs the halo,
+          then a steep feFuncA snaps alpha to ink-or-paper and a black
+          flood recolors the result. Partial opacity and tinted ink are
+          impossible by construction: the letter body is always solid
+          #000, and all character lives in where the boundary lands.
+          #ink-small is the same recipe with every spatial length at
+          0.72x, matching the 12 and 13px type. */}
       <svg aria-hidden="true" width="0" height="0" className="absolute">
-        <filter id="ink-page" x="-4%" y="-12%" width="108%" height="124%">
+        <filter id="ink-page" x="-6%" y="-14%" width="112%" height="128%">
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.3"
+            baseFrequency="0.25"
             numOctaves="1"
             seed="11"
             result="warp"
           />
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.6" />
-          <feGaussianBlur stdDeviation="0.45" result="soft" />
-          <feComponentTransfer in="soft" result="inked">
-            <feFuncA type="linear" slope="2.6" intercept="-0.38" />
-          </feComponentTransfer>
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.12"
-            numOctaves="3"
-            seed="29"
-          />
-          <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.5" intercept="0.62" />
-          </feComponentTransfer>
-          <feComposite in="inked" in2="press" operator="in" result="worn" />
-          <feComponentTransfer in="soft" result="core">
-            <feFuncA type="linear" slope="8" intercept="-5" />
-          </feComponentTransfer>
-          <feMerge>
-            <feMergeNode in="worn" />
-            <feMergeNode in="core" />
-          </feMerge>
-        </filter>
-        <filter id="ink-small" x="-4%" y="-12%" width="108%" height="124%">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.42"
-            numOctaves="1"
-            seed="11"
-            result="warp"
-          />
-          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.15" />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="1.1" />
           <feGaussianBlur stdDeviation="0.32" result="soft" />
-          <feComponentTransfer in="soft" result="inked">
-            <feFuncA type="linear" slope="2.6" intercept="-0.38" />
-          </feComponentTransfer>
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.17"
-            numOctaves="3"
-            seed="29"
+            baseFrequency="0.12 0.48"
+            numOctaves="2"
+            seed="7"
+            result="fiber"
           />
-          <feComponentTransfer result="press">
-            <feFuncA type="linear" slope="0.5" intercept="0.62" />
+          <feColorMatrix
+            in="fiber"
+            type="matrix"
+            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"
+            result="fiberA"
+          />
+          <feComposite
+            in="soft"
+            in2="fiberA"
+            operator="arithmetic"
+            k1="0"
+            k2="1"
+            k3="0.55"
+            k4="-0.275"
+            result="noised"
+          />
+          <feComponentTransfer in="noised" result="stepped">
+            <feFuncA type="linear" slope="22" intercept="-9.4" />
           </feComponentTransfer>
-          <feComposite in="inked" in2="press" operator="in" result="worn" />
-          <feComponentTransfer in="soft" result="core">
-            <feFuncA type="linear" slope="8" intercept="-5" />
+          <feFlood floodColor="#000000" result="blackfill" />
+          <feComposite in="blackfill" in2="stepped" operator="in" />
+        </filter>
+        <filter id="ink-small" x="-6%" y="-14%" width="112%" height="128%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.35"
+            numOctaves="1"
+            seed="11"
+            result="warp"
+          />
+          <feDisplacementMap in="SourceGraphic" in2="warp" scale="0.79" />
+          <feGaussianBlur stdDeviation="0.23" result="soft" />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.17 0.67"
+            numOctaves="2"
+            seed="7"
+            result="fiber"
+          />
+          <feColorMatrix
+            in="fiber"
+            type="matrix"
+            values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"
+            result="fiberA"
+          />
+          <feComposite
+            in="soft"
+            in2="fiberA"
+            operator="arithmetic"
+            k1="0"
+            k2="1"
+            k3="0.55"
+            k4="-0.275"
+            result="noised"
+          />
+          <feComponentTransfer in="noised" result="stepped">
+            <feFuncA type="linear" slope="22" intercept="-9.4" />
           </feComponentTransfer>
-          <feMerge>
-            <feMergeNode in="worn" />
-            <feMergeNode in="core" />
-          </feMerge>
+          <feFlood floodColor="#000000" result="blackfill" />
+          <feComposite in="blackfill" in2="stepped" operator="in" />
         </filter>
       </svg>
       <SquareParagraphs />
