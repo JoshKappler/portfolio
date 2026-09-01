@@ -6,6 +6,12 @@
 <title>Font Studio</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=IM+Fell+DW+Pica&family=IM+Fell+Double+Pica&family=IM+Fell+English&family=Inknut+Antiqua:wght@400;700&family=Special+Elite&display=swap">
 <style>
+  /* Downloaded candidates live untracked in fonts-local/ (personal-use
+     licenses; never commit or deploy them without clearing the license). */
+  @font-face { font-family: "Caslon Antique"; src: url("fonts-local/caslon-antique.regular.ttf"); }
+  @font-face { font-family: "Elegant Typewriter"; src: url("fonts-local/ELEGANT TYPEWRITER Regular.ttf"); font-weight: 400; }
+  @font-face { font-family: "Elegant Typewriter"; src: url("fonts-local/ELEGANT TYPEWRITER Bold.ttf"); font-weight: 700; }
+  @font-face { font-family: "Tox Typewriter"; src: url("fonts-local/Tox Typewriter.ttf"); }
   :root {
     --paper: #f2e8d5;
     --ink: #000;
@@ -92,6 +98,8 @@
   .sheet ul { list-style: none; margin: 1rem 0 0; padding: 0; }
   .sheet li + li { margin-top: 1.25rem; }
   .sheet p.body, .sheet li { text-align: justify; text-align-last: justify; }
+  .sheet p.body.loose-last, .sheet li.loose-last { text-align-last: center; }
+  .sheet.measuring p.body, .sheet.measuring li { text-align-last: left; }
   .u { text-decoration: underline; text-underline-offset: 3px; }
   .b { font-weight: 700; }
   .sheet footer {
@@ -126,6 +134,9 @@
         <option value="fraunces">Fraunces (variable)</option>
         <option value="inknut">Inknut Antiqua</option>
         <option value="specialElite">Special Elite</option>
+        <option value="caslonAntique">Caslon Antique (local)</option>
+        <option value="elegantTypewriter">Elegant Typewriter (local)</option>
+        <option value="toxTypewriter">Tox Typewriter (local)</option>
       </select>
       <p class="hint warn" id="fauxnote" hidden>This face ships no bold; the browser fakes the bold names by smearing.</p>
       <div class="row"><span>Body size (px)</span><span class="val" id="v-size"></span></div>
@@ -262,6 +273,9 @@ const FONTS = {
   fraunces:       { clean: "Fraunces",            stack: `Fraunces, Georgia, serif`, realBold: true },
   inknut:         { clean: "Inknut Antiqua",      stack: `'Inknut Antiqua', Georgia, serif`, realBold: true },
   specialElite:   { clean: "Special Elite",       stack: `'Special Elite', 'Courier New', monospace`, realBold: false },
+  caslonAntique:     { clean: "Caslon Antique",     stack: `'Caslon Antique', Georgia, serif`, realBold: false },
+  elegantTypewriter: { clean: "Elegant Typewriter", stack: `'Elegant Typewriter', 'Courier New', monospace`, realBold: true },
+  toxTypewriter:     { clean: "Tox Typewriter",     stack: `'Tox Typewriter', 'Courier New', monospace`, realBold: false },
 };
 
 const LIVE = {
@@ -319,6 +333,28 @@ function recipeObj() {
 }
 
 const sheet = document.getElementById("sheet");
+
+/* The site's square-paragraphs fallback: a last line whose natural width
+   falls under 85% of the column gets centered instead of stretched. */
+function squareLastLines() {
+  const blocks = document.querySelectorAll(".sheet p.body, .sheet li");
+  sheet.classList.add("measuring");
+  blocks.forEach(el => el.classList.remove("loose-last"));
+  const loose = [];
+  blocks.forEach(el => {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const rects = [...range.getClientRects()].filter(r => r.width > 0);
+    if (!rects.length) return;
+    const lastTop = rects[rects.length - 1].top;
+    const row = rects.filter(r => Math.abs(r.top - lastTop) < 2);
+    const width = Math.max(...row.map(r => r.right)) - Math.min(...row.map(r => r.left));
+    if (width / el.getBoundingClientRect().width < 0.85) loose.push(el);
+  });
+  sheet.classList.remove("measuring");
+  loose.forEach(el => el.classList.add("loose-last"));
+}
+
 function render() {
   const f = FONTS[state.font];
   sheet.style.fontFamily = f.stack;
@@ -343,7 +379,16 @@ function render() {
     if (l) l.textContent = getPath(i.dataset.path);
   });
   document.getElementById("recipe").value = JSON.stringify(recipeObj(), null, 2);
+  squareLastLines();
+  // Re-measure once the face itself arrives; fonts.ready alone resolves
+  // too early in Firefox for lazily loaded local files.
+  const family = f.stack.split(",")[0].replace(/'/g, "").trim();
+  Promise.all([
+    document.fonts.load(`${state.size}px "${family}"`),
+    document.fonts.load(`700 ${state.size}px "${family}"`),
+  ]).then(() => squareLastLines());
 }
+document.fonts.addEventListener("loadingdone", () => squareLastLines());
 
 function syncUI() {
   document.getElementById("fontsel").value = state.font;
@@ -381,6 +426,14 @@ document.getElementById("copybtn").addEventListener("click", async () => {
     document.execCommand("copy");
   }
 });
+
+/* ?font=<key>&wear=off preselects a tab, e.g. for opening one tab per
+   downloaded candidate with the filters cleared. */
+const qp = new URLSearchParams(location.search);
+if (qp.get("font") && FONTS[qp.get("font")]) state.font = qp.get("font");
+if (qp.get("wear") === "off") {
+  state.warble.on = state.ink.on = state.press.on = state.speck.on = false;
+}
 
 syncUI();
 render();
