@@ -50,11 +50,16 @@ understated register: one narrow text column, no hero effects, no webfonts.
 - The homepage pins its layout viewport to 672px (`viewport` export in
   `page.tsx`): phones scale the whole rendered sheet instead of the root
   font. WebKit rasterizes CSS url() SVG filters at layout resolution, and
-  that resolution is never finer than the layout grid, so the sheet lays
-  out at 2x (32px root font) and `[data-sheet]` in globals.css shows it at
-  half scale; the ink then prints sharp on Retina glass in every engine.
-  The `100vw / 21` root-font rule in globals.css only serves narrow
-  desktop windows.
+  that resolution is never finer than the layout grid, so on mouse-driven
+  screens (`hover: hover` and `pointer: fine`) the sheet lays out at 2x
+  (32px root font) and `[data-sheet]` in globals.css shows it at half
+  scale; the ink then prints sharp on Retina glass. Touch devices stay on
+  the 1x grid (16px root, no transform): the 2x grid quadruples every
+  filter buffer and the grain blend, and at DPR 3 it exhausted phone GPU
+  memory (black sheet, unrasterized lower half, tab killed). Both grids
+  are all-rem and wrap identically; never add a length in px. The
+  `min()` root-font rules in globals.css only serve narrow desktop
+  windows.
 - Every paragraph and list entry renders as a square: justified with the
   last line stretched. New or edited copy must be word-tuned until its last
   line naturally fills 91-99% of the column (measure in the browser with
