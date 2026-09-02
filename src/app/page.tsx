@@ -266,7 +266,7 @@ export default function Home() {
         myself: tool loops, state machines, memory, routing. No frameworks.
       </p>
       <p className="mt-4">
-        Before engineering I ran{" "}
+        Before engineering I built and ran{" "}
         <a
           href="https://youtube.com/boffy"
           target="_blank"
