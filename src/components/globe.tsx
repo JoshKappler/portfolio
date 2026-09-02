@@ -100,7 +100,10 @@ export function Globe() {
 
     const loop = (now: number) => {
       frame = requestAnimationFrame(loop);
-      if (startedAt == null) startedAt = now;
+      // The still image stands in until the sprite arrives; the first frame
+      // then opens on the melt itself, skipping the opening hold.
+      if (!markReady) return;
+      if (startedAt == null) startedAt = now - holdMs;
       draw(now - startedAt);
     };
     // Follow the motion preference live, not just at mount: hold on the
