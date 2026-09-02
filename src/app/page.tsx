@@ -117,7 +117,7 @@ const headerLinks: ItemLink[] = [
 function ItemList({ title, items }: { title: string; items: Item[] }) {
   return (
     <section className="mt-12">
-      <h2 className="text-center text-xs">
+      <h2 className="text-center text-xl">
         {title}
       </h2>
       <ul className="mt-4 space-y-5">
@@ -288,7 +288,7 @@ export default function Home() {
       <ItemList title="playground" items={playground} />
 
       <section className="mt-12">
-        <h2 className="text-center text-xs">
+        <h2 className="text-center text-xl">
           contact
         </h2>
         <div className="relative mt-4 text-center">
@@ -303,7 +303,7 @@ export default function Home() {
         <CrestMark className="inline-block h-[8rem] text-seal" />
       </div>
 
-      <footer className="mt-12 border-t-2 border-border pt-4 text-center text-xs print:border-t">
+      <footer className="mt-12 border-t-2 border-border pt-4 text-center text-xl print:border-t">
         <p>Josh Kappler · President, Boffy LLC · 2026</p>
         <p className="mt-1">
           Founding Developer Experience Engineer, General Translation, Inc.
