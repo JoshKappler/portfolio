@@ -82,19 +82,32 @@ main[data-paper] :is(h2, nav, header p, footer p, .text-xs) {
 /* One fixed composition at every width, like a sheet of paper: every
    length on the page is rem, the root font sets the sheet's scale, and
    below the full column width the font follows the viewport so lines
-   wrap identically at any size. The root font is 32px, twice the type's
-   visual size, and [data-sheet] shows the doubled sheet at half scale:
-   WebKit rasterizes url() filters at layout resolution, so the ink only
-   prints sharp when the layout grid is at least as fine as the glass.
-   ink-scale.tsx keeps the wrapper's height equal to the scaled sheet.
-   Phones never hit the min() branch: the layout viewport is pinned to
-   672px (page.tsx viewport export), so 100vw/21 is 32px there and the
-   OS scales the whole render. min() covers narrow desktop windows. */
+   wrap identically at any size. Phones never hit the min() branch: the
+   layout viewport is pinned to 672px (page.tsx viewport export), so
+   100vw/42 is 16px there and the OS scales the whole render. min()
+   covers narrow desktop windows. */
 @media screen {
   html:has(main[data-paper]) {
-    font-size: min(32px, calc(100vw / 21));
+    font-size: min(16px, calc(100vw / 42));
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+  }
+}
+
+/* Mouse-driven screens lay the sheet out at 2x and show it at half scale:
+   the root font is 32px, twice the type's visual size, and [data-sheet]
+   holds the scaled sheet. WebKit rasterizes url() filters at layout
+   resolution, so the ink only prints sharp on Retina glass when the
+   layout grid is at least as fine as the glass. ink-scale.tsx keeps the
+   wrapper's height equal to the scaled sheet and doubles the filter
+   lengths on its own. Touch devices stay on the 1x grid on purpose: the
+   2x grid quadruples every filter buffer and the page-tall grain blend,
+   and at DPR 3 that is more GPU memory than a phone has. iOS painted the
+   sheet black, stopped rasterizing the lower half, then killed the tab.
+   Every length is rem, so both grids wrap identically. */
+@media screen and (hover: hover) and (pointer: fine) {
+  html:has(main[data-paper]) {
+    font-size: min(32px, calc(100vw / 21));
   }
   [data-sheet] {
     width: 21rem;
