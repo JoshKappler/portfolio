@@ -75,6 +75,11 @@ const projects: Item[] = [
 
 const playground: Item[] = [
   {
+    name: "escapement",
+    href: "https://escapement.joshuakappler.com",
+    line: "A perpetual calendar wristwatch simulated gear by gear in the browser. The balance wheel is a differential equation at six beats a second; every hand, disc, and digit is geared to it through 51 wheels in 26 tested meshes. Pull the slider and it comes apart in 3D, part by part.",
+  },
+  {
     name: "lasso",
     href: "https://github.com/JoshKappler/herdr-layout",
     line: "The terminal cockpit I live in: a forked multiplexer herding more Claude Code sessions than I can watch. Live AI summaries on every tab, a subagent viewer panel, and morse that beeps which pane wants me.",
