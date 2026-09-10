@@ -252,7 +252,7 @@ export default function Home() {
       </div>
 
       <p className="mt-8">
-        I&apos;m the founding DX Engineer at{" "}
+        Most recently I was the founding DX Engineer at{" "}
         <a
           href="https://generaltranslation.com"
           target="_blank"
@@ -261,7 +261,7 @@ export default function Home() {
         >
           General Translation
         </a>
-        , where I&apos;ve built the dashboard&apos;s AI assistant, an
+        , where I built the dashboard&apos;s AI assistant, an
         autonomous outbound growth engine, and a content engine that turns the
         docs into demo videos and tutorials.
       </p>
@@ -306,7 +306,7 @@ export default function Home() {
       <footer className="mt-12 border-t-2 border-border pt-4 text-center text-xs print:border-t">
         <p>Josh Kappler · President, Boffy LLC · 2026</p>
         <p className="mt-1">
-          Founding Developer Experience Engineer, General Translation, Inc.
+          Founding Developer Experience Engineer, General Translation, Inc., 2026
         </p>
         <p className="mt-1">Set in Georgia. System fonts only, no trackers.</p>
       </footer>
