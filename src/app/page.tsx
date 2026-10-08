@@ -263,7 +263,8 @@ export default function Home() {
         </a>
         , where I built the dashboard&apos;s AI assistant, an
         autonomous outbound growth engine, and a content engine that turns the
-        docs into demo videos and tutorials.
+        docs into finished demo videos and clear step-by-step written
+        tutorials in any language.
       </p>
       <p className="mt-4">
         I ship whole products: the frontend, the backend, the data model, and
