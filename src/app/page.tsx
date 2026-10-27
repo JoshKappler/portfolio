@@ -305,9 +305,9 @@ export default function Home() {
       </div>
 
       <footer className="mt-12 border-t-2 border-border pt-4 text-center text-xs print:border-t">
-        <p>Josh Kappler · President, Boffy LLC · 2026</p>
+        <p>Josh Kappler · Software Engineer, San Francisco · 2026</p>
         <p className="mt-1">
-          Founding Developer Experience Engineer, General Translation, Inc., 2026
+          Founding Developer Experience Engineer, General Translation, Inc., Jul to Sep 2026
         </p>
         <p className="mt-1">Set in Georgia. System fonts only, no trackers.</p>
       </footer>
