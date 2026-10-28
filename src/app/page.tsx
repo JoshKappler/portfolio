@@ -58,6 +58,11 @@ const projects: Item[] = [
     line: "Claude Code, driven from an Apple Watch over a cellular connection. The agent itself runs on my Mac behind an authenticated tunnel; the watch is a native watchOS client: dictate a prompt, pinch to send it, roll the crown to approve diffs, shake your wrist to stop it.",
   },
   {
+    name: "butler",
+    href: "https://github.com/JoshKappler/butler",
+    line: "A voice agent for my Windows desktop, open source. Hold a key and talk: it opens apps, reads the screen, searches the web and my files, and starts Claude Code agents. Each job can run on OpenAI, Gemini, Anthropic or Meta, and it all lives in a liquid-glass Dynamic Island.",
+  },
+  {
     name: "fleetview",
     href: "https://github.com/JoshKappler/claude-control-center",
     line: "A terminal cockpit that runs up to eight Claude agents in parallel and keeps every machine I own in sync. The agents survive crashes and reboots. Plain Node, raw ANSI, zero npm dependencies.",
