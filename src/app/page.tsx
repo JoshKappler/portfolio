@@ -51,12 +51,22 @@ const projects: Item[] = [
   {
     name: "pinch",
     href: "https://github.com/JoshKappler/apple-watch-claude-code",
-    line: "Claude Code, driven from an Apple Watch over a cellular connection. The agent itself runs on my Mac behind an authenticated tunnel; the watch is a native watchOS client: dictate a prompt, pinch to send it, roll the crown to approve diffs, shake your wrist to stop it.",
+    line: "Claude Code, driven from an Apple Watch over a cellular connection. The agent itself runs on my Mac behind an authenticated tunnel; the watch is a native watchOS client: dictate a prompt, pinch to send it, roll the crown to approve diffs, shake your wrist to stop it cold.",
   },
   {
     name: "butler",
     href: "https://github.com/JoshKappler/butler",
-    line: "A voice agent for my Windows desktop, open source. Hold a key and talk: it opens apps, reads the screen, searches the web and my files, and starts Claude Code agents. Each job can run on OpenAI, Gemini, Anthropic or Meta, and it all lives in a liquid-glass Dynamic Island.",
+    line: "A voice agent for my Windows desktop, open source. Hold a key and talk: it opens apps, reads the screen, searches the web and my files, and starts Claude Code agents. Each job can run on OpenAI, Gemini, Anthropic or Meta, and it all lives inside a liquid-glass Dynamic Island.",
+  },
+  {
+    name: "autohack",
+    href: "https://github.com/JoshKappler/autohack",
+    line: "An autonomous bug-hunter that watches seven public bug bounty platforms, spawns hour-long hunts, adversarially reviews every one of its own findings, and then drafts its submission-ready reports.",
+  },
+  {
+    name: "lasso",
+    href: "https://github.com/JoshKappler/herdr-layout",
+    line: "The terminal cockpit I live in: a forked multiplexer herding more Claude Code sessions than I can watch. Live AI summaries on every tab, a subagent viewer panel, and morse that beeps which pane wants me.",
   },
 ];
 
@@ -249,7 +259,7 @@ export default function Home() {
           Boffy
         </a>
         , a gaming YouTube channel with 2.1M+ subscribers and 270M+ lifetime views
-        across 136 long-form videos, each one written and presented by me.
+        across all 136 long-form videos, each one written and presented by me.
       </p>
 
       <ItemList title="projects" items={projects} />
