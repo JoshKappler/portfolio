@@ -29,10 +29,6 @@ const projects: Item[] = [
     line: "The assistant on the General Translation dashboard, live in production today. Grounded in the docs, with read-only account tools, per-plan model tiers, per-plan rate limits, and per-plan usage billing.",
   },
   {
-    name: "GTM dashboard",
-    line: "General Translation's internal growth dashboard. Agent pipelines find the leads, research and score them, and then draft the outreach; a person reads and confirms every draft before it sends.",
-  },
-  {
     name: "autodemo",
     href: "https://autovid.joshuakappler.com",
     line: "A pipeline built at General Translation that turns a docs page into a finished demo video in any language: it writes the scene script, scaffolds a real working app, drives a real browser and a real code editor, records the whole run, and then cuts together the finished video.",
@@ -48,9 +44,9 @@ const projects: Item[] = [
     line: "Insurance claim adjudication where Claude reads the documents and a deterministic engine computes the payout. Median error against the human adjudicator: $0. Built end to end in 36 hours.",
   },
   {
-    name: "autohack",
-    href: "https://github.com/JoshKappler/autohack",
-    line: "An autonomous bug-hunter that watches seven public bug bounty platforms, spawns hour-long hunts, adversarially reviews every one of its own findings, and then drafts submission-ready reports.",
+    name: "sixteen",
+    href: "https://www.youtube.com/watch?v=I1aBncW7lgY",
+    line: "Minecraft's engine, rewritten from scratch in Rust across sixteen crates and 1,680 commits. Its terrain matches the real game block for block, and the render distance goes from 32 chunks to 1,000. The video I made about the build has passed 430K views on YouTube.",
   },
   {
     name: "pinch",
@@ -62,20 +58,6 @@ const projects: Item[] = [
     href: "https://github.com/JoshKappler/butler",
     line: "A voice agent for my Windows desktop, open source. Hold a key and talk: it opens apps, reads the screen, searches the web and my files, and starts Claude Code agents. Each job can run on OpenAI, Gemini, Anthropic or Meta, and it all lives in a liquid-glass Dynamic Island.",
   },
-  {
-    name: "fleetview",
-    href: "https://github.com/JoshKappler/claude-control-center",
-    line: "A terminal cockpit that runs up to eight Claude agents in parallel and keeps every machine I own in sync. The agents survive crashes and reboots. Plain Node, raw ANSI, zero npm dependencies.",
-  },
-  {
-    name: "survival station",
-    href: "https://github.com/JoshKappler/survival-station",
-    line: "An air-gapped, solar-powered AI survival computer built for a non-technical user: local models, an 85 GB offline library with all of English Wikipedia, full offline US maps, no internet ever.",
-  },
-  {
-    name: "property leads",
-    line: "Built for a Chicago property holding company that buys foreclosures for cash. Four agents on an hourly cron find, research, and score the properties, all at roughly $0.22 per 33-property batch.",
-  },
 ];
 
 const playground: Item[] = [
@@ -83,26 +65,6 @@ const playground: Item[] = [
     name: "escapement",
     href: "https://escapement.joshuakappler.com",
     line: "A perpetual calendar wristwatch simulated gear by gear in the browser. The balance wheel is a differential equation at six beats a second; every hand, disc, and digit is geared to it through 51 wheels in 26 tested meshes. Pull the slider and it comes apart in 3D, part by part.",
-  },
-  {
-    name: "lasso",
-    href: "https://github.com/JoshKappler/herdr-layout",
-    line: "The terminal cockpit I live in: a forked multiplexer herding more Claude Code sessions than I can watch. Live AI summaries on every tab, a subagent viewer panel, and morse that beeps which pane wants me.",
-  },
-  {
-    name: "chadGPT",
-    href: "https://chadgpt.joshuakappler.com",
-    line: 'A hostile chatbot on a green CRT. He answers your question correctly, and then he insults you for asking it. He gets grumpier with every message you send. Dial him on the rotary phone. He picks up.',
-  },
-  {
-    name: "chud",
-    href: "https://chud.joshuakappler.com",
-    line: 'A goblin voice assistant, his skin a mass hung on a base-excited spring. Say "hey chud" and he talks back out loud. Beat him up: 20 damage stages, 16 recorded screams. He stays grumpy until he heals.',
-  },
-  {
-    name: "deskfly",
-    href: "https://deskfly.joshuakappler.com",
-    line: "A fruit fly's real connectome, living as a fly on my desktop. All 139,255 neurons and 3.87M connections run in a live spiking network. It sees the screen through its real eye map and lands on window edges.",
   },
   {
     name: "scuttle",
@@ -277,7 +239,7 @@ export default function Home() {
         myself: tool loops, state machines, memory, routing. No frameworks.
       </p>
       <p className="mt-4">
-        Before engineering I built and ran{" "}
+        I also run Boffy Media LLC, the company behind{" "}
         <a
           href="https://youtube.com/boffy"
           target="_blank"
@@ -286,8 +248,8 @@ export default function Home() {
         >
           Boffy
         </a>
-        , a YouTube channel with 2.1M subscribers and 270M lifetime views
-        across its 136 long-form videos.
+        , a gaming YouTube channel with 2.1M+ subscribers and 270M+ lifetime views
+        across 136 long-form videos, each one written and presented by me.
       </p>
 
       <ItemList title="projects" items={projects} />
