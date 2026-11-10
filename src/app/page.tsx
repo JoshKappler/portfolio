@@ -1,6 +1,5 @@
 import type { Viewport } from "next";
 import { ContactEmail } from "@/components/contact-email";
-import { CrestMark } from "@/components/crest-mark";
 import { Globe } from "@/components/globe";
 import { InkScale } from "@/components/ink-scale";
 import { SquareParagraphs } from "@/components/square-paragraphs";
@@ -26,47 +25,47 @@ const projects: Item[] = [
   {
     name: "Ask AI",
     href: "https://dash.generaltranslation.com",
-    line: "The assistant on the General Translation dashboard, live in production today. Grounded in the docs, with read-only account tools, per-plan model tiers, per-plan rate limits, and per-plan usage billing.",
+    line: "The assistant on the General Translation dashboard, live in production. Grounded in the docs, with per-plan model tiers and limits.",
   },
   {
     name: "autodemo",
     href: "https://autovid.joshuakappler.com",
-    line: "A pipeline built at General Translation that turns a docs page into a finished demo video in any language: it writes the scene script, scaffolds a real working app, drives a real browser and a real code editor, records the whole run, and then cuts together the finished video.",
+    line: "Turns a docs page into a demo video in any language: it builds a real app, drives a real browser and editor, and cuts the video.",
   },
   {
     name: "memo engine",
     href: DEMO_URL,
-    line: "Built for a private credit firm. It reads a deal's documents and writes the credit memo, with every claim cited back to the exact source page. The demo runs a full 80-file deal start to finish.",
+    line: "Built for a private credit firm: it reads a deal's docs and writes the credit memo, with every claim cited back to its source page.",
   },
   {
     name: "claim wright",
     href: "https://github.com/JoshKappler/claim-wright",
-    line: "Insurance claim adjudication where Claude reads the documents and a deterministic engine computes the payout. Median error against the human adjudicator: $0. Built end to end in 36 hours.",
+    line: "Insurance claims: Claude reads the documents and a deterministic engine sets the payout. Median error against humans: $0.",
   },
   {
     name: "sixteen",
     href: "https://www.youtube.com/watch?v=I1aBncW7lgY",
-    line: "Minecraft's engine, rewritten from scratch in Rust across sixteen crates and 1,680 commits. Its terrain matches the real game block for block, and the render distance goes from 32 chunks to 1,000. The video I made about the build has passed 430K views on YouTube.",
+    line: "Minecraft's engine rewritten from scratch in Rust, with terrain that matches the real game block for block. The video has 430K views.",
   },
   {
     name: "pinch",
     href: "https://github.com/JoshKappler/apple-watch-claude-code",
-    line: "Claude Code, driven from an Apple Watch over a cellular connection. The agent itself runs on my Mac behind an authenticated tunnel; the watch is a native watchOS client: dictate a prompt, pinch to send it, roll the crown to approve diffs, shake your wrist to stop it cold.",
+    line: "Claude Code driven from an Apple Watch over cellular. Dictate a prompt, pinch to send it, roll the crown to approve diffs, shake to stop.",
   },
   {
     name: "butler",
     href: "https://github.com/JoshKappler/butler",
-    line: "A voice agent for my Windows desktop, open source. Hold a key and talk: it opens apps, reads the screen, searches the web and my files, and starts Claude Code agents. Each job can run on OpenAI, Gemini, Anthropic or Meta, and it all lives inside a liquid-glass Dynamic Island.",
+    line: "An open-source voice agent for my Windows PC. Hold a key and talk: it opens apps, reads the screen, and starts Claude Code agents.",
   },
   {
     name: "autohack",
     href: "https://github.com/JoshKappler/autohack",
-    line: "An autonomous bug-hunter that watches seven public bug bounty platforms, spawns hour-long hunts, adversarially reviews every one of its own findings, and then drafts its submission-ready reports.",
+    line: "An autonomous bug-hunter across seven bounty platforms. It runs hour-long hunts, attacks its own findings, and drafts the reports.",
   },
   {
     name: "lasso",
     href: "https://github.com/JoshKappler/herdr-layout",
-    line: "The terminal cockpit I live in: a forked multiplexer herding more Claude Code sessions than I can watch. Live AI summaries on every tab, a subagent viewer panel, and morse that beeps which pane wants me.",
+    line: "The terminal cockpit I run Claude Code from: a forked multiplexer with live AI summaries on every tab and a subagent viewer.",
   },
 ];
 
@@ -74,12 +73,12 @@ const playground: Item[] = [
   {
     name: "escapement",
     href: "https://escapement.joshuakappler.com",
-    line: "A perpetual calendar wristwatch simulated gear by gear in the browser. The balance wheel is a differential equation at six beats a second; every hand, disc, and digit is geared to it through 51 wheels in 26 tested meshes. Pull the slider and it comes apart in 3D, part by part.",
+    line: "A perpetual calendar watch simulated gear by gear in the browser: 51 wheels in 26 tested meshes, running at six beats a second.",
   },
   {
     name: "scuttle",
     href: "https://scuttle.joshuakappler.com",
-    line: "A voxel pirate roguelite in the browser. Cannonballs knock out real hull voxels, breaches flood watertight compartments, and the ships list, capsize, and sink for real. 500 unit tests cover the simulation core.",
+    line: "A voxel pirate roguelite in the browser. Cannonballs knock out real hull voxels, breaches flood below, and ships list, capsize, and sink.",
   },
 ];
 
@@ -277,11 +276,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div aria-hidden className="mt-14 text-center leading-none">
-        <CrestMark className="inline-block h-[8rem] text-seal" />
-      </div>
-
-      <footer className="mt-12 border-t-2 border-border pt-4 text-center text-xs print:border-t">
+      <footer className="mt-14 border-t-2 border-border pt-4 text-center text-xs print:border-t">
         <p>Josh Kappler · Software Engineer, San Francisco · 2026</p>
         <p className="mt-1">
           Founding Developer Experience Engineer, General Translation, Inc., Jul to Sep 2026

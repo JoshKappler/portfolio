@@ -63,14 +63,13 @@ understated register: one narrow text column, no hero effects, no webfonts.
 - Every paragraph and list entry renders as a square: justified with the
   last line stretched. New or edited copy must be word-tuned until its last
   line naturally fills 91-99% of the column (measure in the browser with
-  text-align-last: center). A line that falls short of 85% gets centered by
+  text-align-last: center). Each project and playground entry is exactly two lines
+  (Josh, 2026-11-10: readable at a glance). A line that falls short of 85% gets centered by
   square-paragraphs.tsx and visibly breaks the pattern.
-- `src/components/crest-mark.tsx` is the de Falco family seal, stylized from
-  a photo of the wax stamp; it closes the page and `public/crest.png` is its
-  transparent render, used by Josh's email signature. Regenerate the PNG when
-  the mark changes; the signature hotlinks it, and the social card
-  `src/app/opengraph-image.png` embeds it (regenerate that too, via
-  `scripts/generate-og-image.html`).
+- The de Falco crest was taken off the page and the social card on 2026-11-10 at
+  Josh's word. `public/crest.png` stays only because Josh's email signature hotlinks
+  it. The social card `src/app/opengraph-image.png` comes from
+  `scripts/generate-og-image.html`.
 - The footer colophon claims system fonts and no trackers. Adding a webfont,
   analytics, or any third-party script makes it false; update or remove the
   line in the same change.

@@ -9,7 +9,6 @@
      if it ever carries text again. */
   --ink-muted: #6f654f;
   --line: #d8cbae;
-  --seal: #8e2b23;
 }
 
 /* The /resume page still uses these token names; keep them defined. */
@@ -19,7 +18,6 @@
   --color-text-muted: var(--ink-muted);
   --color-border: var(--line);
   --color-accent: var(--ink);
-  --color-seal: var(--seal);
   --font-mono: "Courier New", Courier, monospace;
 }
 
@@ -153,7 +151,6 @@ a {
     --ink: #000;
     --ink-muted: #555;
     --line: #bbb;
-    --seal: #000;
   }
   [data-sheet] {
     width: auto !important;
