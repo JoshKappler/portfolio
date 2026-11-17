@@ -228,6 +228,11 @@ export default function Home() {
       </div>
 
       <p className="mt-8">
+        I ship whole products: the frontend, the backend, the data model, and
+        the AI inside them. When that means agents, I write the orchestration
+        myself: tool loops, state machines, memory, routing. No frameworks.
+      </p>
+      <p className="mt-4">
         Most recently I was the founding DX Engineer at{" "}
         <a
           href="https://generaltranslation.com"
@@ -241,11 +246,6 @@ export default function Home() {
         autonomous outbound growth engine, and a content engine that turns the
         docs into finished demo videos and clear step-by-step written
         tutorials in any language.
-      </p>
-      <p className="mt-4">
-        I ship whole products: the frontend, the backend, the data model, and
-        the AI inside them. When that means agents, I write the orchestration
-        myself: tool loops, state machines, memory, routing. No frameworks.
       </p>
       <p className="mt-4">
         I also run Boffy Media LLC, the company behind{" "}
