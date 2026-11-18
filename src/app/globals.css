@@ -2,7 +2,9 @@
 
 /* One scheme only: the page is parchment in every browser, like paper. */
 :root {
-  color-scheme: light;
+  /* "only" stops browser auto dark modes (Chrome, Android, Samsung) from
+     recoloring the sheet brown with white text. */
+  color-scheme: only light;
   --paper: #f2e8d5;
   --ink: #000;
   /* Only tints the decorative divider; holds 4.5:1 (WCAG AA) on --paper

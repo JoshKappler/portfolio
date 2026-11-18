@@ -9,7 +9,8 @@ understated register: one narrow text column, no hero effects, no webfonts.
 - Fonts are system-only. The letter is Georgia alone, every element, with
   size as the only variation; Courier New appears only in the /resume
   viewer chrome and the globe's canvas glyphs.
-- One color scheme only: warm parchment, `color-scheme: light`, no dark
+- One color scheme only: warm parchment, `color-scheme: only light` (the
+  "only" opts out of browser auto dark modes; never drop it), no dark
   mode, no theme toggle, no theme-provider. Paper has no dark mode. The
   browser-chrome `themeColor` in `layout.tsx` (and the black override in
   `resume/page.tsx`) must track `--paper` when colors change. All letter

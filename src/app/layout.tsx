@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 /* Browser chrome matches the sheet; /resume overrides to its black. */
 export const viewport: Viewport = {
   themeColor: "#f2e8d5",
-  colorScheme: "light",
+  colorScheme: "only light",
 };
 
 export default function RootLayout({
